@@ -566,6 +566,12 @@ end
 function BigWigs.modulePrototype:RemoveBar(text)
 	self:TriggerEvent("BigWigs_StopBar", self, text)
 end
+
+function BigWigs.modulePrototype:IntervalBar(text, intervalMin, intervalMax, icon, otherColor, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10)
+	self:TriggerEvent("BigWigs_StartBar", self, text, intervalMin, "Interface\\Icons\\" .. icon, otherColor, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10)
+ self:SetCandyBarFade("BigWigsBar "..text, intervalMax-intervalMin)
+end
+
 function BigWigs.modulePrototype:DelayedBar(delay, text, time, icon, otherColor, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10)
 	return self:ScheduleEvent(delayPrefix .. "Bar" .. self:ToString() .. text, "BigWigs_StartBar", delay, self, text, time, "Interface\\Icons\\" .. icon, otherColor, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10)
 end
