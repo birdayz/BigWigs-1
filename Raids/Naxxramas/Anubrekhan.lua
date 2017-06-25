@@ -25,10 +25,10 @@ L:RegisterTranslations("enUS", function() return {
 	starttrigger2 = "Yes, run! It makes the blood pump faster!",
 	starttrigger3 = "There is no way out.",
 	engagewarn = "Anub'Rekhan engaged. First Locust Swarm in ~60 sec",
-	
+
 	etrigger = "gains Enrage.",
 	enragewarn = "Crypt Guard Enrage - Stun + Traps!",
-	
+
 	gaintrigger = "Anub'Rekhan gains Locust Swarm.",
 	gainendwarn = "Locust Swarm ended!",
 	gainnextwarn = "Next Locust Swarm in ~60 sec",
@@ -56,9 +56,9 @@ module.toggleoptions = {"locust", "enrage", "bosskill"}
 -- locals
 local timer = {
 	firstLocustSwarm = 75,
-    locustSwarmInterval = 60,
-    locustSwarmDuration = 20,
-    locustSwarmCastTime = 3.25,
+	locustSwarmInterval = 60,
+	locustSwarmDuration = 20,
+	locustSwarmCastTime = 3.25,
 }
 local icon = {
 	locust = "Spell_Nature_InsectSwarm",
@@ -127,7 +127,7 @@ end
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.locustCast then
+	if sync == syncName.locustCast then
 		self:LocustCast()
 	elseif sync == syncName.locustGain then
 		self:LocustGain()
@@ -167,11 +167,11 @@ end
 ----------------------------------
 
 function module:Test(long)
-    -- /run local m=BigWigs:GetModule("Anub'Rekhan");m:Test()
-    
+	-- /run local m=BigWigs:GetModule("Anub'Rekhan");m:Test()
+
 	local function testLocustSwarmCast()
 		module:CheckForLocustCast(L["casttrigger"])
-    end
+	end
 	local function testLocustSwarmGain()
 		module:CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS(L["gaintrigger"])
 	end
@@ -183,26 +183,26 @@ function module:Test(long)
 		BigWigs:TriggerEvent("BigWigs_RebootModule", self:ToString())
 		BigWigs:DisableModule(module:ToString())
 	end
-	
+
 	if long then
 		local testTimer = 0
 		-- long test
 		self:SendEngageSync()
-		
+
 		-- first locust swarm cast
 		testTimer = testTimer + timer.firstLocustSwarm
 		self:ScheduleEvent(self:ToString() .. "testLocustSwarmCast1", testLocustSwarmCast, testTimer, self)
 		BigWigs:Print("testLocustSwarmCast in " .. testTimer)
-		
+
 		-- first locust swarm gain
 		testTimer = testTimer + timer.locustSwarmCastTime
 		self:ScheduleEvent(self:ToString() .. "testLocustSwarmGain1", testLocustSwarmGain, testTimer, self)
 		BigWigs:Print("testLocustSwarmGain in " .. testTimer)
-		
+
 		-- enrage
 		self:ScheduleEvent(self:ToString() .. "testEnrage1", testEnrage, 90, self)
 		BigWigs:Print("testEnrage in " .. 90)
-		
+
 		-- second locust swarm cast
 		testTimer = testTimer + timer.locustSwarmInterval
 		self:ScheduleEvent(self:ToString() .. "testLocustSwarmCast2", testLocustSwarmCast, testTimer, self)
@@ -212,7 +212,7 @@ function module:Test(long)
 		testTimer = testTimer + timer.locustSwarmCastTime
 		self:ScheduleEvent(self:ToString() .. "testLocustSwarmGain2", testLocustSwarmGain, testTimer, self)
 		BigWigs:Print("testLocustSwarmGain in " .. testTimer)
-		
+
 		-- wipe
 		testTimer = testTimer + 10
 		self:ScheduleEvent(self:ToString() .. "testDisable", testDisable, testTimer, self)
@@ -221,21 +221,21 @@ function module:Test(long)
 		-- short test
 		local testTimer = 0
 		self:SendEngageSync()
-		
+
 		-- first locust swarm cast
 		testTimer = testTimer + 5
 		self:ScheduleEvent(self:ToString() .. "testLocustSwarmCast1", testLocustSwarmCast, testTimer, self)
 		BigWigs:Print("testLocustSwarmCast in " .. testTimer)
-		
+
 		-- first locust swarm gain
 		testTimer = testTimer + timer.locustSwarmCastTime
 		self:ScheduleEvent(self:ToString() .. "testLocustSwarmGain1", testLocustSwarmGain, testTimer, self)
 		BigWigs:Print("testLocustSwarmGain in " .. testTimer)
-		
+
 		-- enrage
 		self:ScheduleEvent(self:ToString() .. "testEnrage1", testEnrage, 10, self)
 		BigWigs:Print("testEnrage in " .. 10)
-		
+
 		-- second locust swarm cast
 		testTimer = testTimer + 25
 		self:ScheduleEvent(self:ToString() .. "testLocustSwarmCast2", testLocustSwarmCast, testTimer, self)
@@ -245,7 +245,7 @@ function module:Test(long)
 		testTimer = testTimer + timer.locustSwarmCastTime
 		self:ScheduleEvent(self:ToString() .. "testLocustSwarmGain2", testLocustSwarmGain, testTimer, self)
 		BigWigs:Print("testLocustSwarmGain in " .. testTimer)
-		
+
 		-- wipe
 		testTimer = testTimer + 5
 		self:ScheduleEvent(self:ToString() .. "testDisable", testDisable, testTimer, self)

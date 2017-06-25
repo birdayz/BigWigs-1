@@ -38,7 +38,7 @@ L:RegisterTranslations("deDE", function() return {
 	--frostbreath_cmd = "frostbreath",
 	frostbreath_name = "Alarm f\195\188r Frostatem",
 	frostbreath_desc = "Warnen wenn Gahz'ranka beginnt Frostatem zu wirken.",
-	
+
 	--massivegeyser_cmd = "massivegeyser",
 	massivegeyser_name = "Alarm f\195\188r Massiver Geysir",
 	massivegeyser_desc = "Warnen wenn Gahz'ranka beginnt Massiver Geysir zu wirken.",
@@ -69,7 +69,7 @@ local icon = {
 ------------------------------
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED", "CheckForEngage")
 end

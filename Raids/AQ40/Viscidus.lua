@@ -117,7 +117,7 @@ local prior
 ------------------------------
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("BigWigs_Message")
 	self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE", "Emote")
 	self:RegisterEvent("CHAT_MSG_RAID_BOSS_EMOTE", "Emote")

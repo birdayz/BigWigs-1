@@ -19,26 +19,26 @@ module.toggleoptions = {"curse", "deaden", "blink", "counterspell", "bosskill"}
 
 local timer = {
 	cs = 16,
-    firstCS = 15,
-    curse =  20, 
-    firstCurse = 10,
-    blink = 25,
-    firstBlink = 25,
-    deaden = 7,
-    firstDeaden = 5,
+	firstCS = 15,
+	curse =  20,
+	firstCurse = 10,
+	blink = 25,
+	firstBlink = 25,
+	deaden = 7,
+	firstDeaden = 5,
 }
 local icon = {
-    cs = "Spell_Frost_IceShock",
-    curse = "Spell_Shadow_AntiShadow",
-    blink = "Spell_Arcane_Blink",
-    deaden = "Spell_Holy_SealOfSalvation",
+	cs = "Spell_Frost_IceShock",
+	curse = "Spell_Shadow_AntiShadow",
+	blink = "Spell_Arcane_Blink",
+	deaden = "Spell_Holy_SealOfSalvation",
 }
 local syncName = {
 	cs = "ShazzrahCounterspell"..module.revision,
-    curse = "ShazzrahCurse"..module.revision,
-    blink = "ShazzrahBlink"..module.revision,
-    deaden = "ShazzrahDeadenMagicOn"..module.revision,
-    deadenOver = "ShazzrahDeadenMagicOff"..module.revision,
+	curse = "ShazzrahCurse"..module.revision,
+	blink = "ShazzrahBlink"..module.revision,
+	deaden = "ShazzrahDeadenMagicOn"..module.revision,
+	deadenOver = "ShazzrahDeadenMagicOff"..module.revision,
 }
 
 local _, playerClass = UnitClass("player")
@@ -53,7 +53,7 @@ L:RegisterTranslations("enUS", function() return {
 	deaden_trigger = "Shazzrah gains Deaden Magic",
 	curse_trigger = "afflicted by Shazzrah",
 	cs_trigger2 = "Shazzrah casts Counterspell",
-    cs_trigger = "Shazzrah(.+) Counterspell was resisted by",
+	cs_trigger = "Shazzrah(.+) Counterspell was resisted by",
 	curse_trigger2 = "Shazzrah(.+) Curse was resisted",
 	deaden_over_trigger = "Deaden Magic fades from Shazzrah",
 
@@ -70,21 +70,21 @@ L:RegisterTranslations("enUS", function() return {
 	cs_bar = "Possible Counterspell",
 
 	cmd = "Shazzrah",
-	
-            
-    -- counterspell after blink 2s later
+
+
+	-- counterspell after blink 2s later
 	counterspell_cmd = "counterspell",
 	counterspell_name = "Counterspell alert",
 	counterspell_desc = "Warn for Shazzrah's Counterspell",
-	
+
 	curse_cmd = "curse",
 	curse_name = "Shazzrah's Curse alert",
 	curse_desc = "Warn for Shazzrah's Curse",
-	
+
 	deaden_cmd = "deaden",
 	deaden_name = "Deaden Magic alert",
 	deaden_desc = "Warn when Shazzrah has Deaden Magic",
-	
+
 	blink_cmd = "blink",
 	blink_name = "Blink alert",
 	blink_desc = "Warn when Shazzrah Blinks",
@@ -95,7 +95,7 @@ L:RegisterTranslations("deDE", function() return {
 	deaden_trigger = "Shazzrah bekommt \'Magie dämpfen",
 	curse_trigger = "von Shazzrahs Fluch betroffen",
 	cs_trigger2 = "Shazzrah wirkt Gegenzauber",
-    cs_trigger = "Shazzrahs Gegenzauber wurde von (.+) widerstanden",
+	cs_trigger = "Shazzrahs Gegenzauber wurde von (.+) widerstanden",
 	curse_trigger2 = "Shazzrahs Fluch(.)widerstanden",
 	deaden_over_trigger = "Magie dämpfen schwindet von Shazzrah",
 
@@ -110,21 +110,21 @@ L:RegisterTranslations("deDE", function() return {
 	deaden_bar = "Magie dämpfen",
 	curse_bar = "Nächster Fluch",
 	cs_bar = "Möglicher Gegenzauber",
-	
+
 	--cmd = "Shazzrah",
-	
+
 	--counterspell_cmd = "Gegenzauber",
 	counterspell_name = "Alarm für Gegenzauber",
 	counterspell_desc = "Warnen vor Shazzrahs Gegenzauber",
-	
+
 	--curse_cmd = "curse",
 	curse_name = "Alarm für Shazzrahs Fluch",
 	curse_desc = "Warnen vor Shazzrahs Fluch",
-	
+
 	--deaden_cmd = "deaden",
 	deaden_name = "Alarm für Magie dämpfen",
 	deaden_desc = "Warnen wenn Shazzrah Magie dämpfen hat",
-	
+
 	--blink_cmd = "blink",
 	blink_name = "Alarm für Blinzeln",
 	blink_desc = "Warnen wenn Shazzrah blinzelt",
@@ -136,7 +136,7 @@ L:RegisterTranslations("deDE", function() return {
 ------------------------------
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "Event")
@@ -149,13 +149,13 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_PARTY_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE", "Event")
-    self:RegisterEvent("CHAT_MSG_SPELL_DAMAGESHIELDS_ON_OTHERS", "Event")
-	
+	self:RegisterEvent("CHAT_MSG_SPELL_DAMAGESHIELDS_ON_OTHERS", "Event")
+
 	self:ThrottleSync(10, syncName.blink)
-    self:ThrottleSync(10, syncName.curse)
-    self:ThrottleSync(5, syncName.deaden)
-    self:ThrottleSync(5, syncName.deadenOver)
-    self:ThrottleSync(0.5, syncName.cs)
+	self:ThrottleSync(10, syncName.curse)
+	self:ThrottleSync(5, syncName.deaden)
+	self:ThrottleSync(5, syncName.deadenOver)
+	self:ThrottleSync(0.5, syncName.cs)
 end
 
 -- called after module is enabled and after each wipe
@@ -164,23 +164,23 @@ function module:OnSetup()
 end
 
 -- called after boss is engaged
-function module:OnEngage()        
-    if self.db.profile.counterspell then
-        self:Bar(L["cs_bar"], timer.firstCS, icon.cs)
-    end
-    self:DelayedSync(timer.firstCS, syncName.cs)
-    
-    if self.db.profile.blink then
-        self:Bar(L["blink_bar"], timer.firstBlink, icon.blink)
-    end
-    self:DelayedSync(timer.firstBlink, syncName.blink)
-    
-    if self.db.profile.curse then
-        self:Bar(L["curse_bar"], timer.firstCurse, icon.curse) -- seems to be completly random
-    end
-    if self.db.profile.deaden then
-        self:Bar(L["deaden_bar"], timer.firstDeaden, icon.deaden)
-    end
+function module:OnEngage()
+	if self.db.profile.counterspell then
+		self:Bar(L["cs_bar"], timer.firstCS, icon.cs)
+	end
+	self:DelayedSync(timer.firstCS, syncName.cs)
+
+	if self.db.profile.blink then
+		self:Bar(L["blink_bar"], timer.firstBlink, icon.blink)
+	end
+	self:DelayedSync(timer.firstBlink, syncName.blink)
+
+	if self.db.profile.curse then
+		self:Bar(L["curse_bar"], timer.firstCurse, icon.curse) -- seems to be completly random
+	end
+	if self.db.profile.deaden then
+		self:Bar(L["deaden_bar"], timer.firstDeaden, icon.deaden)
+	end
 end
 
 -- called after boss is disengaged (wipe(retreat) or victory)
@@ -211,9 +211,9 @@ end
 
 function module:BigWigs_RecvSync(sync, rest, nick)
 	if sync == syncName.blink then
-        self:Blink()
+		self:Blink()
 	elseif sync == syncName.deaden  then
-        self:DeadenMagic()
+		self:DeadenMagic()
 	elseif sync == syncName.deadenOver then
 		self:DeadenMagicOver()
 	elseif sync == syncName.curse then
@@ -228,47 +228,47 @@ end
 ------------------------------
 
 function module:Counterspell()
-    if self.db.profile.counterspell then
-        self:Bar(L["cs_bar"], timer.cs, icon.cs)
-    end
-    self:DelayedSync(timer.cs, syncName.cs)
+	if self.db.profile.counterspell then
+		self:Bar(L["cs_bar"], timer.cs, icon.cs)
+	end
+	self:DelayedSync(timer.cs, syncName.cs)
 end
 
 function module:Curse()
-    self:Message(L["curse_warn"], "Attention", "Alarm")
-    self:Bar(L["curse_bar"], timer.curse, icon.curse) -- seems to be completly random
+	self:Message(L["curse_warn"], "Attention", "Alarm")
+	self:Bar(L["curse_bar"], timer.curse, icon.curse) -- seems to be completly random
 end
 
 function module:Blink()
 	firstblink = false
-    --self:KTM_Reset()
-    
-    if self.db.profile.blink then
-        self:Message(L["blink_warn"], "Important")
-        self:Bar(L["blink_bar"], timer.blink, icon.blink)
-        
-        self:DelayedMessage(timer.blink - 5, L["blink_soon_warn"], "Attention", "Alarm", nil, nil, true)
-    end
-    
-    self:DelayedSync(timer.blink, syncName.blink)
+	--self:KTM_Reset()
+
+	if self.db.profile.blink then
+		self:Message(L["blink_warn"], "Important")
+		self:Bar(L["blink_bar"], timer.blink, icon.blink)
+
+		self:DelayedMessage(timer.blink - 5, L["blink_soon_warn"], "Attention", "Alarm", nil, nil, true)
+	end
+
+	self:DelayedSync(timer.blink, syncName.blink)
 end
 
 function module:DeadenMagic()
-    if self.db.profile.deaden then
-        self:RemoveBar(L["deaden_bar"])
-        self:Message(L["deaden_warn"], "Important")
-        self:Bar(L["deaden_bar"], timer.deaden, icon.deaden)
-        if playerClass == "SHAMAN" or playerClass == "PRIEST" then
-            self:WarningSign(icon.deaden, timer.deaden)
-        end
-    end
+	if self.db.profile.deaden then
+		self:RemoveBar(L["deaden_bar"])
+		self:Message(L["deaden_warn"], "Important")
+		self:Bar(L["deaden_bar"], timer.deaden, icon.deaden)
+		if playerClass == "SHAMAN" or playerClass == "PRIEST" then
+			self:WarningSign(icon.deaden, timer.deaden)
+		end
+	end
 end
 
 function module:DeadenMagicOver()
-    if self.db.profile.deaden then
-        self:RemoveBar(L["deaden_bar"])
-        if playerClass == "SHAMAN" or playerClass == "PRIEST" then
-            self:RemoveWarningSign(icon.deaden)
-        end
-    end
+	if self.db.profile.deaden then
+		self:RemoveBar(L["deaden_bar"])
+		if playerClass == "SHAMAN" or playerClass == "PRIEST" then
+			self:RemoveWarningSign(icon.deaden)
+		end
+	end
 end

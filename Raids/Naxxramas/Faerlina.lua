@@ -40,7 +40,7 @@ L:RegisterTranslations("enUS", function() return {
 
 	enragebar = "Enrage",
 	silencebar = "Silence",
-	
+
 	rain_cmd = "rain",
 	rain_name = "Rain of Fire Alert",
 	rain_desc = "Warn when you are standing in Rain of Fire",
@@ -94,15 +94,15 @@ module:RegisterYellEngage(L["starttrigger4"])
 function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_DAMAGE")
-	
+
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE",        "CheckRain")
-    self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE",            "CheckRain")
-    self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_FRIENDLYPLAYER_DAMAGE",  "CheckRain")
-    self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE",              "CheckRain")
-    self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE",     "CheckRain")
-    self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE",               "CheckRain")
-    self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF")
-	
+	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE",            "CheckRain")
+	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_FRIENDLYPLAYER_DAMAGE",  "CheckRain")
+	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE",              "CheckRain")
+	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE",     "CheckRain")
+	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE",               "CheckRain")
+	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF")
+
 	self:ThrottleSync(5, syncName.enrage)
 	self:ThrottleSync(5, syncName.silence)
 end
@@ -147,25 +147,25 @@ end
 
 -- untested
 function module:CheckRain(msg)
-    if string.find(msg, L["rain_run_trigger"]) then
-        if self.db.profile.rain then
-            -- I found no better way to trigger this, it will autohide after 2s which is the time between Rain of Fire ticks
-            self:WarningSign(icon.rain, timer.rainTick)
-        end
+	if string.find(msg, L["rain_run_trigger"]) then
+		if self.db.profile.rain then
+			-- I found no better way to trigger this, it will autohide after 2s which is the time between Rain of Fire ticks
+			self:WarningSign(icon.rain, timer.rainTick)
+		end
 	elseif (string.find(msg, L["rain_trigger"])) then
-        if self.db.profile.rain then
-            -- this will not trigger, but I will leave it in case they fix this combatlog event/message
-            self:Message(L["rain_warn"], "Attention", true, "Alarm")
-            self:WarningSign(icon.rain, timer.rainDuration)
-            --self:DelayedBar(timer.rainDuration, L["barNextRain"], timer.nextRain - timer.rainDuration, icon.rain) -- variance too high
-        end
+		if self.db.profile.rain then
+			-- this will not trigger, but I will leave it in case they fix this combatlog event/message
+			self:Message(L["rain_warn"], "Attention", true, "Alarm")
+			self:WarningSign(icon.rain, timer.rainDuration)
+			--self:DelayedBar(timer.rainDuration, L["barNextRain"], timer.nextRain - timer.rainDuration, icon.rain) -- variance too high
+		end
 	end
 end
 function module:CHAT_MSG_SPELL_AURA_GONE_SELF(msg)
-    if string.find(msg, "Rain of Fire") then
-        -- this will not trigger, but I will leave it in case they fix this combatlog event/message
-        self:RemoveWarningSign(icon.rain)
-    end
+	if string.find(msg, "Rain of Fire") then
+		-- this will not trigger, but I will leave it in case they fix this combatlog event/message
+		self:RemoveWarningSign(icon.rain)
+	end
 end
 
 ------------------------------
@@ -173,7 +173,7 @@ end
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.enrage then
+	if sync == syncName.enrage then
 		self:Enrage()
 	elseif sync == syncName.silence then
 		self:Silence()
@@ -189,7 +189,7 @@ function module:Enrage()
 		self:Message(L["enragewarn"], "Urgent")
 	end
 	self:RemoveBar(L["enragebar"])
-	self:CancelDelayedMessage(L["enragewarn15sec"]) 
+	self:CancelDelayedMessage(L["enragewarn15sec"])
 	if self.db.profile.enrage then
 		self:Bar(L["enragebar"], timer.enrage, icon.enrage)
 		self:DelayedMessage(timer.enrage - 15, L["enragewarn15sec"], "Important")
@@ -230,11 +230,11 @@ function module:Silence()
 	else -- Reactive enrage removed
 		if self.db.profile.enrage then
 			self:Message(string.format(L["enrageremovewarn"], timer.enrage), "Urgent")
-		end
-		if self.db.profile.silence then
-			self:Bar(L["silencebar"], timer.silence, icon.silence)
-			self:DelayedMessage(timer.silence -5, L["silencewarn5sec"], "Urgent")
-		end
-		isEnraged = nil
+	end
+	if self.db.profile.silence then
+		self:Bar(L["silencebar"], timer.silence, icon.silence)
+		self:DelayedMessage(timer.silence -5, L["silencewarn5sec"], "Urgent")
+	end
+	isEnraged = nil
 	end
 end

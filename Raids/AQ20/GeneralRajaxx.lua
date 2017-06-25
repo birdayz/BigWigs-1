@@ -28,14 +28,14 @@ L:RegisterTranslations("enUS", function() return {
 	trigger7 = "Fandral! Your time has come! Go and hide in the Emerald Dream and pray we never find you!",
 	trigger8 = "Impudent fool! I will kill you myself!",
 	trigger10 = "I lied...",
-	
+
 	shield_trigger ="gains Shield of Rajaxx",
 	shield = "Shield of Rajaxx",
 	shield_cd = "Shield of Rajaxx CD",
-    
-    trigger2_2 = "Kill ",
-            
-    warn0 = "Wave 1/8", -- trigger for starting the event by pulling the first wave instead of talking to andorov
+
+	trigger2_2 = "Kill ",
+
+	warn0 = "Wave 1/8", -- trigger for starting the event by pulling the first wave instead of talking to andorov
 	warn1 = "Wave 1/8",
 	warn2 = "Wave 2/8",
 	warn3 = "Wave 3/8",
@@ -44,7 +44,7 @@ L:RegisterTranslations("enUS", function() return {
 	warn6 = "Wave 6/8",
 	warn7 = "Wave 7/8",
 	warn8 = "Incoming General Rajaxx",
-	
+
 
 } end )
 
@@ -53,7 +53,7 @@ L:RegisterTranslations("deDE", function() return {
 	wave_name = "Wellen",
 	wave_desc = "Warnung vor den ankommenden Gegner Wellen.",
 
-    trigger0 = "Erinnerst du dich daran, Rajaxx, wann ich dir das letzte Mal sagte, ich w\195\188rde dich t\195\182ten?",
+	trigger0 = "Erinnerst du dich daran, Rajaxx, wann ich dir das letzte Mal sagte, ich w\195\188rde dich t\195\182ten?",
 	trigger1 = "Hier kommen sie. Bleibt am Leben, Welpen.",
 	trigger2 = "?????",  -- There is no callout for wave 2 ><
 	trigger3 = "Die Zeit der Vergeltung ist gekommen!",
@@ -62,8 +62,8 @@ L:RegisterTranslations("deDE", function() return {
 	trigger6 = "Staghelm wird winseln und um sein Leben betteln, genau wie sein r\195\164udiger Sohn!",
 	trigger7 = "Fandral! Deine Zeit ist gekommen!",
 	trigger8 = "Unversch\195\164mter Narr! Ich werde Euch h\195\182chstpers\195\182nlich t\195\182ten!",
-	
-    warn0 = "Welle 1/8", -- trigger for starting the event by pulling the first wave instead of talking to andorov
+
+	warn0 = "Welle 1/8", -- trigger for starting the event by pulling the first wave instead of talking to andorov
 	warn1 = "Welle 1/8",
 	warn2 = "Welle 2/8",
 	warn3 = "Welle 3/8",
@@ -88,12 +88,12 @@ module.toggleoptions = {--[["wave",]] "bosskill"}
 
 -- locals
 local timer = {
-    wave = 180,
+	wave = 180,
 	yeggethShield = 6,
-	--yeggethShieldCD = 15,
+--yeggethShieldCD = 15,
 }
 local icon = {
-    wave = "Spell_Holy_PrayerOfHealing",
+	wave = "Spell_Holy_PrayerOfHealing",
 	yeggethShield = "Spell_Holy_SealOfProtection",
 }
 local syncName = {}
@@ -106,16 +106,16 @@ local wave = nil
 module:RegisterYellEngage(L["trigger1"])
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS")
 	--self:RegisterEvent("CHAT_MSG_MONSTER_YELL")
-	
+
 	--self.warnsets = {}
-	--for i=0,8 do 
-	--	self.warnsets[L["trigger"..i]] = L["warn"..i] 
+	--for i=0,8 do
+	--	self.warnsets[L["trigger"..i]] = L["warn"..i]
 	--end
-    --
-    --wave = 0
+	--
+	--wave = 0
 end
 
 -- called after module is enabled and after each wipe
@@ -124,7 +124,7 @@ end
 
 -- called after boss is engaged
 function module:OnEngage()
-    --wave = 1
+--wave = 1
 end
 
 -- called after boss is disengaged (wipe(retreat) or victory)
@@ -136,40 +136,14 @@ end
 --      Event Handlers	    --
 ------------------------------
 
-function module:CheckForWipe()    
-    -- ignore wipe check
+function module:CheckForWipe()
+-- ignore wipe check
 end
-
---[[function module:CHAT_MSG_MONSTER_YELL(msg)
-    --if string.find(msg, L["trigger1"]) then
-        
-    
-	--[[if self.db.profile.wave and msg and self.warnsets[msg] then
-		self:Message(self.warnsets[msg], "Urgent")
-        
-        local i = tonumber(string.sub(L:GetReverseTranslation(self.warnsets[msg]), 5))
-        if i == 0 then
-            i = 1
-        end        
-        wave = i
-        
-        self:RemoveBar(L["warn" .. i])
-        if i < 8 then
-            self:Bar(L["warn" .. i+1], timer.wave, icon.wave)
-        end
-	end
-    
-    if self.db.profile.wave and msg and string.find(msg, L["trigger2_2"]) and wave == 1 then -- but not "Kill first ..."
-        wave = 2
-        self:RemoveBar(L["warn2"])
-        self:Bar(L["warn3"], timer.wave - 5, icon.wave) -- kill yell around 5s later
-    end]]
-end]]
 
 function module:CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS(msg)
 	if string.find(msg, L["shield_trigger"])then
-		--self:CancelDelayedBar(L["shield_cd"]) 
-		--self:RemoveBar(L["shield_cd"]) 
+		--self:CancelDelayedBar(L["shield_cd"])
+		--self:RemoveBar(L["shield_cd"])
 		self:Bar(L["shield"], timer.yeggethShield, icon.yeggethShield)
 		--self:DelayedBar(timer.yeggethShield, L["shield_cd"], timer.yeggethShieldCD-timer.yeggethShield, icon.yeggethShield)
 	end

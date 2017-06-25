@@ -38,8 +38,8 @@ L:RegisterTranslations("enUS", function() return {
 	egg_trigger = "Razorgore the Untamed begins to cast Destroy Egg\.",
 	egg_message = "%d/30 eggs destroyed!",
 	egg_bar = "Destroy Egg",
-    -- there is no clear phase2 trigger
-	phase2_trigger = "I'm free! That device shall never torment me again!", --"You'll pay for forcing me to do this.", 
+	-- there is no clear phase2 trigger
+	phase2_trigger = "I'm free! That device shall never torment me again!", --"You'll pay for forcing me to do this.",
 	phase2_message = "Phase 2",
 	volley_trigger = "Razorgore the Untamed begins to cast Fireball Volley\.",
 	volley_bar = "Fireball Volley",
@@ -83,7 +83,7 @@ L:RegisterTranslations("enUS", function() return {
 	polymorph_cmd = "polymorph",
 	polymorph_name = "Greater Polymorph",
 	polymorph_desc = "Tells you who got polymorphed by Grethok the Controller and starts a clickable bar for easy selection.",
-	
+
 	icon_cmd = "icon",
 	icon_name = "Raid Icon on Mind Control",
 	icon_desc = "Place a raid icon on the mind controlled player for the duration of the debuff.\n\n(Requires assistant or higher)",
@@ -161,7 +161,7 @@ L:RegisterTranslations("deDE", function() return {
 	polymorph_cmd = "polymorph",
 	polymorph_name = "Gro\195\159e Verwandlung",
 	polymorph_desc = "Sagt Ihnen, wer von Grethok den Controller polymorphed habe und startet einen anklickbaren Balken f\195\188r einfache Auswahl.",
-	
+
 	icon_cmd = "icon",
 	icon_name = "Schlachtzugsymbol auf die Gedankenkontrolle Spieler",
 	icon_desc = "Versetzt eine Schlachtzugsymbol auf der Gedankenkontrolle Spieler.\n\n(Ben\195\182tigt Schlachtzugleiter oder Assistent)",
@@ -229,8 +229,8 @@ function module:OnEnable()
 	--self:RegisterEvent("CHAT_MSG_COMBAT_FRIENDLY_DEATH", "Events")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE")
 	self:RegisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE")
-    self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE")
-	
+	self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE")
+
 	self:ThrottleSync(5, syncName.egg)
 	self:ThrottleSync(5, syncName.orb .. "(.+)")
 	self:ThrottleSync(5, syncName.orbOver .. "(.+)")
@@ -241,9 +241,9 @@ end
 -- called after module is enabled and after each wipe
 function module:OnSetup()
 	self.started        = nil
-    self.phase          = 0
-    self.previousorb    = nil
-    self.eggs           = 0
+	self.phase          = 0
+	self.previousorb    = nil
+	self.eggs           = 0
 end
 
 -- called after boss is engaged
@@ -283,14 +283,14 @@ function module:CHAT_MSG_SPELL_FRIENDLYPLAYER_BUFF(msg)
 end
 
 function module:CHAT_MSG_MONSTER_EMOTE(msg)
-    if string.find(msg, "Razorgore the Untamed casts Destroy Egg") then
-        -- as of now, this does also fire on finished 'Destroy Egg' cast. 
-        -- but only after a successful one and the range is shitty of this emote.
-        self:Sync(syncName.egg .. " " .. tostring(self.eggs + 1))
-    elseif string.find(msg, "Nefarian's troops flee as the power") then
-        -- there is a really funny emote text bug on the current version on Nostalris, I'll only use this in case they fix it
-        self:Sync(syncName.phase2)
-    end
+	if string.find(msg, "Razorgore the Untamed casts Destroy Egg") then
+		-- as of now, this does also fire on finished 'Destroy Egg' cast.
+		-- but only after a successful one and the range is shitty of this emote.
+		self:Sync(syncName.egg .. " " .. tostring(self.eggs + 1))
+	elseif string.find(msg, "Nefarian's troops flee as the power") then
+		-- there is a really funny emote text bug on the current version on Nostalris, I'll only use this in case they fix it
+		self:Sync(syncName.phase2)
+	end
 end
 
 function module:Events(msg)
@@ -300,7 +300,7 @@ function module:Events(msg)
 	local _, _, polyotherend = string.find(msg, L["polymorphotherend_trigger"])
 	local _, _, orbother = string.find(msg, L["orbcontrolother_trigger"])
 	--local _, _, deathother = string.find(msg, L["deathother_trigger"])
-	
+
 	if self.db.profile.icon then
 		if mcother then
 			self:Icon(mcother)
@@ -310,7 +310,7 @@ function module:Events(msg)
 			self:RemoveIcon()
 		end
 	end
-	
+
 	if self.db.profile.mc then
 		if msg == L["mindcontrolyou_trigger"] then
 			self:Message(L["mindcontrol_message_you"], "Important")
@@ -326,7 +326,7 @@ function module:Events(msg)
 			self:RemoveBar(string.format(L["mindcontrol_bar"], mcotherend))
 		end
 	end
-	
+
 	if self.db.profile.polymorph then
 		if msg == L["polymorphyou_trigger"] then
 			self:Message(L["polymorph_message_you"], "Important")
@@ -342,7 +342,7 @@ function module:Events(msg)
 			self:RemoveBar(string.format(L["polymorph_bar"], polyotherend))
 		end
 	end
-	
+
 	if self.db.profile.orb then
 		if orbother then
 			self:Sync(syncName.orb .. orbother)
@@ -350,31 +350,31 @@ function module:Events(msg)
 			self:Sync(syncName.orb .. UnitName("player"))
 		end
 	end
-	
+
 	if self.db.profile.conflagration and string.find(msg, L["conflagration_trigger"]) then
 		self:Bar(L["conflagration_bar"], timer.conflagrate, "Spell_Fire_Incinerate", true, "red")
 	end
-	
+
 	--[[if deathother then
-		if self.db.profile.mc then
-			self:RemoveBar(string.format(L["mindcontrol_bar"], deathother))
-		end
-		if self.db.profile.polymorph then
-			self:RemoveBar(string.format(L["polymorph_bar"], deathother))
-		end
-		if self.db.profile.orb then
-			self:RemoveBar(string.format(L["orb_bar"], deathother))
-		end
+	if self.db.profile.mc then
+	self:RemoveBar(string.format(L["mindcontrol_bar"], deathother))
+	end
+	if self.db.profile.polymorph then
+	self:RemoveBar(string.format(L["polymorph_bar"], deathother))
+	end
+	if self.db.profile.orb then
+	self:RemoveBar(string.format(L["orb_bar"], deathother))
+	end
 	elseif msg == L["deathyou_trigger"] then
-		if self.db.profile.mc then
-			self:RemoveBar(string.format(L["mindcontrol_bar"], UnitName("player")))
-		end
-		if self.db.profile.polymorph then
-			self:RemoveBar(string.format(L["polymorph_bar"], UnitName("player")))
-		end
-		if self.db.profile.orb then
-			self:RemoveBar(string.format(L["orb_bar"], UnitName("player")))
-		end
+	if self.db.profile.mc then
+	self:RemoveBar(string.format(L["mindcontrol_bar"], UnitName("player")))
+	end
+	if self.db.profile.polymorph then
+	self:RemoveBar(string.format(L["polymorph_bar"], UnitName("player")))
+	end
+	if self.db.profile.orb then
+	self:RemoveBar(string.format(L["orb_bar"], UnitName("player")))
+	end
 	end]]
 end
 
@@ -396,14 +396,14 @@ end
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.egg then
+	if sync == syncName.egg then
 		rest = tonumber(rest)
 		if rest == (self.eggs + 1) and self.eggs <= 30 then
 			self.eggs = self.eggs + 1
 			if self.db.profile.eggs then
 				self:Message(string.format(L["egg_message"], self.eggs), "Positive")
 			end
-            self:TriggerEvent("BigWigs_SetCounterBar", self, "Eggs destroyed", (30 - self.eggs))
+			self:TriggerEvent("BigWigs_SetCounterBar", self, "Eggs destroyed", (30 - self.eggs))
 		elseif rest == (self.eggs + 1) and rest == 30 and self.phase ~= 2 then
 			self:Sync(syncName.phase2)
 		end
@@ -439,13 +439,13 @@ function module:BigWigs_RecvSync(sync, rest, nick)
 		if self.db.profile.eggs then
 			self:RemoveBar(L["egg_bar"])
 		end
-    elseif sync == syncName.volley and self.db.profile.fireballvolley then
-        self:Bar(L["volley_bar"], timer.volley, icon.volley, true, "red")
+	elseif sync == syncName.volley and self.db.profile.fireballvolley then
+		self:Bar(L["volley_bar"], timer.volley, icon.volley, true, "red")
 		self:Message(L["volley_message"], "Urgent")
-        self:WarningSign(icon.volley, 2)
-    elseif sync == syncName.phase2 and self.phase < 2 then
-        self.phase = 2
-        self:CancelScheduledEvent("destroyegg_check")
+		self:WarningSign(icon.volley, 2)
+	elseif sync == syncName.phase2 and self.phase < 2 then
+		self.phase = 2
+		self:CancelScheduledEvent("destroyegg_check")
 		self:CancelScheduledEvent("orbcontrol_check")
 		if self.previousorb ~= nil and self.db.profile.orb then
 			self:RemoveBar(string.format(L["orb_bar"], self.previousorb))
@@ -460,7 +460,7 @@ function module:BigWigs_RecvSync(sync, rest, nick)
 		self:Bar(L["conflagration_bar"], timer.firstConflagrate, "Spell_Fire_Incinerate", true, "red")
 		self:Bar(L["volley_bar"], timer.firstVolley, icon.volley, true, "blue")
 		self:Bar(L["warstomp_bar"], timer.firstWarStomp, "Ability_BullRush")
-		
+
 		self:KTM_SetTarget(self.translatedName)
 		self:KTM_Reset()
 	end
@@ -494,6 +494,6 @@ function module:DestroyEggCheck()
 		end
 	end
 	if bosscontrol then
-		--self:TriggerEvent("BigWigs_SendSync", "RazorgoreEgg "..tostring(self.eggs + 1))
+	--self:TriggerEvent("BigWigs_SendSync", "RazorgoreEgg "..tostring(self.eggs + 1))
 	end
 end

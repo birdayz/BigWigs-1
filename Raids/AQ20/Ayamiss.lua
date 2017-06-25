@@ -19,7 +19,7 @@ L:RegisterTranslations("enUS", function() return {
 	sacrificetrigger = "^([^%s]+) ([^%s]+) afflicted by Paralyze",
 	sacrificewarn = " is being Sacrificed!",
 	you = "You",
-	are = "are",	
+	are = "are",
 } end )
 
 L:RegisterTranslations("deDE", function() return {
@@ -84,9 +84,9 @@ function module:CheckSacrifice( msg )
 		if (player == L["you"] and type == L["are"]) then
 			player = UnitName("player")
 		end
-		
-		if self.db.profile.sacrifice then 
-			self:Message(player .. L["sacrificewarn"], "Important") 
+
+		if self.db.profile.sacrifice then
+			self:Message(player .. L["sacrificewarn"], "Important")
 		end
 	end
 end

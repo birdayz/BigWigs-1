@@ -50,25 +50,25 @@ L:RegisterTranslations("enUS", function() return {
 	guardians_cmd = "guardians",
 	guardians_name = "Guardian Spawns",
 	guardians_desc = "Warn for incoming Icecrown Guardians in phase 3.",
-	
+
 	fbvolley_cmd = "fbvolley",
 	fbvolley_name = "Possible volley",
 	fbvolley_desc = "Timer for possible Frostbolt volley/multiple",
-	
+
 	addcount_cmd = "addcount",
 	addcount_name = "P1 Add counter",
 	addcount_desc = "Counts number of killed adds in P1",
-	
+
 	ktmreset_cmd = "ktmreset",
 	ktmreset_name = "Do not reset KTM on MC",
 	ktmreset_desc = "Resets KTM on MC when disabled, does nothing when enabled.",
-	
+
 	mc_trigger1 = "Your soul, is bound to me now!",
 	mc_trigger2 = "There will be no escape!",
 	mc_warning = "Mind Control!",
 	mc_bar = "Possible Mind Control!",
 
-	start_trigger = "Minions, servants, soldiers of the cold dark, obey the call of Kel'Thuzad!",   
+	start_trigger = "Minions, servants, soldiers of the cold dark, obey the call of Kel'Thuzad!",
 	start_trigger1 = "Minions, servants, soldiers of the cold dark! Obey the call of Kel'Thuzad!",
 	start_warning = "Kel'Thuzad encounter started! ~5min till he is active!",
 	start_bar = "Phase 1 Timer",
@@ -111,15 +111,15 @@ L:RegisterTranslations("enUS", function() return {
 	frostbolt_warning = "Frostbolt! Interrupt!",
 	frostbolt_bar = "Frostbolt",
 
-	
+
 	frostbolt_volley = "Possible volley",
 	frostbolt_volley_trigger = "afflicted by Frostbolt",
-	
+
 	add_dead_trigger = "(.*) dies",
 	add_bar = "%d/14 %s",
-	
+
 	frostblast_bar = "Possible Frost Blast",
-	frostblast_trigger1 = "I will freeze the blood in your veins!",  
+	frostblast_trigger1 = "I will freeze the blood in your veins!",
 	frostblast_warning = "Frost Blast!",
 	frostblast_soon_message = "Possible Frost Blast in ~5sec!",
 
@@ -131,13 +131,13 @@ L:RegisterTranslations("enUS", function() return {
 	detonate_bar = "Detonate Mana - %s",
 	detonate_possible_bar = "Detonate Mana",
 	detonate_warning = "%s has Detonate Mana!",
-	
+
 	you = "You",
 	are = "are",
-	
+
 	proximity_cmd = "proximity",
-    proximity_name = "Proximity Warning",
-    proximity_desc = "Show Proximity Warning Frame",
+	proximity_name = "Proximity Warning",
+	proximity_desc = "Show Proximity Warning Frame",
 } end )
 
 
@@ -198,7 +198,7 @@ local syncName = {
 	guardians = "KelGuardians",
 }
 
-local timeLastFrostboltVolley = 0    -- saves time of first frostbolt 
+local timeLastFrostboltVolley = 0    -- saves time of first frostbolt
 local numFrostboltVolleyHits = 0	-- counts the number of people hit by frostbolt
 local numAbominations = 0	-- counter for Unstoppable Abomination's
 local numWeavers = 0 	-- counter for Soul Weaver's
@@ -221,7 +221,7 @@ end
 function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_MONSTER_YELL")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE")
-	
+
 	self:RegisterEvent("CHAT_MSG_SPELL_SELF_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PARTY_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE", "Event")
@@ -236,7 +236,7 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "Affliction")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "Affliction")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "Affliction")
-	
+
 	self:ThrottleSync(5, syncName.detonate)
 	self:ThrottleSync(5, syncName.frostblast)
 	self:ThrottleSync(2, syncName.frostbolt)
@@ -251,7 +251,7 @@ end
 -- called after module is enabled and after each wipe
 function module:OnSetup()
 	self:RegisterEvent("CHAT_MSG_COMBAT_HOSTILE_DEATH")
-	
+
 	self.warnedAboutPhase3Soon = nil
 	frostbolttime = 0
 end
@@ -261,7 +261,7 @@ function module:OnEngage()
 	self:Message(L["start_warning"], "Attention")
 	self:Bar(L["start_bar"], timer.phase1, icon.phase1)
 	self:DelayedMessage(timer.phase1 - 20, L["phase1_warn"], "Important")
-	
+
 	if self.db.profile.addcount then
 		timePhase1Start = GetTime() 	-- start of p1, used for tracking add counts
 		numAbominations = 0
@@ -273,7 +273,7 @@ end
 
 -- called after boss is disengaged (wipe(retreat) or victory)
 function module:OnDisengage()
-    self:RemoveProximity()
+	self:RemoveProximity()
 end
 
 
@@ -282,17 +282,17 @@ end
 ------------------------------
 
 function module:MINIMAP_ZONE_CHANGED(msg)
-	if GetMinimapZoneText() ~= L["KELTHUZADCHAMBERLOCALIZEDLOLHAX"] or self.core:IsModuleActive(module.translatedName) then 
-        return 
-    end
-    
+	if GetMinimapZoneText() ~= L["KELTHUZADCHAMBERLOCALIZEDLOLHAX"] or self.core:IsModuleActive(module.translatedName) then
+		return
+	end
+
 	-- Activate the Kel'Thuzad mod!
 	self.core:EnableModule(module.translatedName)
 end
 
 -- check for phase 3
 function module:UNIT_HEALTH(msg)
-	if self.db.profile.phase then 
+	if self.db.profile.phase then
 		if UnitName(msg) == self.translatedName then
 			local health = UnitHealth(msg)
 			if health > 35 and health <= 40 and not self.warnedAboutPhase3Soon then
@@ -333,13 +333,13 @@ function module:CHAT_MSG_COMBAT_HOSTILE_DEATH(msg)
 		self:Sync(syncName.abomination .. " " .. mob)
 	elseif self.db.profile.addcount and (mob == "Soul Weaver") then
 		self:Sync(syncName.soulWeaver .. " " .. mob)
-	elseif self.db.profile.bosskill and (mob == "Kel'Thuzad") then 
+	elseif self.db.profile.bosskill and (mob == "Kel'Thuzad") then
 		self:SendBossDeathSync()
 	end
 end
 
 --[[function module:Volley()
-	self:Bar(L["frostbolt_volley"], 15, icon.frostboltVolley)
+self:Bar(L["frostbolt_volley"], 15, icon.frostboltVolley)
 end]]
 function module:Affliction(msg)
 	if string.find(msg, L["detonate_trigger"]) then
@@ -351,29 +351,29 @@ function module:Affliction(msg)
 			self:Sync(syncName.detonate .. " ".. dplayer)
 		end
 	end
-	
+
 	if self.db.profile.fbvolley and string.find(msg, L["frostbolt_volley_trigger"]) then
 		local now = GetTime()
-		
+
 		-- only warn if there are more than 4 players hit by frostbolt volley within 4s
 		if now - timeLastFrostboltVolley > 4 then
 			timeLastFrostboltVolley = now
 			numFrostboltVolleyHits = 1
-		else 
+		else
 			numFrostboltVolleyHits = numFrostboltVolleyHits + 1
 		end
-		
-		if numFrostboltVolleyHits == 4 then 
-			
+
+		if numFrostboltVolleyHits == 4 then
+
 			self:Bar(L["frostbolt_volley"], timer.frostboltVolley, icon.frostboltVolley)
-			
+
 			--[[self:CancelScheduledEvent("bwfbvolley30")
 			self:CancelScheduledEvent("bwfbvolley45")
-			self:CancelScheduledEvent("bwfbvolley60") 
+			self:CancelScheduledEvent("bwfbvolley60")
 			self:ScheduleEvent("bwfbvolley30", self.Volley, 15, self)
 			self:ScheduleEvent("bwfbvolley45", self.Volley, 30, self)
 			self:ScheduleEvent("bwfbvolley60", self.Volley, 45, self) ]] -- why 3 times?
-			
+
 			self:CancelDelayedBar(L["frostbolt_volley"])
 			self:DelayedBar(timer.frostboltVolley, L["frostbolt_volley"], timer.frostboltVolley, icon.frostboltVolley)
 		end
@@ -396,7 +396,7 @@ function module:Event(msg)
 			or string.find(msg, L["pummel_trigger1"]) or string.find(msg, L["pummel_trigger2"]) or string.find(msg, L["pummel_trigger3"]) -- pummeled
 			or string.find(msg, L["shieldbash_trigger1"]) or string.find(msg, L["shieldbash_trigger2"]) or string.find(msg, L["shieldbash_trigger3"]) -- shield bashed
 			or string.find(msg, L["earthshock_trigger1"]) or string.find(msg, L["earthshock_trigger2"]) then -- earth shocked
-			
+
 			self:RemoveBar(L["frostbolt_bar"])
 			frostbolttime = 0
 			self:Sync(syncName.frostboltOver)
@@ -449,14 +449,14 @@ function module:Phase2()
 	self:DelayedMessage(timer.phase2, L["phase2_warning"], "Important")
 	self:DelayedMessage(timer.firstDetonate - 5, L["phase2_detonate_warning"], "Important")
 	self:DelayedMessage(timer.firstFrostblast - 5, L["phase2_mcfrostblast_warning"], "Important")
-	
+
 	if self.db.profile.fbvolley then
 		self:Bar(L["frostbolt_volley"], timer.firstFrostboltVolley, icon.frostboltVolley)
 	end
-	
+
 	-- master target should be automatically set, as soon as a raid assistant targets kel'thuzad
 	self:KTM_Reset()
-	
+
 	-- proximity silent
 	self:Proximity()
 end
@@ -470,7 +470,7 @@ end
 function module:MindControl()
 	self:Message(L["mc_warning"], "Urgent")
 	self:Bar(L["mc_bar"], timer.mindcontrol, icon.mindcontrol)
-	
+
 	self:KTM_Reset()
 end
 
@@ -490,8 +490,8 @@ end
 function module:Detonate(name)
 	if name and self.db.profile.detonate then
 		self:Message(string.format(L["detonate_warning"], name), "Attention")
-		if self.db.profile.detonateicon then 
-			self:Icon(name) 
+		if self.db.profile.detonateicon then
+			self:Icon(name)
 		end
 		self:Bar(string.format(L["detonate_bar"], name), timer.detonate, icon.detonate)
 		self:Bar(L["detonate_possible_bar"], timer.nextDetonate, icon.detonate)
@@ -528,9 +528,9 @@ function module:AbominationDies(name)
 	if name and self.db.profile.addcount then
 		self:RemoveBar(string.format(L["add_bar"], numAbominations, name))
 		numAbominations = numAbominations + 1
-		if numAbominations < 14 then 
-			self:Bar(string.format(L["add_bar"], numAbominations, name), (timePhase1Start + timer.phase1 - GetTime()), icon.abomination) 
-		end	
+		if numAbominations < 14 then
+			self:Bar(string.format(L["add_bar"], numAbominations, name), (timePhase1Start + timer.phase1 - GetTime()), icon.abomination)
+		end
 	end
 end
 
@@ -538,8 +538,8 @@ function module:WeaverDies(name)
 	if name and self.db.profile.addcount then
 		self:RemoveBar(string.format(L["add_bar"], numWeavers, name))
 		numWeavers = numWeavers + 1
-		if numWeavers < 14 then 
-			self:Bar(string.format(L["add_bar"], numWeavers, name), (timePhase1Start + timer.phase1 - GetTime()), icon.soulWeaver) 
+		if numWeavers < 14 then
+			self:Bar(string.format(L["add_bar"], numWeavers, name), (timePhase1Start + timer.phase1 - GetTime()), icon.soulWeaver)
 		end
 	end
 end

@@ -12,7 +12,7 @@ local module, L = BigWigs:ModuleDeclaration("High Priestess Mar'li", "Zul'Gurub"
 
 L:RegisterTranslations("enUS", function() return {
 	spawn_name = "Spawn of Mar'li",
-	
+
 	cmd = "Marli",
 
 	spiders_trigger = "Aid me my brood!",
@@ -46,7 +46,7 @@ L:RegisterTranslations("enUS", function() return {
 	drain_cmd = "drain",
 	drain_name = "Drain Life Alert",
 	drain_desc = "Warn for life drain",
-	
+
 	phase_cmd = "phase",
 	phase_name = "Phase Notification",
 	phase_desc = "Announces the boss' phase transition",
@@ -54,7 +54,7 @@ L:RegisterTranslations("enUS", function() return {
 
 L:RegisterTranslations("deDE", function() return {
 	spawn_name = "Spawn of Mar'li",
-	
+
 	--cmd = "Marli",
 
 	spiders_trigger = "Aid me my brood!",
@@ -88,7 +88,7 @@ L:RegisterTranslations("deDE", function() return {
 	--drain_cmd = "drain",
 	drain_name = "Alarm f\195\188r Blutsauger",
 	drain_desc = "Warnen vor Blutsauger",
-	
+
 	--phase_cmd = "phase",
 	phase_name = "Phasen-Benachrichtigung",
 	phase_desc = "Verk\195\188ndet den Phasenwechsel des Bosses",
@@ -132,7 +132,7 @@ local syncName = {
 --module:RegisterYellEngage(L["start_trigger"])
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_MONSTER_YELL")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "Event")
@@ -143,7 +143,7 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_PARTY", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_OTHER", "Event")
-	
+
 	self:ThrottleSync(5, syncName.drain)
 	self:ThrottleSync(5, syncName.drainOver)
 	self:ThrottleSync(5, syncName.trollPhase)
@@ -203,7 +203,7 @@ end
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.spiders and self.db.profile.spider then
+	if sync == syncName.spiders and self.db.profile.spider then
 		self:Message(L["spiders_message"], "Attention")
 	elseif sync == syncName.trollPhase and self.db.profile.phase then
 		self:Message(L["trollphase"], "Attention")

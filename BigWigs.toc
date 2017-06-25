@@ -63,23 +63,18 @@ Plugins\BossBlock.lua
 Plugins\RaidIcon.lua
 Plugins\Range.lua
 Plugins\CommonAuras.lua
-# Plugins\contribute.lua
 Plugins\Version.lua
 Plugins\Test.lua
 Plugins\CustomBar.lua
 Plugins\Tranq.lua
 Plugins\ZombieFood.lua
 Plugins\LoathebTactical.lua
-# Plugins\NefCount.lua
 Plugins\RespawnTimers.lua
 Plugins\WarningSign.lua
 Plugins\BossRecords.lua
-#Plugins\ReadyCheck.lua
 Plugins\RaidOfficer.lua
 Plugins\AutoReply.lua
 Plugins\Proximity.lua
-#Plugins\DousedRunes.lua
-#Plugins\Enrage.lua
 Plugins\Ignite.lua
 Plugins\WorldBuffTimers.lua
 Plugins\ScorchTimer.lua
@@ -97,6 +92,7 @@ Raids\ZG\Renataki.lua
 Raids\ZG\Hazzarah.lua
 Raids\ZG\Wushoolay.lua
 Raids\ZG\Gahzranka.lua
+Raids\ZG\GurubashiBerserker.lua
 
 Raids\AQ20\Ayamiss.lua
 Raids\AQ20\Buru.lua
@@ -136,6 +132,7 @@ Raids\MC\Shazzrah.lua
 Raids\MC\Garr.lua
 Raids\MC\Sulfuron.lua
 Raids\MC\Golemagg.lua
+Raids\MC\CoreHound.lua
 
 Raids\Other\Azuregos.lua
 Raids\Other\Kazzak.lua
@@ -143,8 +140,6 @@ Raids\Other\Emeriss.lua
 Raids\Other\Lethon.lua
 Raids\Other\Taerar.lua
 Raids\Other\Ysondre.lua
-
-#Raids\Other\Boar.lua
 
 Raids\Onyxia\Onyxia.lua
 
@@ -163,6 +158,3 @@ Raids\Naxxramas\Loatheb.lua
 Raids\Naxxramas\Horsemen.lua
 Raids\Naxxramas\Sapphiron.lua
 Raids\Naxxramas\Kelthuzad.lua
-
-Raids\Trash\CoreHound.lua
-Raids\Trash\GurubashiBerserker.lua

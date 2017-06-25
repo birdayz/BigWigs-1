@@ -12,7 +12,7 @@ local module, L = BigWigs:ModuleDeclaration("Battleguard Sartura", "Ahn'Qiraj")
 
 L:RegisterTranslations("enUS", function() return {
 	cmd = "Sartura",
-	
+
 	add_name = "Sartura's Royal Guard",
 	starttrigger = "defiling these sacred grounds",
 	endtrigger = "I serve to the last!",
@@ -40,15 +40,15 @@ L:RegisterTranslations("enUS", function() return {
 	deadaddtrigger = "Sartura's Royal Guard dies.",
 	deadbosstrigger = "Battleguard Sartura dies.",
 	addmsg = "%d/3 Sartura's Royal Guards dead!",
-	
+
 	adds_cmd = "adds",
 	adds_name = "Dead adds counter",
 	adds_desc = "Announces dead Sartura's Royal Guards.",
-	
+
 	enrage_cmd = "enrage",
 	enrage_name = "Enrage",
 	enrage_desc = "Announces the Enrage when the boss is at 20% HP.",
-	
+
 	berserk_cmd = "berserk",
 	berserk_name = "Berserk",
 	berserk_desc = "Warns for the Berserk that the boss gains after 10 minutes.",
@@ -60,7 +60,7 @@ L:RegisterTranslations("enUS", function() return {
 
 L:RegisterTranslations("deDE", function() return {
 	cmd = "Sartura",
-	
+
 	add_name = "Sarturas Königswache",
 	starttrigger = "defiling these sacred grounds", -- translation missing
 	endtrigger = "I serve to the last!", -- translation missing
@@ -88,15 +88,15 @@ L:RegisterTranslations("deDE", function() return {
 	deadaddtrigger = "Sarturas Königswache stirbt.",
 	deadbosstrigger = "Schlachtwache Sartura stirbt.",
 	addmsg = "%d/3 Sarturas Königswache tot!",
-	
+
 	adds_cmd = "adds",
 	adds_name = "Z\195\164hler f\195\188r tote Adds",
 	adds_desc = "Verk\195\188ndet Sarturas Königswache Tod.",
-	
+
 	enrage_cmd = "enrage",
 	enrage_name = "Wutanfall",
 	enrage_desc = "Meldet den Wutanfall, wenn der Boss bei 20% HP ist.",
-	
+
 	berserk_cmd = "berserk",
 	berserk_name = "Berserker",
 	berserk_desc = "Warnt vor dem Berserkermodus, in den der Boss nach 10 Minuten geht.",
@@ -151,7 +151,7 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_OTHER")
 	self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS")
-	
+
 	self:ThrottleSync(3, syncName.whirlwind)
 	self:ThrottleSync(3, syncName.whirlwindOver)
 	self:ThrottleSync(5, syncName.enrage)
@@ -162,7 +162,7 @@ end
 function module:OnSetup()
 	self.started = nil
 	guard = 0
-	
+
 	self:RegisterEvent("CHAT_MSG_COMBAT_HOSTILE_DEATH")
 end
 
@@ -205,7 +205,7 @@ end
 
 function module:CHAT_MSG_COMBAT_HOSTILE_DEATH(msg)
 	BigWigs:CheckForBossDeath(msg, self)
-	
+
 	if msg == L["deadaddtrigger"] then
 		self:Sync(syncName.add.." "..guard+1)
 	end
@@ -238,7 +238,7 @@ function module:BigWigs_RecvSync(sync, rest, nick)
 	if sync == syncName.whirlwind and self.db.profile.whirlwind then
 		self:Message(L["whirlwindonwarn"], "Important")
 		self:Bar(L["whirlwindbartext"], timer.whirlwind, icon.whirlwind)
-		
+
 		self:DelayedBar(timer.whirlwind, L["whirlwindnextbartext"], timer.nextWhirlwind, icon.whirlwind)
 		self:DelayedMessage(timer.nextWhirlwind+timer.whirlwind - 3, L["whirlwindinctext"], "Attention", true, "Alarm")
 	elseif sync == syncName.whirlwindOver and self.db.profile.whirlwind then
@@ -249,7 +249,7 @@ function module:BigWigs_RecvSync(sync, rest, nick)
 	elseif sync == syncName.berserk and self.db.profile.berserk then
 		self:Message(L["berserkwarn"], "Attention")
 		self:RemoveBar(L["berserktext"])
-		
+
 		self:CancelDelayedMessage(L["warn1"])
 		self:CancelDelayedMessage(L["warn2"])
 		self:CancelDelayedMessage(L["warn3"])

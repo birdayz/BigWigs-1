@@ -42,11 +42,11 @@ L:RegisterTranslations("enUS", function() return {
 	["Runs a version query on the BigWigs core."] = true,
 	["Nr Replies"] = true,
 	["Ancient"] = true,
-            
-    ["Your version of Big Wigs Elysium is out of date!\nPlease visit https://github.com/Hosq/BigWigs to get the latest version."] = true,
-    ["Close"] = true,
-    ["Cancel"] = true,
-            
+
+	["Your version of Big Wigs Elysium is out of date!\nPlease visit https://github.com/Hosq/BigWigs to get the latest version."] = true,
+	["Close"] = true,
+	["Cancel"] = true,
+
 } end )
 
 L:RegisterTranslations("deDE", function() return {
@@ -75,10 +75,10 @@ L:RegisterTranslations("deDE", function() return {
 	["Runs a version query on the BigWigs core."] = "Versionsabfrage f\195\188r die BigWigs Kernkomponente starten.",
 	["Nr Replies"] = "Anzahl der Antworten",
 	["Ancient"] = "Alt",
-            
-    ["Your version of Big Wigs Elysium is out of date!\nPlease visit https://github.com/Hosq/BigWigs to get the latest version."] = "Deine Version von Big Wigs Elysium ist veraltet! Bitte downloade die neuste Version von https://github.com/Hosq/BigWigs",
-    ["Close"] = "Schliessen",
-    ["Cancel"] = "Abbrechen",
+
+	["Your version of Big Wigs Elysium is out of date!\nPlease visit https://github.com/Hosq/BigWigs to get the latest version."] = "Deine Version von Big Wigs Elysium ist veraltet! Bitte downloade die neuste Version von https://github.com/Hosq/BigWigs",
+	["Close"] = "Schliessen",
+	["Cancel"] = "Abbrechen",
 } end )
 
 
@@ -122,7 +122,7 @@ BigWigsVersionQuery.consoleOptions = {
 ------------------------------
 
 function BigWigsVersionQuery:Test()
-    BigWigsVersionQuery:QueryVersion("BigWigs")
+	BigWigsVersionQuery:QueryVersion("BigWigs")
 end
 
 function BigWigsVersionQuery:OnEnable()
@@ -138,9 +138,9 @@ function BigWigsVersionQuery:OnEnable()
 	self:RegisterEvent("BigWigs_RecvSync")
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWVQ", 0)
 	self:TriggerEvent("BigWigs_ThrottleSync", "BWVR", 0)
-	
+
 	--BigWigsVersionQuery:QueryVersion("BigWigs")
-    self:ScheduleEvent("versionquerytest", BigWigsVersionQuery.Test, 1, self) -- check version in 1s
+	self:ScheduleEvent("versionquerytest", BigWigsVersionQuery.Test, 1, self) -- check version in 1s
 end
 
 function BigWigsVersionQuery:PopulateRevisions()
@@ -167,7 +167,7 @@ end
 ------------------------------
 
 function BigWigsVersionQuery:UpdateTablet()
-    if not tablet:IsRegistered("BigWigs_VersionQuery") then
+	if not tablet:IsRegistered("BigWigs_VersionQuery") then
 		tablet:Register("BigWigs_VersionQuery",
 			"children", function() tablet:SetTitle(L["Big Wigs Version Query"])
 				self:OnTooltipUpdate() end,
@@ -176,22 +176,22 @@ function BigWigsVersionQuery:UpdateTablet()
 			"showHintWhenDetached", true,
 			"cantAttach", true,
 			"menu", function()
-					dewdrop:AddLine(
-						"text", L["BigWigs"],
-						"tooltipTitle", L["BigWigs"],
-						"tooltipText", L["Runs a version query on the BigWigs core."],
-						"func", function() self:QueryVersion("BigWigs") end)
-					dewdrop:AddLine(
-						"text", L["Current zone"],
-						"tooltipTitle", L["Current zone"],
-						"tooltipText", L["Runs a version query on your current zone."],
-						"func", function() self:QueryVersion() end)
-					dewdrop:AddLine(
-						"text", L["Close window"],
-						"tooltipTitle", L["Close window"],
-						"tooltipText", L["Closes the version query window."],
-						"func", function() tablet:Attach("BigWigs_VersionQuery"); dewdrop:Close() end)
-				end
+				dewdrop:AddLine(
+					"text", L["BigWigs"],
+					"tooltipTitle", L["BigWigs"],
+					"tooltipText", L["Runs a version query on the BigWigs core."],
+					"func", function() self:QueryVersion("BigWigs") end)
+				dewdrop:AddLine(
+					"text", L["Current zone"],
+					"tooltipTitle", L["Current zone"],
+					"tooltipText", L["Runs a version query on your current zone."],
+					"func", function() self:QueryVersion() end)
+				dewdrop:AddLine(
+					"text", L["Close window"],
+					"tooltipTitle", L["Close window"],
+					"tooltipText", L["Closes the version query window."],
+					"func", function() tablet:Attach("BigWigs_VersionQuery"); dewdrop:Close() end)
+			end
 		)
 	end
 	if tablet:IsAttached("BigWigs_VersionQuery") then
@@ -201,56 +201,56 @@ function BigWigsVersionQuery:UpdateTablet()
 	end
 end
 function BigWigsVersionQuery:UpdateVersions()
-    for name, version in pairs(self.responseTable) do
-        if not self.zoneRevisions then return end
+	for name, version in pairs(self.responseTable) do
+		if not self.zoneRevisions then return end
 		if version > 20000 and version < 30000 then
 			if self.zoneRevisions[self.currentZone] and version > self.zoneRevisions[self.currentZone] then
 				self:IsOutOfDate()
 			end
 		end
 	end
-    
+
 	if not isInitialQuery then
-        self:UpdateTablet()
-    end
+		self:UpdateTablet()
+	end
 end
 
 function BigWigsVersionQuery:IsOutOfDate()
 	if not self.OutOfDateShown then
 		self.OutOfDateShown = true
 		BigWigs:Print(L["Your version of Big Wigs Elysium is out of date!\nPlease visit https://github.com/Hosq/BigWigs to get the latest version."])
-        
-        local dialog = nil
-        StaticPopupDialogs["BigWigsOutOfDateDialog"] = {
-            text = L["Your version of Big Wigs Elysium is out of date!\nPlease visit https://github.com/Hosq/BigWigs to get the latest version."],
-            button1 = L["Close"],
-            button2 = L["Cancel"],
-            OnAccept = function()
-                StaticPopup_Hide ("BigWigsOutOfDateDialog")
-            end,
-            OnCancel = function()
-                StaticPopup_Hide ("BigWigsOutOfDateDialog")
-            end,
-            OnShow = function (self, data)
-                local editbox = getglobal(this:GetName().."WideEditBox")
-                editbox:SetText("https://github.com/Hosq/BigWigs")
-                editbox:SetWidth(250)
-                editbox:ClearFocus()
-                editbox:HighlightText() 
-                --self.editBox:SetText("Some text goes here")
-                getglobal(this:GetName().."Button2"):Hide()
-            end,
-            hasEditBox = true,
-            hasWideEditBox = true,
-            maxLetters = 42,
-            --EditBox:setText("Text"),
-            timeout = 0,
-            whileDead = true,
-            hideOnEscape = true,
-            preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
-        }
-        local dialog = StaticPopup_Show ("BigWigsOutOfDateDialog")
-        
+
+		local dialog = nil
+		StaticPopupDialogs["BigWigsOutOfDateDialog"] = {
+			text = L["Your version of Big Wigs Elysium is out of date!\nPlease visit https://github.com/Hosq/BigWigs to get the latest version."],
+			button1 = L["Close"],
+			button2 = L["Cancel"],
+			OnAccept = function()
+				StaticPopup_Hide ("BigWigsOutOfDateDialog")
+			end,
+			OnCancel = function()
+				StaticPopup_Hide ("BigWigsOutOfDateDialog")
+			end,
+			OnShow = function (self, data)
+				local editbox = getglobal(this:GetName().."WideEditBox")
+				editbox:SetText("https://github.com/Hosq/BigWigs")
+				editbox:SetWidth(250)
+				editbox:ClearFocus()
+				editbox:HighlightText()
+				--self.editBox:SetText("Some text goes here")
+				getglobal(this:GetName().."Button2"):Hide()
+			end,
+			hasEditBox = true,
+			hasWideEditBox = true,
+			maxLetters = 42,
+			--EditBox:setText("Text"),
+			timeout = 0,
+			whileDead = true,
+			hideOnEscape = true,
+			preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+		}
+		local dialog = StaticPopup_Show ("BigWigsOutOfDateDialog")
+
 	end
 end
 
@@ -297,7 +297,7 @@ function BigWigsVersionQuery:OnTooltipUpdate()
 end
 
 function BigWigsVersionQuery:QueryVersionAndShowWindow(zone)
-    self:QueryVersion(zone)
+	self:QueryVersion(zone)
 	self:UpdateVersions()
 end
 function BigWigsVersionQuery:QueryVersion(zone)
@@ -318,7 +318,7 @@ function BigWigsVersionQuery:QueryVersion(zone)
 			zone = BZ:GetTranslation(zone)
 		end
 	end
-    
+
 	if not zone then
 		error("The given zone is invalid.")
 		return
@@ -326,8 +326,8 @@ function BigWigsVersionQuery:QueryVersion(zone)
 
 	-- ZZZ |zone| should be translated here.
 	if not isInitialQuery then
-        self.core:Print(L["Querying versions for "].."|cff"..COLOR_GREEN..zone.."|r.")
-    end
+		self.core:Print(L["Querying versions for "].."|cff"..COLOR_GREEN..zone.."|r.")
+	end
 
 	-- If this is a non-enUS zone, convert it to enUS.
 	if BZ:HasReverseTranslation(zone) then zone = BZ:GetReverseTranslation(zone) end
@@ -336,12 +336,12 @@ function BigWigsVersionQuery:QueryVersion(zone)
 
 	self.queryRunning = true
 	self:ScheduleEvent(	function()
-            self.queryRunning = nil
-            if not isInitialQuery then
-                self.core:Print(L["Version query done."])
-            end
-            isInitialQuery = false
-        end, 5)
+		self.queryRunning = nil
+		if not isInitialQuery then
+			self.core:Print(L["Version query done."])
+		end
+		isInitialQuery = false
+	end, 5)
 
 	self.responseTable = {}
 
@@ -396,9 +396,9 @@ end
 
 function BigWigsVersionQuery:BigWigs_RecvSync(sync, rest, nick)
 	if sync == "BWVQ" and nick ~= UnitName("player") and rest then
-		if not self.zoneRevisions then 
-            self:PopulateRevisions() 
-        end
+		if not self.zoneRevisions then
+			self:PopulateRevisions()
+		end
 		if not self.zoneRevisions[rest] then
 			self:TriggerEvent("BigWigs_SendSync", "BWVR -1 "..nick)
 		else

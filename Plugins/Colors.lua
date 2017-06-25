@@ -273,7 +273,7 @@ BigWigsColors.defaultDB = {
 	positive = "00ff00", -- Green
 	bosskill = "00ff00", -- Green
 	core = "00ffff", -- Cyan
-	
+
 	shortbar = {"ffff00", "ff7f00", "ff0000"},
 	shortnr = 3,
 	longbar = {"00ff00", "ffff00", "ff7f00", "ff0000"},

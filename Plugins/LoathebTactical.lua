@@ -21,11 +21,11 @@ local boss = AceLibrary("Babble-Boss-2.2")["Loatheb"]
 
 L:RegisterTranslations("enUS", function() return {
 	cmd = "BigWigsLoathebTactical",
-	
+
 	graphic_cmd = "graphic",
 	graphic_name = "Graphical Icons",
 	graphic_desc = "When checked shows graphical icons",
-	
+
 	sound_cmd = "sound",
 	sound_name = "Sound Effects",
 	sound_desc = "When checked plays sound effects",
@@ -35,19 +35,19 @@ L:RegisterTranslations("enUS", function() return {
 	consumable_cmd = "consumable",
 	consumable_name = "Do NOT warn raid to use consumables (A)",
 	consumable_desc = "When check does NOT warn raid to use consambles over raidwarn. Requires Assistance (A)",
-	
+
 	shadowpot = "-- Drink Shadow Protection Potion ! --",
 	bandage = "-- Use your bandages ! --",
 	wrtorhs = "-- Healthstone or Whipper Root Tuber ! --",
 	shadowpotandbandage = "-- Drink Shadow Protection Potion and Bandage ! --",
 	noconsumable = "-- No Consumable at this time ! --",
-	
+
 	soundshadowpot = "Interface\\Addons\\BigWigs_LoathebTactical\\Sounds\\potion.wav",
 	soundbandage = "Interface\\Addons\\BigWigs_LoathebTactical\\Sounds\\bandage.wav",
 	soundwrtorhs = "Interface\\Addons\\BigWigs_LoathebTactical\\Sounds\\healthstone.wav",
 	soundshadowpotandbandage = "Interface\\Addons\\BigWigs_LoathebTactical\\Sounds\\potionandbandage.wav",
 	soundgoforbuff = "Interface\\Addons\\BigWigs_LoathebTactical\\Sounds\\goforbuff.wav",
-	
+
 	resetmsg = "Bigwigs Loatheb Tactical Module has reset"
 
 } end )
@@ -72,45 +72,45 @@ BigWigsLoathebTactical.external = true
 --      Initialization      --
 ------------------------------
 function BigWigsLoathebTactical:OnRegister()
-	self.frameIcon = CreateFrame("Frame",nil,UIParent)	
-	
+	self.frameIcon = CreateFrame("Frame",nil,UIParent)
+
 	self.frameIcon:SetFrameStrata("MEDIUM")
 	self.frameIcon:SetWidth(100)
 	self.frameIcon:SetHeight(100)
 	self.frameIcon:SetAlpha(0.6)
-	
+
 	self.frameTexture = self.frameIcon:CreateTexture(nil,"BACKGROUND")
-	
+
 	self.frameTexture:SetTexture(nil)
 	self.frameTexture:SetAllPoints(self.frameIcon)
-	
+
 	self.frameIcon:Hide()
-	
-	self.frameIcon2 = CreateFrame("Frame",nil,UIParent)	
-	
+
+	self.frameIcon2 = CreateFrame("Frame",nil,UIParent)
+
 	self.frameIcon2:SetFrameStrata("MEDIUM")
 	self.frameIcon2:SetWidth(100)
 	self.frameIcon2:SetHeight(100)
 	self.frameIcon2:SetAlpha(0.6)
-	
+
 	self.frameTexture2 = self.frameIcon2:CreateTexture(nil,"BACKGROUND")
-	
+
 	self.frameTexture2:SetTexture(nil)
 	self.frameTexture2:SetAllPoints(self.frameIcon2)
-	
+
 	self.frameIcon2:Hide()
 end
 
 function BigWigsLoathebTactical:OnEnable()
-	
+
 	self.sporespawn = 1
 	self.consumableseq = 1
 
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", "CheckForWipe")
 	self:RegisterEvent("CHAT_MSG_COMBAT_HOSTILE_DEATH")
-	
-	self:RegisterEvent("BigWigs_RecvSync")	
-	
+
+	self:RegisterEvent("BigWigs_RecvSync")
+
 	DEFAULT_CHAT_FRAME:AddMessage(L["resetmsg"])
 end
 
@@ -119,20 +119,20 @@ end
 ------------------------------
 
 function BigWigsLoathebTactical:BigWigs_RecvSync( sync, rest, nick )
-	if sync == "LoathebDoom2" and rest then		
+	if sync == "LoathebDoom2" and rest then
 		rest = tonumber(rest)
 		if not rest then return end
 		if rest == (self.consumableseq + 1) then
-			self:ScheduleEvent("bwloathebconsumable "..tostring(self.consumableseq), self.ConsumableWarning, 11, self)			
-		end	
+			self:ScheduleEvent("bwloathebconsumable "..tostring(self.consumableseq), self.ConsumableWarning, 11, self)
+		end
 	end
 end
 
 function BigWigsLoathebTactical:ConsumableWarning()
 	if consumableslist[self.consumableseq] then
 		if not self.db.profile.consumable then
-				SendChatMessage(consumableslist[self.consumableseq], "RAID_WARNING")
-				SendChatMessage(consumableslist[self.consumableseq], "SAY")
+			SendChatMessage(consumableslist[self.consumableseq], "RAID_WARNING")
+			SendChatMessage(consumableslist[self.consumableseq], "SAY")
 		end
 		if self.db.profile.graphic then
 			if consumableslist[self.consumableseq] == L["shadowpot"] then
@@ -151,22 +151,22 @@ function BigWigsLoathebTactical:ConsumableWarning()
 				self.frameTexture:SetTexture(nil)
 				self.frameTexture2:SetTexture(nil)
 			end
-			
+
 			self.frameIcon.texture = self.frameTexture
 			self.frameTexture:SetTexCoord(0.0,1.0,0.0,1.0)
 			self.frameIcon:SetPoint("CENTER",200,100)
 			self.frameIcon:Show()
-			
+
 			self.frameIcon2.texture = self.frameTexture2
 			self.frameTexture2:SetTexCoord(0.0,1.0,0.0,1.0)
 			self.frameIcon2:SetPoint("CENTER",200,0)
 			self.frameIcon2:Show()
-			
-			self:ScheduleEvent(function() 
-				self.frameIcon:Hide() 
+
+			self:ScheduleEvent(function()
+				self.frameIcon:Hide()
 				self.frameIcon2:Hide()
-			end, 5)			
-		end 
+			end, 5)
+		end
 		if self.db.profile.sound then
 			if consumableslist[self.consumableseq] == L["shadowpot"] then
 				PlaySoundFile(L["soundshadowpot"])

@@ -97,14 +97,14 @@ module:RegisterYellEngage(L["starttrigger2"])
 module:RegisterYellEngage(L["starttrigger3"])
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_MONSTER_YELL")
 	self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE")
 
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "CheckForDisease")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "CheckForDisease")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "CheckForDisease")
-	
+
 	self:ThrottleSync(10, syncName.teleport)
 	self:ThrottleSync(5, syncName.disease)
 end
@@ -152,7 +152,7 @@ end
 
 function module:CheckForDisease( msg )
 	if string.find(msg, L["dtrigger"]) then
-		if self.db.profile.disease then 
+		if self.db.profile.disease then
 			self:Sync(syncName.disease)
 		end
 	end
@@ -164,7 +164,7 @@ end
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.disease then
+	if sync == syncName.disease then
 		self:Disease()
 	elseif sync == syncName.teleport then
 		self:Teleport()
@@ -176,13 +176,13 @@ end
 ------------------------------
 
 function module:Disease()
-	self:Message(L["dwarn"], "Important") 
+	self:Message(L["dwarn"], "Important")
 	self:Bar(L["dbar"], timer.disease, icon.disease)
 end
 
 function module:Teleport()
 	self:ScheduleEvent(self.BackToRoom, timer.toRoom, self)
-	
+
 	if self.db.profile.teleport then
 		self:Message(string.format(L["on_platform_message"], timer.toRoom), "Attention")
 		self:DelayedMessage(timer.toRoom - 30, L["to_floor_30sec_message"], "Urgent")

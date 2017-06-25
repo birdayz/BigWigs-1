@@ -25,7 +25,7 @@ L:RegisterTranslations("enUS", function() return {
 	vanish_cmd = "vanish",
 	vanish_name = "Vanish announce",
 	vanish_desc = "Shows warnings for boss' Vanish.",
-	
+
 	enraged_cmd = "enraged",
 	enraged_name = "Announce boss Enrage",
 	enraged_desc = "Lets you know when boss hits harder.",
@@ -45,7 +45,7 @@ L:RegisterTranslations("deDE", function() return {
 	vanish_cmd = "vanish",
 	vanish_name = "Verschwinden anzeigen",
 	vanish_desc = "Verk\195\188ndet Boss' Verschwinden.",
-	
+
 	enraged_cmd = "enraged",
 	enraged_name = "Verk\195\188ndet Boss' Raserei",
 	enraged_desc = "L\195\164sst dich wissen, wenn Boss h\195\164rter zuschl\195\164gt.",
@@ -87,7 +87,7 @@ local syncName = {
 function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS")
 	self:RegisterEvent("UNIT_HEALTH")
-	
+
 	self:ThrottleSync(5, syncName.unvanish)
 	self:ThrottleSync(5, syncName.vanish)
 	self:ThrottleSync(5, syncName.enrage)
@@ -157,14 +157,14 @@ end
 ------------------------------
 
 function module:VisiblePhase()
-    vanished = false
+	vanished = false
 	self:CancelScheduledEvent("renatakiunvanishcheck")
 	if self.db.profile.vanish then
 		self:RemoveBar(L["return_bar"])
 		self:Bar(L["vanish_bar"], timer.vanishSoon, icon.vanish)
 		self:Message(L["unvanish_message"], "Attention")
 	end
-    
+
 	if not vanished then
 		self:ScheduleRepeatingEvent("renatakivanishcheck", self.CheckVanish, 0.5, self)
 	end
@@ -175,7 +175,7 @@ function module:VanishPhase()
 	self:CancelScheduledEvent("renatakivanishcheck")
 	if self.db.profile.vanish then
 		self:RemoveBar(L["vanish_bar"])
-        self:Message(L["vanish_message"], "Attention")
+		self:Message(L["vanish_message"], "Attention")
 		self:Bar(L["return_bar"], timer.unvanish, icon.vanish)
 	end
 	self:ScheduleRepeatingEvent("renatakiunvanishcheck", self.CheckUnvanish, 0.5, self)
@@ -186,16 +186,16 @@ end
 ------------------------------
 
 function module:CheckUnvanish()
-    self:DebugMessage("CheckUnvanish")
-    if module:IsRenatakiVisible() then
-        self:Sync(syncName.unvanish)
-    end
+	self:DebugMessage("CheckUnvanish")
+	if module:IsRenatakiVisible() then
+		self:Sync(syncName.unvanish)
+	end
 end
 function module:CheckVanish()
-    self:DebugMessage("CheckVanish")
-    if not module:IsRenatakiVisible() then
-        self:Sync(syncName.vanish)
-    end	
+	self:DebugMessage("CheckVanish")
+	if not module:IsRenatakiVisible() then
+		self:Sync(syncName.vanish)
+	end
 end
 function module:IsRenatakiVisible()
 	if UnitName("playertarget") == self.translatedName then
@@ -207,6 +207,6 @@ function module:IsRenatakiVisible()
 			end
 		end
 	end
-    
-    return false
+
+	return false
 end

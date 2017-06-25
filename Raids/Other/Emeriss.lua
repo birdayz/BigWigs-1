@@ -29,7 +29,7 @@ local icon = {
 	corruption = "Interface\\Icons\\Ability_Creature_Cursed_03",
 }
 local syncName = {
-}
+	}
 
 ----------------------------
 --      Localization      --
@@ -66,7 +66,7 @@ L:RegisterTranslations("enUS", function() return {
 
 	breath_bar = "Noxious Breath",
 	corruption_bar = "Corruption of the Earth",
-	
+
 } end )
 
 ------------------------------
@@ -98,18 +98,18 @@ end
 
 function module:Event( msg )
 	if string.find(msg, L["breath_trigger"]) then
-		if self.db.profile.noxious then 
+		if self.db.profile.noxious then
 			self:CancelDelayedMessage(L["breathSoon_warn"])
 			self:DelayedMessage(timer.breath-3, L["breathSoon_warn"], "Important", true, "Alert")
 			self:RemoveBar(L["breath_bar"])
 			self:Bar(L["breath_bar"], timer.breath, icon.breath)
-		end			
+		end
 	else
 		local _,_, EPlayer, EType = string.find(msg, L["volatile_trigger"])
 		if (EPlayer and EType) then
 			if (EPlayer == L["isyou"] and EType == L["isare"]) then
-				if self.db.profile.volatileyou then 
-					self:Message(L["volatileYou_warn"], "Important", true) 
+				if self.db.profile.volatileyou then
+					self:Message(L["volatileYou_warn"], "Important", true)
 				end
 			else
 				if self.db.profile.volatileother then
@@ -128,10 +128,10 @@ function module:CHAT_MSG_MONSTER_YELL(msg)
 			self:DelayedMessage(timer.firstBreath-3, L["breathSoon_warn"], "Important", true, "Alert")
 			self:RemoveBar(L["breath_bar"])
 			self:Bar(L["breath_bar"], timer.firstBreath, icon.breath)
-	end
+		end
 	elseif (string.find(msg, L["corruption_trigger"])) then
-		 self:Message(L["corruption_warn"], "Important")
-		 self:RemoveBar(L["corruption_bar"])
-		 self:Bar(L["corruption_bar"], timer.corruption, icon.corruption)
+		self:Message(L["corruption_warn"], "Important")
+		self:RemoveBar(L["corruption_bar"])
+		self:Bar(L["corruption_bar"], timer.corruption, icon.corruption)
 	end
 end

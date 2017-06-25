@@ -13,7 +13,7 @@ local module, L = BigWigs:ModuleDeclaration("Bossname", "Naxxramas")
 L:RegisterTranslations("enUS", function() return {
 	cmd = "Testboss",
 
-	start_trigger = "Let the games begin."
+	start_trigger = "Let the games begin.",
 	
 	berserk_cmd = "berserk",
 	berserk_name = "Berserk",

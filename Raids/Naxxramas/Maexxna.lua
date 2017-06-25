@@ -92,7 +92,7 @@ local enrageannounced = false
 ------------------------------
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS", "Enrage")
 	self:RegisterEvent("UNIT_HEALTH")
 
@@ -151,8 +151,8 @@ function module:UNIT_HEALTH( msg )
 	if UnitName(msg) == boss then
 		local health = UnitHealth(msg)
 		if (health > 30 and health <= 33 and not enrageannounced) then
-			if self.db.profile.enrage then 
-				self:Message(L["enragesoonwarn"], "Important") 
+			if self.db.profile.enrage then
+				self:Message(L["enragesoonwarn"], "Important")
 			end
 			enrageannounced = true
 		elseif (health > 40 and enrageannounced) then
@@ -163,8 +163,8 @@ end
 
 function module:Enrage( msg )
 	if string.find(msg, L["etrigger1"]) then
-		if self.db.profile.enrage then 
-			self:Message(L["enragewarn"], "Important", nil, "Beware") 
+		if self.db.profile.enrage then
+			self:Message(L["enragewarn"], "Important", nil, "Beware")
 		end
 	end
 end
@@ -199,7 +199,7 @@ function module:Webspray()
 	self:Bar(L["cocoonbar"], timer.cocoon, "Spell_Nature_Web")
 	self:Bar(L["spiderbar"], timer.spider, "INV_Misc_MonsterSpiderCarapace_01")
 	self:Bar(L["webspraybar"], timer.webspray, "Ability_Ensnare")
-	
+
 	self:DelayedMessage(timer.webspray - 30, L["webspraywarn30sec"], "Attention")
 	self:DelayedMessage(timer.webspray - 20, L["webspraywarn20sec"], "Attention")
 	self:DelayedMessage(timer.webspray - 10, L["webspraywarn10sec"], "Attention")
@@ -207,7 +207,7 @@ function module:Webspray()
 end
 
 function module:Poison()
-	if self.db.profile.poison then 
+	if self.db.profile.poison then
 		self:Message(L["poisonwarn"], "Important")
 		self:Bar(L["poisonbar"], timer.poison, "Ability_Creature_Poison_03")
 	end
@@ -216,8 +216,8 @@ end
 function module:Cocoon(player)
 	local t = GetTime()
 	if (not times[player]) or (times[player] and (times[player] + 10) < t) then
-		if self.db.profile.cocoon then 
-			self:Message(string.format(L["cocoonwarn"], player), "Urgent") 
+		if self.db.profile.cocoon then
+			self:Message(string.format(L["cocoonwarn"], player), "Urgent")
 		end
 		times[player] = t
 	end

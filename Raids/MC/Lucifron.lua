@@ -63,7 +63,7 @@ L:RegisterTranslations("enUS", function() return {
 	deathother_trigger = "(.*) dies.",
 	deadaddtrigger = "Flamewaker Protector dies",
 	add_name = "Flamewaker Protector",
-	
+
 	mindcontrol_message = "%s is mindcontrolled!",
 	mindcontrol_message_you = "You are mindcontrolled!",
 	mindcontrol_bar = "MC: %s",
@@ -74,23 +74,23 @@ L:RegisterTranslations("enUS", function() return {
 	shock_bar = "Shadow Shock",
 
 	cmd = "Lucifron",
-	
+
 	adds_cmd = "adds",
 	adds_name = "Dead adds counter",
 	adds_desc = "Announces dead Flamewaker Protectors",
-	
+
 	mc_cmd = "mc",
 	mc_name = "Dominate Mind",
 	mc_desc = "Alert when someone is mind controlled.",
-	
+
 	curse_cmd = "curse",
 	curse_name = "Lucifron's Curse alert",
 	curse_desc = "Warn for Lucifron's Curse",
-	
+
 	doom_cmd = "doom",
 	doom_name = "Impending Doom alert",
 	doom_desc = "Warn for Impending Doom",
-	
+
 	shock_cmd = "shock",
 	shock_name = "Shadow Shock alert",
 	shock_desc  = "Warn for Shadow Shock",
@@ -103,7 +103,7 @@ L:RegisterTranslations("deDE", function() return {
 	shock_trigger2 = "Schattenschock(.+) widerstanden",
 	curse_trigger2 = "Lucifrons Fluch wurde von(.+) widerstanden",
 	doom_trigger2 = "Drohende Verdammnis wurde von(.+) widerstanden",
-	
+
 	curse_warn_soon = "5 Sekunden bis Lucifrons Fluch!",
 	curse_warn_now = "Lucifrons Fluch - 20 Sekunden bis zum nächsten!",
 	doom_warn_soon = "5 Sekunden bis Drohende Verdammnis!",
@@ -116,7 +116,7 @@ L:RegisterTranslations("deDE", function() return {
 	deathother_trigger = "(.*) stirbt.",
 	deadaddtrigger = "Feuerschuppenbeschützer stirbt", --"Besch\195\188tzer der Flammensch\195\188rer stirbt.",
 	add_name = "Feuerschuppenbeschützer",
-	
+
 	mindcontrol_message = "%s ist gedankenkontrolliert!",
 	mindcontrol_message_you = "Du bist gedankenkontrolliert!",
 	mindcontrol_bar = "GK: %s",
@@ -131,19 +131,19 @@ L:RegisterTranslations("deDE", function() return {
 	--adds_cmd = "adds",
 	adds_name = "Zähler für tote Adds",
 	adds_desc = "Verkündet Feuerschuppenbeschützer Tod",
-	
+
 	--mc_cmd = "mc",
 	mc_name = "Gedankenkontrolle",
 	mc_desc = "Warnen, wenn jemand übernommen ist",
-	
+
 	--curse_cmd = "curse",
 	curse_name = "Alarm für Lucifrons Fluch",
 	curse_desc = "Warnen vor Lucifrons Fluch",
-	
+
 	--doom_cmd = "doom",
 	doom_name = "Alarm für Drohende Verdammnis",
 	doom_desc = "Warnen vor Drohender Verdammnis",
-	
+
 	--shock_cmd = "shock",
 	shock_name = "Alarm für Schattenschock ",
 	shock_desc  = "Warnen vor Schattenschock",
@@ -181,7 +181,7 @@ end
 function module:OnSetup()
 	self.started = nil
 	self.protector = 0
-	
+
 	self:RegisterEvent("CHAT_MSG_COMBAT_HOSTILE_DEATH")
 end
 
@@ -233,7 +233,7 @@ end
 
 function module:CHAT_MSG_COMBAT_HOSTILE_DEATH(msg)
 	BigWigs:CheckForBossDeath(msg, self)
-	
+
 	if string.find(msg, L["deadaddtrigger"]) then
 		self:Sync(syncName.add .. " " .. tostring(self.protector + 1))
 	else
@@ -257,7 +257,7 @@ function module:BigWigs_RecvSync(sync, rest, nick)
 		self:DelayedMessage(timer.doom - 5, L["doom_warn_soon"], "Attention", nil, nil, true)
 		self:Bar(L["doom_bar"], timer.doom, icon.doom)
 	elseif sync == syncName.shock and self.db.profile.shock then
-		--self:Bar(L["shock_bar"], 6, "Spell_Shadow_Shadowbolt")
+	--self:Bar(L["shock_bar"], 6, "Spell_Shadow_Shadowbolt")
 	elseif string.find(sync, syncName.mc) then
 		if self.db.profile.mc then
 			chosenone = string.sub(sync,17)
@@ -275,12 +275,12 @@ function module:BigWigs_RecvSync(sync, rest, nick)
 			self:RemoveBar(string.format(L["mindcontrol_bar"], luckyone))
 		end
 	elseif sync == syncName.add and rest and rest ~= "" then
-        rest = tonumber(rest)
-        if rest <= 4 and self.protector < rest then
-            self.protector = rest
-            if self.db.profile.adds then
+		rest = tonumber(rest)
+		if rest <= 4 and self.protector < rest then
+			self.protector = rest
+			if self.db.profile.adds then
 				self:Message(string.format(L["addmsg"], self.protector), "Positive")
-            end
-        end
+			end
+		end
 	end
 end

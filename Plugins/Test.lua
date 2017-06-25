@@ -97,44 +97,44 @@ function BigWigsTest:BigWigs_RecvSync(sync, rest, nick)
 	if sync == "TestSync" then
 		self:Message(L["Testing Sync"], "Positive")
 		self:Bar(L["Testing Sync"], 10, "Spell_Frost_FrostShock", true, "Green", "Blue", "Yellow", "Red")
-    elseif sync == "TestNumber" and rest then
-        --SendChat(rest)
-        rest = tonumber(rest)
-        if type(rest) == "number" then
-            --SendChat(rest * 2) 
-        end
+	elseif sync == "TestNumber" and rest then
+		--SendChat(rest)
+		rest = tonumber(rest)
+		if type(rest) == "number" then
+		--SendChat(rest * 2)
+		end
 	end
 end
 
 
 function BigWigsTest:BigWigs_Test()
-    self:Message(L["Testing"], "Attention", true, "Long")
+	self:Message(L["Testing"], "Attention", true, "Long")
 	self:Bar(L["Test Bar 4"], 3, "Spell_Nature_ResistNature", true, "black")
-    self:Bar(L["Test Bar 3"], 5, "Spell_Nature_ResistNature", true, "red")
-    self:Bar(L["Test Bar 2"], 16, "Inv_Hammer_Unique_Sulfuras")
+	self:Bar(L["Test Bar 3"], 5, "Spell_Nature_ResistNature", true, "red")
+	self:Bar(L["Test Bar 2"], 16, "Inv_Hammer_Unique_Sulfuras")
 	self:Bar(L["Test Bar"], 20, "Spell_Nature_ResistNature")
-    self:WarningSign("Inv_Hammer_Unique_Sulfuras", 10)
-    
+	self:WarningSign("Inv_Hammer_Unique_Sulfuras", 10)
+
 	self:DelayedMessage(5, L["OMG Bear!"], "Important", true, "Alert")
 	self:DelayedMessage(10, L["*RAWR*"], "Urgent", true, "Alarm")
 	self:DelayedMessage(20, L["Victory!"], "Bosskill", true, "Victory")
-    
-    self:Sync("TestNumber 5")
-    
-    BigWigs:Proximity()
-    
-    local function deactivate()
-        BigWigs:RemoveProximity()
-    end
-    
-    self:ScheduleEvent("BigWigsTestOver", deactivate, 20, self)
-    
-    --self:Sync("BossEngaged "..self:ToString())
-    
-	
-    
-    --self:TriggerEvent("BigWigs_StartCounterBar", self, "CounterBar Test", 10, "Spell_Shadow_Charm")
-    --self:TriggerEvent("BigWigs_StartCounterBar", self, "CounterBar Test2", 30, "Spell_Shadow_Charm", true, "red")
+
+	self:Sync("TestNumber 5")
+
+	BigWigs:Proximity()
+
+	local function deactivate()
+		BigWigs:RemoveProximity()
+	end
+
+	self:ScheduleEvent("BigWigsTestOver", deactivate, 20, self)
+
+	--self:Sync("BossEngaged "..self:ToString())
+
+
+
+	--self:TriggerEvent("BigWigs_StartCounterBar", self, "CounterBar Test", 10, "Spell_Shadow_Charm")
+	--self:TriggerEvent("BigWigs_StartCounterBar", self, "CounterBar Test2", 30, "Spell_Shadow_Charm", true, "red")
 end
 
 --function BigWigsTest:TestCounter()

@@ -32,7 +32,7 @@ local icon = {
 	banish = "Interface\\Icons\\Spell_Nature_Sleep",
 }
 local syncName = {
-}
+	}
 
 ----------------------------
 --      Localization      --
@@ -98,8 +98,8 @@ end
 ------------------------------
 
 function module:CHAT_MSG_COMBAT_HOSTILE_DEATH(msg)
-    BigWigs:CheckForBossDeath(msg, self)
-    if msg == L["shadedies_trigger"] then
+	BigWigs:CheckForBossDeath(msg, self)
+	if msg == L["shadedies_trigger"] then
 		self.shades = self.shades + 1
 	end
 	if self.shades == 3 then
@@ -107,7 +107,7 @@ function module:CHAT_MSG_COMBAT_HOSTILE_DEATH(msg)
 		self.shades = 0
 		local t1 = self.banish-self.lastbreath
 		local t2 = self.banish-self.lastfear
-		if self.db.profile.noxious then 
+		if self.db.profile.noxious then
 			self:Bar(L["breath_bar"], timer.breath-t1, icon.breath)
 		end
 		if self.db.profile.fear then
@@ -118,7 +118,7 @@ end
 
 function module:Event( msg )
 	if string.find(msg, L["breath_trigger"]) then
-		if self.db.profile.noxious then 
+		if self.db.profile.noxious then
 			self.lastbreath = GetTime()
 			self:Message(L["breath_warn"], "Important")
 			self:CancelDelayedMessage(L["breathSoon_warn"])
@@ -146,12 +146,12 @@ function module:CHAT_MSG_MONSTER_YELL(msg)
 			self:Bar(L["fear_bar"], timer.firstFear, icon.fear)
 		end
 	elseif msg == L["shades_trigger"] then
-		 self.banish = GetTime()
-		 self:Message(L["shades_warn"], "Important")
-		 self:RemoveBar(L["banish_bar"])
-		 self:Bar(L["banish_bar"], timer.banish, icon.banish)
-		 self:RemoveBar(L["breath_bar"])
-		 self:RemoveBar(L["fear_bar"])
+		self.banish = GetTime()
+		self:Message(L["shades_warn"], "Important")
+		self:RemoveBar(L["banish_bar"])
+		self:Bar(L["banish_bar"], timer.banish, icon.banish)
+		self:RemoveBar(L["breath_bar"])
+		self:RemoveBar(L["fear_bar"])
 	end
 end
 

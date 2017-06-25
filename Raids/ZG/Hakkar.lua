@@ -77,19 +77,19 @@ L:RegisterTranslations("enUS", function() return {
 	mc_cmd = "mc",
 	mc_name = "Mind Control",
 	mc_desc = "Alert when players have Cause Insanity.",
-	
+
 	aspectjeklik_cmd = "aspectjeklik",
 	aspectjeklik_name = "Aspect of Jeklik",
 	aspectjeklik_desc = "Warnings for the extra ability Hakkar gains when High Priestess Jeklik is still alive.",
-	
+
 	aspectvenoxis_cmd = "aspectvenoxis",
 	aspectvenoxis_name = "Aspect of Venoxis",
 	aspectvenoxis_desc = "Warnings for the extra ability Hakkar gains when High Priest Venoxis is still alive.",
-	
+
 	aspectmarli_cmd = "aspectmarli",
 	aspectmarli_name = "Aspect of Mar'li",
 	aspectmarli_desc = "Warnings for the extra ability Hakkar gains when High Priestess Mar'li is still alive.",
-	
+
 	aspectthekal_cmd = "aspectthekal",
 	aspectthekal_name = "Aspect of Thekal",
 	aspectthekal_desc = "Warnings for the extra ability Hakkar gains when High Priest Thekal is still alive.",
@@ -97,7 +97,7 @@ L:RegisterTranslations("enUS", function() return {
 	aspectarlokk_cmd = "aspectarlokk",
 	aspectarlokk_name = "Aspect of Arlokk",
 	aspectarlokk_desc = "Warnings for the extra ability Hakkar gains when High Priestess Arlokk is still alive.",
-	
+
 	puticon_cmd = "puticon",
 	puticon_name = "Raid icon on MCed players",
 	puticon_desc = "Place a raid icon on the player with Cause Insanity.\n\n(Requires assistant or higher)",
@@ -170,19 +170,19 @@ L:RegisterTranslations("deDE", function() return {
 	mc_cmd = "mc",
 	mc_name = "Mind Control",
 	mc_desc = "Alert when players have Cause Insanity.",
-	
+
 	aspectjeklik_cmd = "aspectjeklik",
 	aspectjeklik_name = "Aspect of Jeklik",
 	aspectjeklik_desc = "Warnings for the extra ability Hakkar gains when High Priestess Jeklik is still alive.",
-	
+
 	aspectvenoxis_cmd = "aspectvenoxis",
 	aspectvenoxis_name = "Aspect of Venoxis",
 	aspectvenoxis_desc = "Warnings for the extra ability Hakkar gains when High Priest Venoxis is still alive.",
-	
+
 	aspectmarli_cmd = "aspectmarli",
 	aspectmarli_name = "Aspect of Mar'li",
 	aspectmarli_desc = "Warnings for the extra ability Hakkar gains when High Priestess Mar'li is still alive.",
-	
+
 	aspectthekal_cmd = "aspectthekal",
 	aspectthekal_name = "Aspect of Thekal",
 	aspectthekal_desc = "Warnings for the extra ability Hakkar gains when High Priest Thekal is still alive.",
@@ -190,7 +190,7 @@ L:RegisterTranslations("deDE", function() return {
 	aspectarlokk_cmd = "aspectarlokk",
 	aspectarlokk_name = "Aspect of Arlokk",
 	aspectarlokk_desc = "Warnings for the extra ability Hakkar gains when High Priestess Arlokk is still alive.",
-	
+
 	puticon_cmd = "puticon",
 	puticon_name = "Raid icon on MCed players",
 	puticon_desc = "Place a raid icon on the player with Cause Insanity.\n\n(Requires assistant or higher)",
@@ -223,7 +223,7 @@ local icon = {
 	bloodSiphon = "Spell_Shadow_LifeDrain",
 	serpent = "Ability_Hunter_Pet_WindSerpent",
 	mindcontrol = "Spell_Shadow_ShadowWordDominate",
-	
+
 	-- aspects
 	jeklik = "Spell_Shadow_Teleport",
 	arlokk = "Ability_Vanish",
@@ -234,7 +234,7 @@ local icon = {
 local syncName = {
 	bloodSiphon = "HakkarBloodSiphon"..module.revision,
 	mindcontrol = "HakkarMC"..module.revision,
-	
+
 	-- aspects
 	jeklik = "HakkarAspectJeklik"..module.revision,
 	arlokk = "HakkarAspectArlokk"..module.revision,
@@ -264,11 +264,11 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_PARTY_DAMAGE", "Others")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE", "Others")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_DAMAGE")
-	
-	
+
+
 	self:ThrottleSync(5, syncName.bloodSiphon)
 	self:ThrottleSync(5, syncName.mindcontrol)
-	
+
 	self:ThrottleSync(5, syncName.jeklik)
 	self:ThrottleSync(5, syncName.arlokk)
 	self:ThrottleSync(5, syncName.arlokkAvoid)
@@ -323,10 +323,10 @@ end
 function module:Self(msg)
 	if msg == L["mindcontrolyou_trigger"] then
 		self:Sync(syncName.mindcontrol .. " "..UnitName("player"))
-    elseif string.find(msg, L["poisonousblood_trigger"]) then
-        self:RemoveWarningSign(icon.serpent)
-		
-	-- aspects
+	elseif string.find(msg, L["poisonousblood_trigger"]) then
+		self:RemoveWarningSign(icon.serpent)
+
+		-- aspects
 	elseif msg == L["aspectofjeklikyou_trigger"] then
 		self:Sync(syncName.jeklik)
 	elseif msg == L["aspectofmarliyou_trigger"] then
@@ -388,8 +388,8 @@ end
 function module:CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS(msg)
 	if msg == L["siphon_trigger"] then
 		self:Sync(syncName.bloodSiphon)
-		
-	-- aspects
+
+		-- aspects
 	elseif string.find(msg, L["aspectofthekal_trigger"]) then
 		self:Sync(syncName.thekalStart)
 	end
@@ -408,18 +408,18 @@ end
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.bloodSiphon then
-        self:BloodSiphon()
+	if sync == syncName.bloodSiphon then
+		self:BloodSiphon()
 	elseif sync == syncName.mindcontrol and rest then
 		self:MindControl(rest)
 
-	-- aspects
+		-- aspects
 	elseif sync == syncName.jeklik and self.db.profile.aspectjeklik then
 		self:Bar(L["aspectjeklik_bar"], 10, icon.jeklik, true, "Orange")
 		self:Bar(L["aspectjeklikdebuff_bar"], 5, icon.jeklik, true, "Orange")
 	elseif sync == syncName.arlokk and self.db.profile.aspectarlokk then
 		self:Bar(L["aspectarlokk_bar"], 10, icon.arlokk, true, "Blue")
-		self:Bar(string.format(L["aspectarlokkdebuff_bar"], rest), 2, icon.arlokk, true, "Blue")	
+		self:Bar(string.format(L["aspectarlokkdebuff_bar"], rest), 2, icon.arlokk, true, "Blue")
 	elseif sync == syncName.arlokkAvoid and self.db.profile.aspectarlokk then
 		self:Bar(L["aspectarlokk_bar"], 10, icon.arlokk, true, "Blue")
 	elseif sync == syncName.venoxis and self.db.profile.aspectvenoxis then
@@ -435,7 +435,7 @@ function module:BigWigs_RecvSync(sync, rest, nick)
 		self:Bar(L["aspectthekal_bar"], 8, icon.thekal, true, "Black")
 		self:Message(L["aspectthekal_ann"], "Important", true, "Alarm")
 	elseif sync == syncName.thekalStop and self.db.profile.aspectthekal then
-        self:RemoveBar(L["aspectthekal_bar"])
+		self:RemoveBar(L["aspectthekal_bar"])
 	end
 end
 
@@ -452,7 +452,7 @@ function module:BloodSiphon()
 		-- before I display that I need to figure out, how to track when the player gained the Poisonous Blood - this should hide the icon again
 		self:DelayedMessage(timer.bloodSiphon - 10, string.format(L["siphon_warning"], 10), "Attention", nil, nil, true)
 	end
-	
+
 	-- aspects
 	if self.db.profile.aspectjeklik then
 		self:RemoveBar(L["aspectjeklik_bar"])

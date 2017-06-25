@@ -150,8 +150,8 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE")
-	
-	
+
+
 	self:ThrottleSync(2, syncName.adrenaline)
 	self:ThrottleSync(3, syncName.flamebreath)
 	self:ThrottleSync(5, syncName.tankburn)
@@ -178,25 +178,25 @@ end
 ------------------------------
 
 function module:CheckForEngage()
-    local function IsHostile()
-        if UnitExists("target") and UnitName("target") == self:ToString() and UnitIsEnemy("player", "target") then
-            return true
-        end
+	local function IsHostile()
+		if UnitExists("target") and UnitName("target") == self:ToString() and UnitIsEnemy("player", "target") then
+			return true
+		end
 
-        local num = GetNumRaidMembers()
-        for i = 1, num do
-            local raidUnit = string.format("raid%starget", i)
-            if UnitExists(raidUnit) and UnitName(raidUnit) == self:ToString() and UnitIsEnemy("raid" .. i, raidUnit) then
-                return true
-            end
-        end
-        
-        return false
-    end
-    
-    if IsHostile() then
-        BigWigs:CheckForEngage(self)
-    end
+		local num = GetNumRaidMembers()
+		for i = 1, num do
+			local raidUnit = string.format("raid%starget", i)
+			if UnitExists(raidUnit) and UnitName(raidUnit) == self:ToString() and UnitIsEnemy("raid" .. i, raidUnit) then
+				return true
+			end
+		end
+
+		return false
+	end
+
+	if IsHostile() then
+		BigWigs:CheckForEngage(self)
+	end
 end
 function module:CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE(msg)
 	if msg == L["flamebreath_trigger"] then
@@ -248,7 +248,7 @@ end
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.flamebreath then
+	if sync == syncName.flamebreath then
 		self:Flamebreath()
 	elseif sync == syncName.adrenaline and rest and rest ~= "" then
 		self:Adrenaline(rest)
@@ -281,24 +281,24 @@ function module:Adrenaline(name)
 		if self.db.profile.whisper and name ~= UnitName("player") then
 			self:TriggerEvent("BigWigs_SendTell", name, L["adrenaline_message_you"])
 		end
-		
+
 		-- bar and message
 		if self.db.profile.adrenaline then
 			self:Bar(string.format(L["adrenaline_bar"], name), timer.adrenaline, icon.adrenaline, true, "White")
 			self:SetCandyBarOnClick("BigWigsBar "..string.format(L["adrenaline_bar"], name), function(name, button, extra) TargetByName(extra, true) end, name)
 			if name == UnitName("player") then
 				self:Message(L["adrenaline_message_you"], "Attention", true, "Beware")
-                self:WarningSign(icon.adrenaline, timer.adrenaline)
+				self:WarningSign(icon.adrenaline, timer.adrenaline)
 			else
 				self:Message(string.format(L["adrenaline_message"], name), "Urgent")
 			end
 		end
-		
+
 		-- set icon
 		if self.db.profile.icon then
 			self:Icon(name)
 		end
-		
+
 		-- tank burn
 		for i = 1, GetNumRaidMembers() do
 			if UnitExists("raid" .. i .. "target") and UnitName("raid" .. i .. "target") == self.translatedName and UnitExists("raid" .. i .. "targettarget") and UnitName("raid" .. i .. "targettarget") == name then

@@ -22,7 +22,7 @@ L:RegisterTranslations("enUS", function() return {
 	shadowflame_warning = "Shadow Flame incoming!",
 	frenzy_message = "Frenzy! Tranq now!",
 	frenzy_bar = "Frenzy",
-    frenzy_Nextbar = "Next Frenzy",
+	frenzy_Nextbar = "Next Frenzy",
 
 	wingbuffetcast_bar = "Wing Buffet",
 	wingbuffet_bar = "Next Wing Buffet",
@@ -56,7 +56,7 @@ L:RegisterTranslations("deDE", function() return {
 	shadowflame_warning = "Schattenflamme bald!",
 	frenzy_message = "Wutanfall! Tranq jetzt!",
 	frenzy_bar = "Wutanfall",
-    frenzy_Nextbar = "Nächster Wutanfall",
+	frenzy_Nextbar = "Nächster Wutanfall",
 
 	wingbuffetcast_bar = "Fl\195\188gelsto\195\159",
 	wingbuffet_bar = "N\195\164chster Fl\195\188gelsto\195\159",
@@ -123,13 +123,13 @@ local _, playerClass = UnitClass("player")
 ------------------------------
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self.started = nil
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_OTHER", "Event")
-    self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE", "Event")
-	
+	self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE", "Event")
+
 	self:ThrottleSync(10, syncName.wingbuffet)
 	self:ThrottleSync(10, syncName.shadowflame)
 	self:ThrottleSync(5, syncName.frenzy)
@@ -150,7 +150,7 @@ function module:OnEngage()
 		self:Bar(L["shadowflame_Nextbar"], timer.firstShadowflame, icon.shadowflame)
 	end
 	if self.db.profile.frenzy then
-		self:Bar(L["frenzy_Nextbar"], timer.firstFrenzy, icon.frenzy, true, "white") 
+		self:Bar(L["frenzy_Nextbar"], timer.firstFrenzy, icon.frenzy, true, "white")
 	end
 end
 
@@ -186,30 +186,30 @@ end
 
 function module:BigWigs_RecvSync(sync, rest, nick)
 	if sync == syncName.wingbuffet and self.db.profile.wingbuffet then
-        self:Message(L["wingbuffet_message"], "Important")
+		self:Message(L["wingbuffet_message"], "Important")
 		self:RemoveBar(L["wingbuffet_bar"]) -- remove timer bar
-        self:DelayedMessage(timer.wingbuffet - 5, L["wingbuffet_warning"], "Attention", nil, nil, true)
+		self:DelayedMessage(timer.wingbuffet - 5, L["wingbuffet_warning"], "Attention", nil, nil, true)
 		self:Bar(L["wingbuffetcast_bar"], timer.wingbuffetCast, icon.wingbuffet, true, "black") -- show cast bar
 		self:DelayedBar(timer.wingbuffetCast, L["wingbuffet_bar"], timer.wingbuffet, icon.wingbuffet) -- delayed timer bar
 	elseif sync == syncName.shadowflame and self.db.profile.shadowflame then
-        self:Message(L["shadowflame_warning"], "Important", true, "Alarm")
+		self:Message(L["shadowflame_warning"], "Important", true, "Alarm")
 		self:RemoveBar(L["shadowflame_Nextbar"]) -- remove timer bar
 		self:Bar(L["shadowflame_bar"], timer.shadowflameCast, icon.shadowflame, true, "red") -- show cast bar
-        self:DelayedBar(timer.shadowflameCast, L["shadowflame_Nextbar"], timer.shadowflame-timer.shadowflameCast, icon.shadowflame) -- delayed timer bar
+		self:DelayedBar(timer.shadowflameCast, L["shadowflame_Nextbar"], timer.shadowflame-timer.shadowflameCast, icon.shadowflame) -- delayed timer bar
 	elseif sync == syncName.frenzy and self.db.profile.frenzy then
 		self:Message(L["frenzy_message"], "Important", nil, true, "Alert")
 		self:Bar(L["frenzy_bar"], timer.frenzy, icon.frenzy, true, "red")
-        if playerClass == "HUNTER" then
-            self:WarningSign(icon.tranquil, timer.frenzy, true)
-        end
-        lastFrenzy = GetTime()
+		if playerClass == "HUNTER" then
+			self:WarningSign(icon.tranquil, timer.frenzy, true)
+		end
+		lastFrenzy = GetTime()
 	elseif sync == syncName.frenzyOver and self.db.profile.frenzy then
-        self:RemoveBar(L["frenzy_bar"])
-        self:RemoveWarningSign(icon.tranquil, true)
-        if lastFrenzy ~= 0 then
-            local NextTime = (lastFrenzy + timer.frenzy) - GetTime()
-            self:Bar(L["frenzy_Nextbar"], NextTime, icon.frenzy, true, "white")
-        end
+		self:RemoveBar(L["frenzy_bar"])
+		self:RemoveWarningSign(icon.tranquil, true)
+		if lastFrenzy ~= 0 then
+			local NextTime = (lastFrenzy + timer.frenzy) - GetTime()
+			self:Bar(L["frenzy_Nextbar"], NextTime, icon.frenzy, true, "white")
+		end
 	end
 end
 
@@ -219,39 +219,39 @@ end
 ----------------------------------
 
 function module:Test()
-    -- /run local m=BigWigs:GetModule("Ouro");m:Test()
-    local function frenzy()
-        self:Event(L["frenzygain_trigger"])
-    end
-    local function frenzyEnd()
-        self:Event(L["frenzyend_trigger"])
-    end
-    local function deactivate()
-        self:DebugMessage("deactivate")
-        self:Disable()
-        --[[self:DebugMessage("deactivate ")
-        if self.phase then
-            self:DebugMessage("deactivate module "..self:ToString())
-            --BigWigs:ToggleModuleActive(self, false) 
-            self.core:ToggleModuleActive(self, false)
-            self.phase = nil
-        end]]
-    end
-    
-    BigWigs:Print("module Test started")
-    BigWigs:Print("  frenzy after 5s")
-    
-    
-    -- immitate CheckForEngage
-    self:SendEngageSync()    
-    
-    -- sweep after 5s
-    self:ScheduleEvent(self:ToString().."Test_frenzy", frenzy, 5, self)
-    
-    -- sweep after 5s
-    self:ScheduleEvent(self:ToString().."Test_frenzyEnd", frenzyEnd, 10, self)
-    
-    -- reset after 60s
-    self:ScheduleEvent(self:ToString().."Test_deactivate", deactivate, 15, self)
-    
+	-- /run local m=BigWigs:GetModule("Ouro");m:Test()
+	local function frenzy()
+		self:Event(L["frenzygain_trigger"])
+	end
+	local function frenzyEnd()
+		self:Event(L["frenzyend_trigger"])
+	end
+	local function deactivate()
+		self:DebugMessage("deactivate")
+		self:Disable()
+		--[[self:DebugMessage("deactivate ")
+		if self.phase then
+		self:DebugMessage("deactivate module "..self:ToString())
+		--BigWigs:ToggleModuleActive(self, false)
+		self.core:ToggleModuleActive(self, false)
+		self.phase = nil
+		end]]
+	end
+
+	BigWigs:Print("module Test started")
+	BigWigs:Print("  frenzy after 5s")
+
+
+	-- immitate CheckForEngage
+	self:SendEngageSync()
+
+	-- sweep after 5s
+	self:ScheduleEvent(self:ToString().."Test_frenzy", frenzy, 5, self)
+
+	-- sweep after 5s
+	self:ScheduleEvent(self:ToString().."Test_frenzyEnd", frenzyEnd, 10, self)
+
+	-- reset after 60s
+	self:ScheduleEvent(self:ToString().."Test_deactivate", deactivate, 15, self)
+
 end

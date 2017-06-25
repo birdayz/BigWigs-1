@@ -31,7 +31,7 @@ L:RegisterTranslations("enUS", function() return {
 	ms_cmd = "ms",
 	ms_name = "Mortal Strike",
 	ms_desc = "Warn when someone gets Mortal Strike and starts a clickable bar for easy selection.",
-	
+
 	knock_cmd = "knock",
 	knock_name = "Knock Away",
 	knock_desc = "Shows a bar with the possible Knock Away cooldown.",
@@ -43,7 +43,7 @@ L:RegisterTranslations("enUS", function() return {
 
 L:RegisterTranslations("deDE", function() return {
 	--cmd = "Broodlord",
-	
+
 	engage_trigger = "Euresgleichen sollte nicht hier sein!",
 	ms_trigger = "^(.+) (.+) von T\195\182dlicher Sto\195\159 betroffen",
 	bw_trigger = "^(.+) (.+) von Druckwelle betroffen",
@@ -61,7 +61,7 @@ L:RegisterTranslations("deDE", function() return {
 	--ms_cmd = "ms",
 	ms_name = "T\195\182dlicher Sto\195\159",
 	ms_desc = "Warnung wenn ein Spieler von Tödlicher Sto\195\159 betroffen ist und startet einen anklickbaren Balken für eine einfache Auswahl.",
-	
+
 	--bw_cmd = "bw",
 	bw_name = "Druckwelle",
 	bw_desc = "Zeigt einen Balken mit der möglichen Druckwellenabklingzeit.\n\n(Hinweis: Diese variiert von 8 bis 15 Sekunden. Zur Sicherheit wurde der kürzeste Intervall gewählt.)",
@@ -105,11 +105,11 @@ local MS = ""
 module:RegisterYellEngage(L["engage_trigger"])
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "Event")
-    self:RegisterEvent("PLAYER_TARGET_CHANGED")
+	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	--self:RegisterEvent("CHAT_MSG_COMBAT_FRIENDLY_DEATH")
 end
 
@@ -117,8 +117,8 @@ end
 function module:OnSetup()
 	self.started = nil
 	lastBlastWave = 0
-    lastMS = 0
-    MS = ""
+	lastMS = 0
+	MS = ""
 end
 
 -- called after boss is engaged
@@ -147,13 +147,13 @@ end
 function module:Event(msg)
 	local _, _, name, detect = string.find(msg, L["ms_trigger"])
 	if name and detect and self.db.profile.ms then
-        MS = name
-        lastMS = GetTime()
+		MS = name
+		lastMS = GetTime()
 		if detect == L["are"] then
 			self:Message(L["ms_warn_you"], "Core", true, "Beware")
 			self:Bar(string.format(L["ms_bar"], UnitName("player")), timer.mortalStrike, icon.mortalStrike, true, "Black")
 			self:SetCandyBarOnClick("BigWigsBar "..string.format(L["ms_bar"], UnitName("player")), function(name, button, extra) TargetByName(extra, true) end, UnitName("player"))
-            self:WarningSign(icon.mortalStrike, timer.mortalStrike)
+			self:WarningSign(icon.mortalStrike, timer.mortalStrike)
 		else
 			self:Message(string.format(L["ms_warn_other"], name), "Core", true, "Alarm")
 			self:Bar(string.format(L["ms_bar"], name), timer.mortalStrike, icon.mortalStrike, true, "Black")
@@ -169,21 +169,21 @@ function module:Event(msg)
 end
 
 --[[function module:CHAT_MSG_COMBAT_FRIENDLY_DEATH(msg)
-	if not self.db.profile.bw then return end
-	local _, _, deathother = string.find(msg, L["deathother_trigger"])
-	if msg == L["deathyou_trigger"] then
-		self:RemoveBar(string.format(L["ms_bar"], UnitName("player")))
-	elseif deathother then
-		self:RemoveBar(string.format(L["ms_bar"], deathother))
-	end
+if not self.db.profile.bw then return end
+local _, _, deathother = string.find(msg, L["deathother_trigger"])
+if msg == L["deathyou_trigger"] then
+self:RemoveBar(string.format(L["ms_bar"], UnitName("player")))
+elseif deathother then
+self:RemoveBar(string.format(L["ms_bar"], deathother))
+end
 end]]
 
 function module:PLAYER_TARGET_CHANGED()
-    if (lastMS + 5) > GetTime() and UnitName("target") == MS then
-        if self.db.profile.ms then
-            self:WarningSign(icon.mortalStrike, (lastMS + 5) - GetTime())
-        end
-    else
-        self:RemoveWarningSign(icon.mortalStrike)
-    end
+	if (lastMS + 5) > GetTime() and UnitName("target") == MS then
+		if self.db.profile.ms then
+			self:WarningSign(icon.mortalStrike, (lastMS + 5) - GetTime())
+		end
+	else
+		self:RemoveWarningSign(icon.mortalStrike)
+	end
 end

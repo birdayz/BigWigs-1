@@ -114,7 +114,7 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "CheckForLifeDrain")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "CheckForLifeDrain")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "CheckForLifeDrain")
-	
+
 	self:ThrottleSync(4, syncName.lifedrain)
 	self:ThrottleSync(5, syncName.flight)
 end
@@ -179,7 +179,7 @@ function module:CheckForDeepBreath(msg)
 			self:Message(L["deepbreath_warning"], "Important")
 			self:Bar(L["deepbreath_bar"], timer.deepbreath, icon.deepbreath)
 		end
-		
+
 		self:RemoveBar(L["lifedrain_bar"])
 		if self.db.profile.lifedrain then
 			self:Bar(L["lifedrain_bar"], timer.lifedrainAfterFlight, icon.lifedrain)
@@ -233,7 +233,7 @@ end
 ------------------------------
 
 function module:StartTargetScanner()
-	if not self:IsEventScheduled("bwsapphtargetscanner") and self.engaged then 
+	if not self:IsEventScheduled("bwsapphtargetscanner") and self.engaged then
 		-- Start a repeating event that scans the raid for targets every 1 second.
 		self:ScheduleRepeatingEvent("bwsapphtargetscanner", self.RepeatedTargetScanner, 1, self)
 	end
@@ -245,8 +245,8 @@ function module:RepeatedTargetScanner()
 		return
 	end
 
-	if not self.engaged then 
-		return 
+	if not self.engaged then
+		return
 	end
 	local found = nil
 
@@ -277,8 +277,8 @@ function module:RepeatedTargetScanner()
 	-- We've checked everything. If nothing was found, just return home.
 	-- We basically shouldn't return here, because someone should always have
 	-- him targetted.
-	if not found then 
-		return 
+	if not found then
+		return
 	end
 
 	local inFlight = nil
@@ -300,8 +300,8 @@ function module:RepeatedTargetScanner()
 	end
 
 	-- He's not flying, so we're just going to continue scanning.
-	if not inFlight then 
-		return 
+	if not inFlight then
+		return
 	end
 
 	-- He's in flight! (I hope)

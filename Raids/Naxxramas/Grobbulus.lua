@@ -95,13 +95,13 @@ local berserkannounced = nil
 ------------------------------
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "InjectEvent")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "InjectEvent")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "InjectEvent")
 
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_BUFF")
-	
+
 	self:ThrottleSync(3, syncName.inject)
 	self:ThrottleSync(5, syncName.cloud)
 end
@@ -171,7 +171,7 @@ function module:Inject(player)
 		if self.db.profile.youinjected and player == UnitName("player") then
 			self:Message(L["bomb_message_you"], "Personal", true, "Beware")
 			self:WarningSign(icon.inject, timer.inject)
-			
+
 			self:Message(string.format(L["bomb_message_other"], player), "Attention", nil, nil, true)
 			self:Bar(string.format(L["bomb_bar"], player), timer.inject, icon.inject)
 		elseif self.db.profile.otherinjected then
@@ -188,6 +188,6 @@ end
 function module:Cloud()
 	if self.db.profile.cloud then
 		self:Message(L["cloud_warn"], "Urgent")
-		self:Bar(L["cloud_bar"], timer.cloud, icon.cloud)			
+		self:Bar(L["cloud_bar"], timer.cloud, icon.cloud)
 	end
 end

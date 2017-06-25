@@ -12,8 +12,8 @@ local module, L = BigWigs:ModuleDeclaration("Ouro", "Ahn'Qiraj")
 L:RegisterTranslations("enUS", function() return {
 	cmd = "Ouro",
 
-    OUROCHAMBERLOCALIZEDLOLHAX = "Kel'Thuzad Chamber",
-            
+	OUROCHAMBERLOCALIZEDLOLHAX = "Kel'Thuzad Chamber",
+
 	sweep_cmd = "sweep",
 	sweep_name = "Sweep Alert",
 	sweep_desc = "Warn for Sweeps",
@@ -63,8 +63,8 @@ L:RegisterTranslations("enUS", function() return {
 	berserktrigger = "Ouro gains Berserk.",
 	berserkannounce = "Berserk - Berserk!",
 	berserksoonwarn = "Berserk Soon - Get Ready!",
-            
-    
+
+
 } end )
 
 L:RegisterTranslations("deDE", function() return {
@@ -97,7 +97,7 @@ L:RegisterTranslations("deDE", function() return {
 	possible_submerge_bar = "Mögliches Untertauchen",
 
 	--emergetrigger = "Dirt Mound casts Summon Ouro Scarabs.",
-    emergetrigger = "Erdhaufen stirbt.", -- ?
+	emergetrigger = "Erdhaufen stirbt.", -- ?
 	emergeannounce = "Ouro ist aufgetaucht!",
 	emergewarn = "15 sek bis mögliches Untertauchen!",
 	emergebartext = "Untertauchen",
@@ -147,7 +147,7 @@ local syncName = {
 	submerge = "OuroSubmerge"..module.revision,
 	berserk = "OuroBerserk"..module.revision,
 }
-		
+
 local berserkannounced = nil
 
 
@@ -159,45 +159,45 @@ local berserkannounced = nil
 function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE")
 	self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE")
-    self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS")
+	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE")
-    
+
 	self:RegisterEvent("UNIT_HEALTH")
-	
+
 	self:ThrottleSync(10, syncName.sweep)
 	self:ThrottleSync(10, syncName.sandblast)
 	self:ThrottleSync(10, syncName.emerge)
 	self:ThrottleSync(10, syncName.submerge)
 	self:ThrottleSync(10, syncName.berserk)
-    
-    self:ScheduleRepeatingEvent("bwouroengagecheck", self.EngageCheck, 0.5, self)
+
+	self:ScheduleRepeatingEvent("bwouroengagecheck", self.EngageCheck, 0.5, self)
 end
 
 -- called after module is enabled and after each wipe
-function module:OnSetup()  
+function module:OnSetup()
 	berserkannounced = nil
 	self.started = nil
-    self.phase = nil
+	self.phase = nil
 end
 
 -- called after boss is engaged
-function module:OnEngage() 
+function module:OnEngage()
 	self:KTM_SetTarget(self:ToString())
 	self.phase = "emerged"
 	self:ScheduleRepeatingEvent("bwourosubmergecheck", self.SubmergeCheck, 0.5, self)
-	
+
 	if self.db.profile.emerge then
 		self:Message(L["engage_message"], "Attention")
 		self:PossibleSubmerge()
 	end
-    if self.db.profile.sandblast then
-        self:DelayedMessage(timer.firstSandblast - 5, L["sandblastwarn"], "Important", nil, nil, true)
-        self:Bar(L["sandblastbartext"], timer.firstSandblast, icon.sandblast)
-    end
-    if self.db.profile.sweep then
-        self:DelayedMessage(timer.firstSweep - 5, L["sweepwarn"], "Important", nil, nil, true)
-        self:Bar(L["sweepbartext"], timer.firstSweep, icon.sweep)
-    end	
+	if self.db.profile.sandblast then
+		self:DelayedMessage(timer.firstSandblast - 5, L["sandblastwarn"], "Important", nil, nil, true)
+		self:Bar(L["sandblastbartext"], timer.firstSandblast, icon.sandblast)
+	end
+	if self.db.profile.sweep then
+		self:DelayedMessage(timer.firstSweep - 5, L["sweepwarn"], "Important", nil, nil, true)
+		self:Bar(L["sweepbartext"], timer.firstSweep, icon.sweep)
+	end
 end
 
 -- called after boss is disengaged (wipe(retreat) or victory)
@@ -224,7 +224,7 @@ function module:UNIT_HEALTH( msg )
 end
 
 function module:CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS(msg)
-    if msg == L["berserktrigger"] then
+	if msg == L["berserktrigger"] then
 		self:Sync(syncName.berserk)
 	end
 end
@@ -279,9 +279,9 @@ end
 function module:Sweep()
 	if self.db.profile.sweep then
 		self:RemoveBar(L["sweepbartext"]) -- remove timer bar
-        self:Bar(L["sweepannounce"], timer.sweep, icon.sweep) -- show cast bar
+		self:Bar(L["sweepannounce"], timer.sweep, icon.sweep) -- show cast bar
 		self:Message(L["sweepannounce"], "Important", true, "Alarm")
-        self:DelayedMessage(timer.sweepInterval - 5, L["sweepwarn"], "Important", nil, nil, true)
+		self:DelayedMessage(timer.sweepInterval - 5, L["sweepwarn"], "Important", nil, nil, true)
 		self:DelayedBar(timer.sweep, L["sweepbartext"], timer.sweepInterval-timer.sweep, icon.sweep) -- delayed timer bar
 	end
 end
@@ -289,7 +289,7 @@ end
 function module:Sandblast()
 	if self.db.profile.sandblast then
 		self:RemoveBar(L["sandblastbartext"]) -- remove timer bar
-        self:Bar(L["sandblastannounce"], timer.sandblast, icon.sandblast) -- show cast bar
+		self:Bar(L["sandblastannounce"], timer.sandblast, icon.sandblast) -- show cast bar
 		self:Message(L["sandblastannounce"], "Important", true, "Alert")
 		self:DelayedMessage(timer.sandblastInterval - 5, L["sandblastwarn"], "Important", nil, nil, true)
 		self:DelayedBar(timer.sandblast, L["sandblastbartext"], timer.sandblastInterval-timer.sandblast, icon.sandblast) -- delayed timer bar
@@ -297,33 +297,33 @@ function module:Sandblast()
 end
 
 function module:DoSubmergeCheck()
-    self:ScheduleRepeatingEvent("bwourosubmergecheck", self.SubmergeCheck, 0.5, self)
+	self:ScheduleRepeatingEvent("bwourosubmergecheck", self.SubmergeCheck, 0.5, self)
 end
 function module:Emerge()
-    if self.phase ~= "berserk" then
-        self.phase = "emerged"
+	if self.phase ~= "berserk" then
+		self.phase = "emerged"
 		self:DebugMessage("emerged module")
 		self:CancelScheduledEvent("bwourosubmergecheck")
-        self:ScheduleEvent("bwourosubmergecheck", self.DoSubmergeCheck, 10, self)
-        --self:ScheduleRepeatingEvent("bwourosubmergecheck", self.SubmergeCheck, 1, self)
-        self:CancelScheduledEvent("bwsubmergewarn")
-        self:RemoveBar(L["submergebartext"])
+		self:ScheduleEvent("bwourosubmergecheck", self.DoSubmergeCheck, 10, self)
+		--self:ScheduleRepeatingEvent("bwourosubmergecheck", self.SubmergeCheck, 1, self)
+		self:CancelScheduledEvent("bwsubmergewarn")
+		self:RemoveBar(L["submergebartext"])
 
-        if self.db.profile.emerge then
-            self:Message(L["emergeannounce"], "Important", false, "Beware")
-            self:PossibleSubmerge()
-        end
+		if self.db.profile.emerge then
+			self:Message(L["emergeannounce"], "Important", false, "Beware")
+			self:PossibleSubmerge()
+		end
 
-        if self.db.profile.sweep then
-            self:DelayedMessage(timer.sweepInterval - 5, L["sweepwarn"], "Important", nil, nil, true)
-            self:Bar(L["sweepbartext"], timer.sweepInterval, icon.sweep)
-        end	
+		if self.db.profile.sweep then
+			self:DelayedMessage(timer.sweepInterval - 5, L["sweepwarn"], "Important", nil, nil, true)
+			self:Bar(L["sweepbartext"], timer.sweepInterval, icon.sweep)
+		end
 
-        if self.db.profile.sandblast then
-            self:DelayedMessage(timer.sandblastInterval - 5, L["sandblastwarn"], "Important", nil, nil, true)
-            self:Bar(L["sandblastbartext"], timer.sandblastInterval, icon.sandblast)
-        end
-    end
+		if self.db.profile.sandblast then
+			self:DelayedMessage(timer.sandblastInterval - 5, L["sandblastwarn"], "Important", nil, nil, true)
+			self:Bar(L["sandblastbartext"], timer.sandblastInterval, icon.sandblast)
+		end
+	end
 end
 
 function module:Submerge()
@@ -336,9 +336,9 @@ function module:Submerge()
 	self:RemoveBar(L["emergebartext"])
 	self:RemoveBar(L["possible_submerge_bar"])
 
-    self.phase = "submerged"
+	self.phase = "submerged"
 	self:KTM_Reset()
-    
+
 	if self.db.profile.submerge then
 		self:Message(L["submergeannounce"], "Important")
 		self:ScheduleEvent("bwsubmergewarn", "BigWigs_Message", timer.nextEmerge - 5, L["submergewarn"], "Important" )
@@ -347,8 +347,8 @@ function module:Submerge()
 end
 
 function module:Berserk()
-    self.phase = "berserk"
-    
+	self.phase = "berserk"
+
 	self:CancelDelayedMessage(L["emergewarn"])
 	self:RemoveBar(L["emergebartext"])
 	self:RemoveBar(L["possible_submerge_bar"])
@@ -371,26 +371,26 @@ function module:PossibleSubmerge()
 end
 
 function module:SubmergeCheck()
-    -- if the player is dead he can't see ouro: omit this check
-    if self.phase == "emerged" then
-        if not UnitIsDeadOrGhost("player") and not self:IsOuroVisible() then
-            self:DebugMessage("OuroSubmerge")
-            self:Sync(syncName.submerge)
-        end
-    end
+	-- if the player is dead he can't see ouro: omit this check
+	if self.phase == "emerged" then
+		if not UnitIsDeadOrGhost("player") and not self:IsOuroVisible() then
+			self:DebugMessage("OuroSubmerge")
+			self:Sync(syncName.submerge)
+		end
+	end
 end
 
 function module:EngageCheck()
-    if not self.engaged then
-        --self:ScheduleRepeatingEvent("bwouroengagecheck", self.EngageCheck, 1, self)
-        if self:IsOuroVisible() then
-            module:CancelScheduledEvent("bwouroengagecheck")
+	if not self.engaged then
+		--self:ScheduleRepeatingEvent("bwouroengagecheck", self.EngageCheck, 1, self)
+		if self:IsOuroVisible() then
+			module:CancelScheduledEvent("bwouroengagecheck")
 
-            module:SendEngageSync()
-        end
-    else
-        module:CancelScheduledEvent("bwouroengagecheck")
-    end
+			module:SendEngageSync()
+		end
+	else
+		module:CancelScheduledEvent("bwouroengagecheck")
+	end
 end
 
 function module:IsOuroVisible()
@@ -403,6 +403,6 @@ function module:IsOuroVisible()
 			end
 		end
 	end
-    
-    return false
+
+	return false
 end

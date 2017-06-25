@@ -49,7 +49,7 @@ L:RegisterTranslations("enUS", function() return {
 	plaguewarn = " has the Plague!",
 	plaguewarnyou = "You have the Plague!",
 	plagueyou = "You",
-	plagueare = "are",	
+	plagueare = "are",
 } end )
 
 L:RegisterTranslations("deDE", function() return {
@@ -111,7 +111,7 @@ local syncName = {}
 ------------------------------
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_COMBAT_HOSTILE_DEATH")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_BUFF")
@@ -147,17 +147,17 @@ function module:CHAT_MSG_COMBAT_HOSTILE_DEATH(msg)
 end
 
 function module:CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS( msg )
-	if self.db.profile.explode and msg == L["explodetrigger"] then 
+	if self.db.profile.explode and msg == L["explodetrigger"] then
 		self:Message(L["explodewarn"], "Important")
-	elseif self.db.profile.enrage and msg == L["enragetrigger"] then 
+	elseif self.db.profile.enrage and msg == L["enragetrigger"] then
 		self:Message(L["enragewarn"], "Important")
 	end
 end
 
 function module:CHAT_MSG_SPELL_CREATURE_VS_CREATURE_BUFF( msg )
-	if self.db.profile.summon and msg == L["summonguardtrigger"] then 
+	if self.db.profile.summon and msg == L["summonguardtrigger"] then
 		self:Message(L["summonguardwarn"], "Attention")
-	elseif self.db.profile.summon and msg == L["summonwarriortrigger"] then 
+	elseif self.db.profile.summon and msg == L["summonwarriortrigger"] then
 		self:Message(L["summonwarriorwarn"], "Attention")
 	end
 end

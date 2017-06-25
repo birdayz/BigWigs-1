@@ -126,7 +126,7 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "CheckForCurse")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "CheckForCurse")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "CheckForCurse")
-	
+
 	self:ThrottleSync(5, syncName.blink)
 	self:ThrottleSync(5, syncName.curse)
 end
@@ -209,11 +209,11 @@ function module:TeleportToBalcony()
 	self:CancelDelayedMessage(L["teleportwarn10"])
 	self:CancelDelayedMessage(L["teleportwarn30"])
 	self:CancelDelayedMessage(L["curse10secwarn"])
-	
+
 	self:RemoveBar(L["blinkbar"])
 	self:RemoveBar(L["cursebar"])
 
-	if self.db.profile.teleport then 
+	if self.db.profile.teleport then
 		self:Message(L["teleportwarn"], "Important")
 		self:Bar(L["backbar"], timer.balcony, icon.balcony)
 		self:DelayedMessage(timer.balcony - 30, L["backwarn30"], "Urgent")
@@ -241,7 +241,7 @@ function module:TeleportToRoom()
 		self:Bar(L["blinkbar"], timer.blinkAfterTeleport, icon.blink)
 		self:DelayedMessage(timer.blinkAfterTeleport - 10, L["blinkwarn10"], "Attention") -- praeda
 		self:DelayedMessage(timer.blinkAfterTeleport - 5, L["blinkwarn5"], "Attention") -- praeda
-		
+
 		self:Bar(L["teleportbar"], timer.room, icon.balcony)
 		self:DelayedMessage(timer.room - 30, L["teleportwarn30"], "Urgent")
 		self:DelayedMessage(timer.room - 10, L["teleportwarn10"], "Urgent")
@@ -255,7 +255,7 @@ end
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.curse then
+	if sync == syncName.curse then
 		self:Curse()
 	elseif sync == syncName.blink then
 		self:Blink()
@@ -281,6 +281,6 @@ function module:Blink()
 		self:DelayedMessage(timer.regularBlink - 5, L["blinkwarn5"], "Attention")
 		self:Bar(L["blinkbar"], timer.regularBlink, icon.blink)
 	end
-	
+
 	-- aggro reset?
 end

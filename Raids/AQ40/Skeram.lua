@@ -25,15 +25,15 @@ L:RegisterTranslations("enUS", function() return {
 	kill_trigger = "You only delay",
 
 	cmd = "Skeram",
-	
+
 	mc_cmd = "mc",
 	mc_name = "Mind Control Alert",
 	mc_desc = "Warn for Mind Control",
-	
+
 	split_cmd = "split",
 	split_name = "Split Alert",
 	split_desc = "Warn before Splitting",
-    ["You have slain %s!"] = true,
+	["You have slain %s!"] = true,
 } end )
 
 L:RegisterTranslations("deDE", function() return {
@@ -49,7 +49,7 @@ L:RegisterTranslations("deDE", function() return {
 	splitsoon_message = "Abbilder bald! Sei bereit!",
 	split_message = "Abbilder!",
 	kill_trigger = "You only delay", -- translation missing
-	
+
 	cmd = "Skeram",
 
 	mc_cmd = "mc",
@@ -59,7 +59,7 @@ L:RegisterTranslations("deDE", function() return {
 	split_cmd = "split",
 	split_name = "Abbilder",
 	split_desc = "Alarm vor der Aufteilung",
-    ["You have slain %s!"] = "Ihr habt %s getötet!",
+	["You have slain %s!"] = "Ihr habt %s getötet!",
 } end )
 
 ---------------------------------
@@ -101,14 +101,14 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_OTHER", "Event")
 	--self:RegisterEvent("CHAT_MSG_COMBAT_FRIENDLY_DEATH", "Event")
 	--self:RegisterEvent("UNIT_HEALTH")
-	
+
 	--[[self:TriggerEvent("BigWigs_ThrottleSync", "SkeramSplit80Soon", 100)
 	self:TriggerEvent("BigWigs_ThrottleSync", "SkeramSplit75Now", 100)
 	self:TriggerEvent("BigWigs_ThrottleSync", "SkeramSplit55Soon", 100)
 	self:TriggerEvent("BigWigs_ThrottleSync", "SkeramSplit50Now", 100)
 	self:TriggerEvent("BigWigs_ThrottleSync", "SkeramSplit30Soon", 100)
 	self:TriggerEvent("BigWigs_ThrottleSync", "SkeramSplit25Now", 100)]]
-	
+
 	self:ThrottleSync(1, syncName.mc)
 	self:ThrottleSync(1, syncName.mcOver)
 end
@@ -135,38 +135,38 @@ end
 
 -- override
 function module:CheckForBossDeath(msg)
-    if msg == string.format(UNITDIESOTHER, self:ToString()) 
-        or msg == string.format(L["You have slain %s!"], self.translatedName) then
+	if msg == string.format(UNITDIESOTHER, self:ToString())
+		or msg == string.format(L["You have slain %s!"], self.translatedName) then
 		-- check that it wasn't only a copy
 		local function IsBossInCombat()
-            local t = module.enabletrigger
-            if not t then return false end
-            if type(t) == "string" then t = {t} end
+			local t = module.enabletrigger
+			if not t then return false end
+			if type(t) == "string" then t = {t} end
 
-            if UnitExists("target") and UnitAffectingCombat("target") then
-                local target = UnitName("target")
-                for _, mob in pairs(t) do
-                    if target == mob then
-                        return true
-                    end
-                end
-            end
+			if UnitExists("target") and UnitAffectingCombat("target") then
+				local target = UnitName("target")
+				for _, mob in pairs(t) do
+					if target == mob then
+						return true
+					end
+				end
+			end
 
-            local num = GetNumRaidMembers()
-            for i = 1, num do
-                local raidUnit = string.format("raid%starget", i)
-                if UnitExists(raidUnit) and UnitAffectingCombat(raidUnit) then
-                    local target = UnitName(raidUnit)
-                    for _, mob in pairs(t) do
-                        if target == mob then
-                            return true
-                        end
-                    end
-                end
-            end
-            return false
-        end
-		
+			local num = GetNumRaidMembers()
+			for i = 1, num do
+				local raidUnit = string.format("raid%starget", i)
+				if UnitExists(raidUnit) and UnitAffectingCombat(raidUnit) then
+					local target = UnitName(raidUnit)
+					for _, mob in pairs(t) do
+						if target == mob then
+							return true
+						end
+					end
+				end
+			end
+			return false
+		end
+
 		if not IsBossInCombat() then
 			self:SendBossDeathSync()
 		end
@@ -193,7 +193,7 @@ function module:Event(msg)
 end
 
 function module:CHAT_MSG_MONSTER_YELL(msg)
-    if string.find(msg, L["kill_trigger"]) then
+	if string.find(msg, L["kill_trigger"]) then
 		BigWigs:Debug("yell kill trigger")
 		--if self.db.profile.bosskill then
 		--	self:Message(string.format(AceLibrary("AceLocale-2.2"):new("BigWigs")["%s has been defeated"], self:ToString()), "Bosskill", nil, "Victory")
@@ -205,23 +205,23 @@ function module:CHAT_MSG_MONSTER_YELL(msg)
 end
 
 --[[function module:UNIT_HEALTH(arg1)
-	if UnitName(arg1) == boss then
-		local health = UnitHealth(arg1)
-		local maxhealth = UnitHealthMax(arg1)
-		if (health > 424782 and health <= 453100) and maxhealth == 566375 and not splittime then
-			self:Sync("SkeramSplit80Soon")
-		elseif (health > 283188 and health <= 311507) and maxhealth == 566375 and not splittime then
-			self:Sync("SkeramSplit55Soon")
-		elseif (health > 141594 and health <= 169913) and maxhealth == 566375 and not splittime then
-			self:Sync("SkeramSplit30Soon")
-		elseif (health > 311508 and health <= 424781) and maxhealth == 566375 and splittime then
-			self:Sync("SkeramSplit75Now")
-		elseif (health > 169914 and health <= 283187) and maxhealth == 566375 and splittime then
-			self:Sync("SkeramSplit50Now")
-		elseif (health > 1 and health <= 141593) and maxhealth == 566375 and splittime then
-			self:Sync("SkeramSplit25Now")
-		end
-	end
+if UnitName(arg1) == boss then
+local health = UnitHealth(arg1)
+local maxhealth = UnitHealthMax(arg1)
+if (health > 424782 and health <= 453100) and maxhealth == 566375 and not splittime then
+self:Sync("SkeramSplit80Soon")
+elseif (health > 283188 and health <= 311507) and maxhealth == 566375 and not splittime then
+self:Sync("SkeramSplit55Soon")
+elseif (health > 141594 and health <= 169913) and maxhealth == 566375 and not splittime then
+self:Sync("SkeramSplit30Soon")
+elseif (health > 311508 and health <= 424781) and maxhealth == 566375 and splittime then
+self:Sync("SkeramSplit75Now")
+elseif (health > 169914 and health <= 283187) and maxhealth == 566375 and splittime then
+self:Sync("SkeramSplit50Now")
+elseif (health > 1 and health <= 141593) and maxhealth == 566375 and splittime then
+self:Sync("SkeramSplit25Now")
+end
+end
 end]]
 
 ------------------------------
@@ -229,36 +229,36 @@ end]]
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    --[[if sync == "SkeramSplit80Soon" then
-		splittime = true
-		if self.db.profile.split then
-			self:Message(L["splitsoon_message"], "Urgent")
-		end
+	--[[if sync == "SkeramSplit80Soon" then
+	splittime = true
+	if self.db.profile.split then
+	self:Message(L["splitsoon_message"], "Urgent")
+	end
 	elseif sync == "SkeramSplit55Soon" then
-		splittime = true
-		if self.db.profile.split then
-			self:Message(L["splitsoon_message"], "Urgent")
-		end
+	splittime = true
+	if self.db.profile.split then
+	self:Message(L["splitsoon_message"], "Urgent")
+	end
 	elseif sync == "SkeramSplit30Soon" then
-		splittime = true
-		if self.db.profile.split then
-			self:Message(L["splitsoon_message"], "Urgent")
-		end
+	splittime = true
+	if self.db.profile.split then
+	self:Message(L["splitsoon_message"], "Urgent")
+	end
 	elseif sync == "SkeramSplit75Now" then
-		splittime = false
-		if self.db.profile.split then
-			self:Message(L["split_message"], "Important", "Alarm")
-		end
+	splittime = false
+	if self.db.profile.split then
+	self:Message(L["split_message"], "Important", "Alarm")
+	end
 	elseif sync == "SkeramSplit50Now" then
-		splittime = false
-		if self.db.profile.split then
-			self:Message(L["split_message"], "Important", "Alarm")
-		end
+	splittime = false
+	if self.db.profile.split then
+	self:Message(L["split_message"], "Important", "Alarm")
+	end
 	elseif sync == "SkeramSplit25Now" then
-		splittime = false
-		if self.db.profile.split then
-			self:Message(L["split_message"], "Important", "Alarm")
-		end
+	splittime = false
+	if self.db.profile.split then
+	self:Message(L["split_message"], "Important", "Alarm")
+	end
 	else]]if sync == syncName.mc then
 		if self.db.profile.mc then
 			if rest == UnitName("player") then

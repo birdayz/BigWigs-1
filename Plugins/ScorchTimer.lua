@@ -1,5 +1,5 @@
---[[  
-	This is a plugin to help mages track their fire vulnerability debuff.
+--[[
+This is a plugin to help mages track their fire vulnerability debuff.
 --]]
 
 assert( BigWigs, "BigWigs not found!")
@@ -51,22 +51,22 @@ L:RegisterTranslations("enUS", function() return {
 
 	["Up"] = true,
 	["Down"] = true,
-	
+
 	["Test"] = true,
 	["Close"] = true,
 
 	["Texture"] = true,
 	["Set the texture for the timerbars."] = true,
-            
+
 	["Reset position"] = true,
 	["Reset the anchor position, moving it to the center of your screen."] = true,
-    ["Reverse"] = true,
+	["Reverse"] = true,
 	["Toggles if bars are reversed (fill up instead of emptying)."] = true,
-	
+
 	["ScorchTimer"] = true,
-	
+
 	["Scorch Timer"] = true,
-	
+
 	firevuln_test = "(.+) is afflicted by Fire Vulnerability.",
 	scorch_test	= "^Your Scorch (%a%a?)\its (.+) for",
 	resist_test = "^Your Fire Vulnerability was resisted by (.+).",
@@ -88,11 +88,11 @@ BigWigsScorchTimer.defaultDB = {
 	texture = "BantoBar",
 	currentonly = false,
 	enable = isMage and true or false,
-    
-    posx = nil,
-    posy = nil,
-    
-    duration = 0.5,
+
+	posx = nil,
+	posy = nil,
+
+	duration = 0.5,
 
 	width = nil,
 	height = nil,
@@ -105,7 +105,7 @@ BigWigsScorchTimer.consoleOptions = {
 	name = L["Scorch Timer"],
 	desc = L["Gives timer for Scorch Fire Vulnerability."],
 	args   = {
-        enable = {
+		enable = {
 			type = "toggle",
 			name = L["Enable"],
 			desc = L["Enable timers."],
@@ -113,7 +113,7 @@ BigWigsScorchTimer.consoleOptions = {
 			get = function() return BigWigsScorchTimer.db.profile.enable end,
 			set = function(v) BigWigsScorchTimer.db.profile.enable = v end,
 		},
-        currentonly = {
+		currentonly = {
 			type = "toggle",
 			name = L["Target only"],
 			desc = L["Only show timer for the current target."],
@@ -121,7 +121,7 @@ BigWigsScorchTimer.consoleOptions = {
 			get = function() return BigWigsScorchTimer.db.profile.currentonly end,
 			set = function(v) BigWigsScorchTimer.db.profile.currentonly = v end,
 		},
-        spacer = {
+		spacer = {
 			type = "header",
 			name = " ",
 			order = 4,
@@ -130,17 +130,17 @@ BigWigsScorchTimer.consoleOptions = {
 			type = "execute",
 			name = L["Show anchor"],
 			desc = L["Show the bar anchor frame."],
-            order = 5,
+			order = 5,
 			func = function() BigWigsScorchTimer:ShowAnchors() end,
 		},
-        reset = {
+		reset = {
 			type = "execute",
 			name = L["Reset position"],
 			desc = L["Reset the anchor position, moving it to the center of your screen."],
 			order = 6,
 			func = function() BigWigsScorchTimer:ResetAnchor() end,
 		},
-        spacer2 = {
+		spacer2 = {
 			type = "header",
 			name = " ",
 			order = 10,
@@ -148,32 +148,32 @@ BigWigsScorchTimer.consoleOptions = {
 		growup = {
 			type = "toggle",
 			name = L["Grow bars upwards"],
-            desc = L["Toggle bars grow upwards/downwards from anchor."],
-            order = 13,
+			desc = L["Toggle bars grow upwards/downwards from anchor."],
+			order = 13,
 			get = function() return BigWigsScorchTimer.db.profile.growup end,
-			set = function(v) 
-                    BigWigsScorchTimer.db.profile.growup = v 
-                    candybar:SetCandyBarGroupPoint("ScorchTimerGroup", v and "BOTTOM" or "TOP", BigWigsScorchTimer.frames.anchor, v and "TOP" or "BOTTOM", 0, 0)
-                    candybar:SetCandyBarGroupGrowth("ScorchTimerGroup", v)
-                end,
+			set = function(v)
+				BigWigsScorchTimer.db.profile.growup = v
+				candybar:SetCandyBarGroupPoint("ScorchTimerGroup", v and "BOTTOM" or "TOP", BigWigsScorchTimer.frames.anchor, v and "TOP" or "BOTTOM", 0, 0)
+				candybar:SetCandyBarGroupGrowth("ScorchTimerGroup", v)
+			end,
 			message = L["Bars now grow %2$s"],
 			current = L["Bars now grow %2$s"],
 			map = {[true] = L["Up"], [false] = L["Down"]},
 		},
-        reverse = {
+		reverse = {
 			type = "toggle",
 			name = L["Reverse"],
 			desc = L["Toggles if bars are reversed (fill up instead of emptying)."],
 			order = 14,
 			get = function() return BigWigsScorchTimer.db.profile.reverse end,
 			set = function(v) BigWigsScorchTimer.db.profile.reverse = v end,
-			--passValue = "reverse",
+		--passValue = "reverse",
 		},
 		scale = {
 			type = "range",
 			name = L["Bar scale"],
 			desc = L["Set the bar scale."],
-            order = 15,
+			order = 15,
 			min = 0.2,
 			max = 2.0,
 			step = 0.1,
@@ -184,7 +184,7 @@ BigWigsScorchTimer.consoleOptions = {
 			type = "text",
 			name = L["Texture"],
 			desc = L["Set the texture for the timerbars."],
-            order = 16,
+			order = 16,
 			get = function() return BigWigsScorchTimer.db.profile.texture end,
 			set = function(v) BigWigsScorchTimer.db.profile.texture = v end,
 			validate = surface:List(),
@@ -206,16 +206,16 @@ BigWigsScorchTimer.debuffs = {}
 
 function BigWigsScorchTimer:OnRegister()
 	self.consoleOptions.args.texture.validate = surface:List()
-        self:RegisterEvent("Surface_Registered", function()
+	self:RegisterEvent("Surface_Registered", function()
 		self.consoleOptions.args.texture.validate = surface:List()
-        end)
+	end)
 end
 
-function BigWigsScorchTimer:OnEnable()    
+function BigWigsScorchTimer:OnEnable()
 	self.playerName = UnitName("player")
 	if not self.db.profile.texture then self.db.profile.texture = "BantoBar" end
 	self.frames = {}
-    self:SetupFrames()
+	self:SetupFrames()
 	self:RegisterEvent("BigWigs_RecvSync")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
@@ -226,17 +226,17 @@ function BigWigsScorchTimer:OnEnable()
 		self:RegisterEvent("CHAT_MSG_SPELL_DAMAGESHIELDS_ON_SELF", "PlayerDamageEvents")
 		self.impScorch = self:CheckTalents()
 	end
-	
-	if not self:IsEventRegistered("Surface_Registered") then 
-	        self:RegisterEvent("Surface_Registered", function()
+
+	if not self:IsEventRegistered("Surface_Registered") then
+		self:RegisterEvent("Surface_Registered", function()
 			self.consoleOptions.args[L["Texture"]].validate = surface:List()
-	        end)
+		end)
 	end
-	
+
 	self.target = UnitName("target")
-	
+
 	self:ThrottleSync(0.2, syncName.scorch)
-	
+
 end
 
 function BigWigsScorchTimer:OnDisable()
@@ -247,22 +247,22 @@ end
 --      Event Handlers
 -----------------------------------------------------------------------
 function BigWigsScorchTimer:PlayerDamageEvents(msg)
---[[
+	--[[
 	local start, ending, victim = string.find(msg, L["firevuln_test"])
 	if victim and UnitName("target") == victim then
-		--self:DebugMessage("Fire vulne - ".. victim)
-		self:StartBar(victim.. " - Fire Vulnerability", 15, "Interface\\Icons\\Spell_Fire_Soulburn")
-		return
+	--self:DebugMessage("Fire vulne - ".. victim)
+	self:StartBar(victim.. " - Fire Vulnerability", 15, "Interface\\Icons\\Spell_Fire_Soulburn")
+	return
 	end
-]]--
-    local start, ending, _, victim = string.find(msg, L["scorch_test"])
+	]]--
+	local start, ending, _, victim = string.find(msg, L["scorch_test"])
 	if victim then
 		--self:DebugMessage("Scorch - ".. victim)
 		self.lastVictim = victim
 		self:ScheduleEvent("ScorchTimerDelayedBar", self.DelayedBar, 0.2, self)
 	end
-	
-    local start, ending, victim = string.find(msg, L["resist_test"])	
+
+	local start, ending, victim = string.find(msg, L["resist_test"])
 	if victim then
 		--self:DebugMessage("Fire vulne resist - ".. victim)
 		if victim == self.lastVictim then
@@ -281,17 +281,17 @@ function BigWigsScorchTimer:DelayedBar()
 end
 
 function BigWigsScorchTimer:PLAYER_REGEN_ENABLED()
-    self.target = nil
+	self.target = nil
 	self:StopAllBars()
 	self.debuffs = {}
 end
 
 function BigWigsScorchTimer:CHARACTER_POINTS_CHANGED()
-    self.impScorch = self:CheckTalents()
+	self.impScorch = self:CheckTalents()
 end
 
 function BigWigsScorchTimer:RecheckTargetChange()
-    local target = UnitName("target")
+	local target = UnitName("target")
 	if target ~= self.target then
 		if self.db.profile.currentonly then
 			self:StopAllBars()
@@ -305,13 +305,13 @@ function BigWigsScorchTimer:RecheckTargetChange()
 end
 -- reset data if you change your target
 function BigWigsScorchTimer:PLAYER_TARGET_CHANGED(msg)
-    if not self:IsEventScheduled("ScorchTimerReckeckTargetChange") then
-        self:ScheduleEvent("ScorchTimerReckeckTargetChange", self.RecheckTargetChange, 0.1, self) 
-    end
+	if not self:IsEventScheduled("ScorchTimerReckeckTargetChange") then
+		self:ScheduleEvent("ScorchTimerReckeckTargetChange", self.RecheckTargetChange, 0.1, self)
+	end
 end
 
 function BigWigsScorchTimer:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.scorch then
+	if sync == syncName.scorch then
 		self.debuffs[rest] = GetTime()
 		if rest == self.target and self.db.profile.enable then
 			self:StartBar(rest, timer.scorch-0.2, "Interface\\Icons\\Spell_Fire_Soulburn")
@@ -323,7 +323,7 @@ end
 --      Util
 -----------------------------------------------------------------------
 function BigWigsScorchTimer:GetTargetInfo()
-	for k, v in pairs(self.debuffs) do 
+	for k, v in pairs(self.debuffs) do
 		if k == self.target then
 			local timeleft = timer.scorch-(GetTime() - v)-0.2
 			if timeleft > 0 then
@@ -372,17 +372,17 @@ end
 
 function BigWigsScorchTimer:SetupFrames()
 	if self.frames.anchor then return end
-    
-    local f, t	
+
+	local f, t
 
 	f, _, _ = GameFontNormal:GetFont()
 
 	--self.frames = {}
-    
+
 	local frame = CreateFrame("Frame", "ScorchTimerBarAnchor", UIParent)
-    
-    --DEFAULT_CHAT_FRAME:AddMessage(frame:GetAttribute("name"))
-    
+
+	--DEFAULT_CHAT_FRAME:AddMessage(frame:GetAttribute("name"))
+
 	frame.owner = self
 	frame:Hide()
 
@@ -392,13 +392,13 @@ function BigWigsScorchTimer:SetupFrames()
 		bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background", tile = true, tileSize = 16,
 		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border", edgeSize = 16,
 		insets = {left = 4, right = 4, top = 4, bottom = 4},
-		})
+	})
 	frame:SetBackdropBorderColor(.5, .5, .5)
 	frame:SetBackdropColor(0,0,0)
 	frame:ClearAllPoints()
 	frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 	frame:EnableMouse(true)
-    frame:RegisterForDrag("LeftButton")
+	frame:RegisterForDrag("LeftButton")
 	frame:SetMovable(true)
 	frame:SetScript("OnDragStart", function() this:StartMoving() end)
 	frame:SetScript("OnDragStop", function() this:StopMovingOrSizing() this.owner:SavePosition() end)
@@ -420,9 +420,9 @@ function BigWigsScorchTimer:SetupFrames()
 	cheader:SetTextColor(1, .8, 0)
 	cheader:ClearAllPoints()
 	cheader:SetPoint("TOP", frame, "TOP", 0, -10)
-    
-    frame.cheader = cheader
-	
+
+	frame.cheader = cheader
+
 	local leftbutton = CreateFrame("Button", nil, frame)
 	leftbutton.owner = self
 	leftbutton:SetWidth(40)
@@ -430,7 +430,7 @@ function BigWigsScorchTimer:SetupFrames()
 	leftbutton:SetPoint("RIGHT", frame, "CENTER", -10, -15)
 	leftbutton:SetScript("OnClick", function()  self:Test() end )
 
-	
+
 	t = leftbutton:CreateTexture()
 	t:SetWidth(50)
 	t:SetHeight(32)
@@ -444,7 +444,7 @@ function BigWigsScorchTimer:SetupFrames()
 	t:SetTexCoord(0, 0.625, 0, 0.6875)
 	t:SetAllPoints(leftbutton)
 	leftbutton:SetPushedTexture(t)
-	
+
 	t = leftbutton:CreateTexture()
 	t:SetTexture("Interface\\Buttons\\UI-Panel-Button-Highlight")
 	t:SetTexCoord(0, 0.625, 0, 0.6875)
@@ -455,8 +455,8 @@ function BigWigsScorchTimer:SetupFrames()
 	leftbuttontext:SetFontObject(GameFontHighlight)
 	leftbuttontext:SetText(L["Test"])
 	leftbuttontext:SetAllPoints(leftbutton)
-    
-    frame.leftbutton = leftbutton
+
+	frame.leftbutton = leftbutton
 
 	local rightbutton = CreateFrame("Button", nil, frame)
 	rightbutton.owner = self
@@ -465,7 +465,7 @@ function BigWigsScorchTimer:SetupFrames()
 	rightbutton:SetPoint("LEFT", frame, "CENTER", 10, -15)
 	rightbutton:SetScript( "OnClick", function() self:HideAnchors() end )
 
-	
+
 	t = rightbutton:CreateTexture()
 	t:SetWidth(50)
 	t:SetHeight(32)
@@ -479,7 +479,7 @@ function BigWigsScorchTimer:SetupFrames()
 	t:SetTexCoord(0, 0.625, 0, 0.6875)
 	t:SetAllPoints(rightbutton)
 	rightbutton:SetPushedTexture(t)
-	
+
 	t = rightbutton:CreateTexture()
 	t:SetTexture("Interface\\Buttons\\UI-Panel-Button-Highlight")
 	t:SetTexCoord(0, 0.625, 0, 0.6875)
@@ -491,10 +491,10 @@ function BigWigsScorchTimer:SetupFrames()
 	rightbuttontext:SetText(L["Close"])
 	rightbuttontext:SetAllPoints(rightbutton)
 
-    frame.rightbutton = rightbutton
-	
+	frame.rightbutton = rightbutton
+
 	self.frames.anchor = frame
-        
+
 	local x = self.db.profile.posx
 	local y = self.db.profile.posy
 	if x and y then
@@ -502,16 +502,16 @@ function BigWigsScorchTimer:SetupFrames()
 		self.frames.anchor:ClearAllPoints()
 		self.frames.anchor:SetPoint("TOP", UIParent, "TOP", 0, 0)--self.frames.anchor:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", x / s, y / s)
 	else
-	self:ResetAnchor("normal")
+		self:ResetAnchor("normal")
 	end
-        
+
 	local value = self.db.profile.growup or false
 	self.frames.anchor.candyBarGroupId = "ScorchTimerGroup"
-    candybar:RegisterCandyBarGroup(self.frames.anchor.candyBarGroupId)
-    candybar:SetCandyBarGroupPoint(self.frames.anchor.candyBarGroupId, value and "BOTTOM" or "TOP", self.frames.anchor, value and "TOP" or "BOTTOM", 0, 0)
-    candybar:SetCandyBarGroupGrowth(self.frames.anchor.candyBarGroupId, value)
-    
-    self:RestorePosition()
+	candybar:RegisterCandyBarGroup(self.frames.anchor.candyBarGroupId)
+	candybar:SetCandyBarGroupPoint(self.frames.anchor.candyBarGroupId, value and "BOTTOM" or "TOP", self.frames.anchor, value and "TOP" or "BOTTOM", 0, 0)
+	candybar:SetCandyBarGroupGrowth(self.frames.anchor.candyBarGroupId, value)
+
+	self:RestorePosition()
 end
 
 function BigWigsScorchTimer:ResetAnchor(specific)
@@ -525,20 +525,20 @@ function BigWigsScorchTimer:ResetAnchor(specific)
 end
 
 function BigWigsScorchTimer:SavePosition()
-    if not self.frames.anchor then self:SetupFrames() end
+	if not self.frames.anchor then self:SetupFrames() end
 
 	local s = self.frames.anchor:GetEffectiveScale()
 	self.db.profile.posx = self.frames.anchor:GetLeft() * s
 	self.db.profile.posy = self.frames.anchor:GetTop() * s
-    
+
 end
 
 function BigWigsScorchTimer:RestorePosition()
 	local x = self.db.profile.posx
 	local y = self.db.profile.posy
-		
+
 	if not x or not y then return end
-				
+
 	local f = self.frames.anchor
 	local s = f:GetEffectiveScale()
 
@@ -552,27 +552,27 @@ end
 
 function BigWigsScorchTimer:ShowAnchors()
 	if not self.frames.anchor then self:SetupFrames() end
-    self.frames.anchor:Show()
+	self.frames.anchor:Show()
 end
 
 function BigWigsScorchTimer:HideAnchors()
 	if not self.frames.anchor then return end
-    self.frames.anchor:Hide()
+	self.frames.anchor:Hide()
 end
 
 local barCache = {
-    -- [i] = {text}
-}
+	-- [i] = {text}
+	}
 
 function BigWigsScorchTimer:StartBar(text, time, icon)
-    if not text or not time then return end
+	if not text or not time then return end
 	local id = "ScorchTimerBar "..text
-    if not self.frames.anchor then self:SetupFrames() end
-     
+	if not self.frames.anchor then self:SetupFrames() end
 
-    local groupId = self.frames.anchor.candyBarGroupId
+
+	local groupId = self.frames.anchor.candyBarGroupId
 	local scale = self.db.profile.scale or 1
-    candybar:RegisterCandyBar(id, time, text, icon)
+	candybar:RegisterCandyBar(id, time, text, icon)
 	candybar:RegisterCandyBarWithGroup(id, groupId)
 	candybar:SetCandyBarTexture(id, surface:Fetch(self.db.profile.texture))
 
@@ -595,14 +595,14 @@ function BigWigsScorchTimer:StartBar(text, time, icon)
 		candybar:SetCandyBarReversed(id, self.db.profile.reverse)
 	end
 
-    candybar:SetCandyBarScale(id, scale)
-    
+	candybar:SetCandyBarScale(id, scale)
+
 	candybar:StartCandyBar(id, true)
 	tinsert(barCache,text)
 end
 
 function BigWigsScorchTimer:StopBar(text)
-    if not text and type(text) ~= "string" then return end    
+	if not text and type(text) ~= "string" then return end
 	candybar:UnregisterCandyBar("ScorchTimerBar "..text)
 end
 

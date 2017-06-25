@@ -18,7 +18,7 @@ local timer = {
 	firstFear = 5,
 	fear = 15,
 	fearCast = 1.5,
-	wingbuffet = 1,	
+	wingbuffet = 1,
 }
 local icon = {
 	wingbuffet = "INV_Misc_MonsterScales_14",
@@ -45,7 +45,7 @@ local phase = 0
 
 L:RegisterTranslations("enUS", function() return {
 	cmd = "Onyxia",
-    engage_trigger = "must leave my lair to feed",
+	engage_trigger = "must leave my lair to feed",
 
 	deepbreath_cmd = "deepbreath",
 	deepbreath_name = "Deep Breath",
@@ -86,7 +86,7 @@ L:RegisterTranslations("enUS", function() return {
 	phase3text = "Phase 3",
 	feartext = "Fear soon!",
 	fear_cast = "Fear",
-    fear_next = "Next Fear",
+	fear_next = "Next Fear",
 	deepbreath_cast = "Deep Breath",
 	flamebreath_cast = "Flame Breath",
 	wingbuffet_cast = "Wing Buffet",
@@ -95,7 +95,7 @@ L:RegisterTranslations("enUS", function() return {
 
 L:RegisterTranslations("deDE", function() return {
 	cmd = "Onyxia",
-    engage_trigger = "must leave my lair to feed",
+	engage_trigger = "must leave my lair to feed",
 
 	deepbreath_cmd = "deepbreath",
 	deepbreath_name = "Tiefer Atem",
@@ -136,7 +136,7 @@ L:RegisterTranslations("deDE", function() return {
 	phase3text = "Phase 3",
 	feartext = "Furcht bald!",
 	fear_cast = "Furcht",
-    fear_next = "Nächste Furcht",
+	fear_next = "Nächste Furcht",
 	deepbreath_cast = "Tiefer Atem",
 	flamebreath_cast = "Flammenatem",
 	wingbuffet_cast = "Fl\195\188gelsto\195\159",
@@ -153,13 +153,13 @@ local iconNumber = 8
 module:RegisterYellEngage(L["engage_trigger"])
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_RAID_BOSS_EMOTE")
 	self:RegisterEvent("CHAT_MSG_MONSTER_YELL")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE")
 	self:RegisterEvent("UNIT_HEALTH")
-    self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF")
-	
+	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF")
+
 	self:ThrottleSync(10, syncName.deepbreath)
 	self:ThrottleSync(10, syncName.phase2)
 	self:ThrottleSync(10, syncName.phase3)
@@ -172,7 +172,7 @@ end
 function module:OnSetup()
 	transitioned = false
 	self.started = false
-    phase = 0
+	phase = 0
 	fireballTarget = nil
 	iconNumber = 8
 end
@@ -200,7 +200,7 @@ function module:CHAT_MSG_RAID_BOSS_EMOTE(msg)
 end
 
 function module:CHAT_MSG_MONSTER_YELL(msg)
-    if (string.find(msg, L["phase2_trigger"])) then
+	if (string.find(msg, L["phase2_trigger"])) then
 		self:Sync(syncName.phase2)
 	elseif (string.find(msg, L["phase3_trigger"])) then
 		self:Sync(syncName.phase3)
@@ -215,7 +215,7 @@ function module:UNIT_HEALTH(arg1) --temporary workaround until Phase2 yell gets 
 		elseif health > 65 then
 			transitioned = false
 		end
-	end
+end
 end
 
 function module:CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE(msg)
@@ -231,9 +231,9 @@ function module:CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE(msg)
 end
 
 function module:CHAT_MSG_SPELL_AURA_GONE_SELF(msg)
-    if string.find(msg, L["fear_over_trigger"]) then
-        self:RemoveWarningSign(icon.fear)
-    end
+	if string.find(msg, L["fear_over_trigger"]) then
+		self:RemoveWarningSign(icon.fear)
+	end
 end
 
 
@@ -245,14 +245,14 @@ function module:BigWigs_RecvSync(sync, rest, nick)
 	if sync == syncName.phase2 then
 		self:Phase2()
 	elseif sync == syncName.phase3 then
-        self:Phase3()
+		self:Phase3()
 	elseif sync == syncName.deepbreath then
 		self:DeepBreath()
 	elseif sync == syncName.flamebreath  then
 		self:FlameBreath()
-	elseif sync == syncName.fireball  then 
+	elseif sync == syncName.fireball  then
 		self:Fireball()
-	elseif sync == syncName.fear  then 
+	elseif sync == syncName.fear  then
 		self:Fear()
 	end
 end
@@ -274,8 +274,8 @@ end
 function module:Phase3()
 	if self.db.profile.phase and phase < 3 then
 		self:Message(L["phase3text"], "Important", true, "Beware")
-        self:Bar(L["fear_next"], timer.firstFear + timer.fearCast, icon.fear)
-        phase = 3
+		self:Bar(L["fear_next"], timer.firstFear + timer.fearCast, icon.fear)
+		phase = 3
 		self:KTM_Reset()
 	end
 end
@@ -284,7 +284,7 @@ function module:DeepBreath()
 	if self.db.profile.deepbreath then
 		self:Message(L["warn1"], "Important", true, "RunAway")
 		self:Bar(L["deepbreath_cast"], 5, icon.deepbreath, true, "black")
-        self:WarningSign(icon.deepbreath_sign, 5)
+		self:WarningSign(icon.deepbreath_sign, 5)
 	end
 end
 
@@ -296,18 +296,18 @@ end
 
 function module:DelayedFireballCheck()
 	local name = "Unknown"
-    self:CheckTarget()
-    if fireballTarget then
-        name = fireballTarget
-        self:Icon(name, iconNumber)
+	self:CheckTarget()
+	if fireballTarget then
+		name = fireballTarget
+		self:Icon(name, iconNumber)
 		iconNumber = iconNumber - 1
 		if iconNumber < 7 then
 			iconNumber = 8
 		end
-        if name == UnitName("player") then
-            self:WarningSign(icon.fireball, 3)
-        end
-    end
+		if name == UnitName("player") then
+			self:WarningSign(icon.fireball, 3)
+		end
+	end
 	if self.db.profile.fireball then
 		self:Bar(string.format(L["fireball_cast"], name), 3 - 0.1, icon.fireball, true, "red")
 	end
@@ -320,11 +320,11 @@ end
 function module:Fear()
 	if self.db.profile.onyfear then
 		self:RemoveBar(L["fear_next"]) -- remove timer bar
-		
+
 		self:Message(L["feartext"], "Important", true, "Alarm")
 		self:Bar(L["fear_cast"], timer.fearCast, icon.fear, true, "white") -- add cast bar
 		self:DelayedBar(timer.fearCast, L["fear_next"], timer.fear, icon.fear) -- delayed timer bar
-        self:WarningSign(icon.fear, 5)
+		self:WarningSign(icon.fear, 5)
 	end
 end
 
@@ -336,7 +336,7 @@ function module:CheckTarget()
 	local i
 	local newtarget = nil
 	local enemy = self:ToString()
-	
+
 	if UnitName("playertarget") == enemy then
 		newtarget = UnitName("playertargettarget")
 	else

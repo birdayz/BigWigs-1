@@ -19,7 +19,7 @@ local timer = {
 	bomb = 8,
 	inferno = 8,
 	nextInferno = 18,
-    firstIgnite = 10,
+	firstIgnite = 10,
 	ignite = 20,
 	service = 8,
 }
@@ -91,7 +91,7 @@ L:RegisterTranslations("enUS", function() return {
 	bomb_cmd = "bomb",
 	bomb_name = "Living Bomb alert",
 	bomb_desc = "Warn when players are the bomb",
-	
+
 	mana_cmd = "manaignite",
 	mana_name = "Ignite Mana alert",
 	mana_desc = "Shows timers for Ignite Mana and announce to dispel it",
@@ -152,7 +152,7 @@ L:RegisterTranslations("deDE", function() return {
 	bomb_cmd = "bomb",
 	bomb_name = "Alarm f\195\188r Lebende Bombe",
 	bomb_desc = "Warnen, wenn andere Spieler die Bombe sind.",
-	
+
 	mana_cmd = "mana",
 	mana_name = "Alarm f\195\188r Mana entz\195\188nden",
 	mana_desc = "Zeige Timer f\195\188r Mana entz\195\188nden und verk\195\188nde Magie entfernen",
@@ -172,7 +172,7 @@ L:RegisterTranslations("deDE", function() return {
 ------------------------------
 
 -- called after module is enabled
-function module:OnEnable()    
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "Event")
@@ -182,7 +182,7 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_OTHER", "Event")
 	--self:RegisterEvent("CHAT_MSG_COMBAT_FRIENDLY_DEATH", "Event")
 	self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE")
-	
+
 	self:ThrottleSync(5, syncName.bomb)
 	self:ThrottleSync(3, syncName.bombStop)
 	self:ThrottleSync(4, syncName.service)
@@ -195,7 +195,7 @@ function module:OnSetup()
 	self.started = nil
 	firstinferno = true
 	firstignite = true
-	
+
 	bombt = 0
 end
 
@@ -222,7 +222,7 @@ function module:Event(msg)
 		if self.db.profile.bomb then
 			self:Bar(string.format(L["bomb_bar1"], UnitName("player")), timer.bomb, icon.bomb)
 			self:Message(L["bomb_message_youscreen"], "Attention", "RunAway")
-            self:WarningSign("Spell_Shadow_MindBomb", timer.bomb)
+			self:WarningSign("Spell_Shadow_MindBomb", timer.bomb)
 		end
 		if self.db.profile.icon then
 			self:Icon(UnitName("player"))
@@ -247,8 +247,8 @@ function module:Event(msg)
 		end
 	elseif bombotherend then
 		self:RemoveBar(string.format(L["bomb_bar"], bombotherend))
-	--elseif string.find(msg, L["deathother_trigger"]) then
-	--	self:RemoveBar(string.format(L["bomb_bar"], bombotherdeath))
+		--elseif string.find(msg, L["deathother_trigger"]) then
+		--	self:RemoveBar(string.format(L["bomb_bar"], bombotherdeath))
 	elseif (string.find(msg, L["ignitemana_trigger1"]) or string.find(msg, L["ignitemana_trigger2"])) then
 		self:Sync(syncName.ignite)
 	end
@@ -256,7 +256,7 @@ end
 
 function module:CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS(msg)
 	if string.find(msg, L["inferno_trigger"]) then
-        BigWigs:DebugMessage("inferno trigger")
+		BigWigs:DebugMessage("inferno trigger")
 		self:Sync(syncName.inferno)
 	end
 end
@@ -275,7 +275,7 @@ end
 function module:BigWigs_RecvSync(sync, rest, nick)
 	if sync == syncName.bomb then
 	elseif sync == syncName.inferno then
-        self:Inferno()
+		self:Inferno()
 	elseif sync == syncName.ignite then
 		self:ManaIgnite()
 	elseif sync == syncName.bombStop and self.db.profile.bomb then
@@ -292,20 +292,20 @@ end
 
 function module:Inferno()
 	--self:DelayedSync(timer.nextInferno, syncName.inferno)
-	
+
 	if self.db.profile.inferno then
 		if firstinferno then
 			self:Bar(L["inferno_bar"], timer.nextInferno, icon.inferno)
-            firstinferno = false
+			firstinferno = false
 		else
 			self:Message(L["inferno_message"], "Important")
 			self:Bar(L["inferno_channel"], timer.inferno, icon.inferno)
 			self:DelayedBar(timer.inferno, L["inferno_bar"], timer.nextInferno - timer.inferno, icon.inferno)
 		end
-	
+
 		self:DelayedMessage(timer.nextInferno - 5, L["nextinferno_message"], "Urgent", nil, nil, true)
 	end
-	
+
 	firstinferno = false
 end
 
@@ -313,10 +313,10 @@ function module:ManaIgnite()
 	if self.db.profile.mana then
 		if not firstignite then
 			self:Message(L["ignite_message"], "Important")
-            self:Bar(L["ignite_bar"], timer.ignite, icon.ignite)
+			self:Bar(L["ignite_bar"], timer.ignite, icon.ignite)
 		else
-            self:Bar(L["ignite_bar"], timer.firstIgnite, icon.ignite)
-        end
-        firstignite = false
+			self:Bar(L["ignite_bar"], timer.firstIgnite, icon.ignite)
+		end
+		firstignite = false
 	end
 end

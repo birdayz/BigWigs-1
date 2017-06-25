@@ -5,7 +5,7 @@
 
 local module, L = BigWigs:ModuleDeclaration("Ancient Core Hound", "Molten Core")
 
-module.revision = 20001 
+module.revision = 20001
 module.enabletrigger = module.translatedName
 module.toggleoptions = {"bars"--[[, "bosskill"]]}
 
@@ -31,38 +31,38 @@ local syncName = {
 
 L:RegisterTranslations("enUS", function() return {
 	Debuff = "Debuff",
-	
+
 	trigger1 = "afflicted by %s",
 	trigger2 = "%s fail(.+) immune.",
 	trigger3 = "%s was resisted",
-	
+
 
 	-- AceConsole strings
 	cmd = "Corehound",
-	
+
 	bars_cmd = "bars",
 	bars_name = "Toggle bars",
 	bars_desc = "Toggles showing bars for timers.",
-	
-     
+
+
 } end )
 
 L:RegisterTranslations("deDE", function() return {
 	Debuff = "Debuff",
-	
+
 	trigger1 = "afflicted by %s",
 	trigger2 = "%s fail(.+) immune.",
 	trigger3 = "%s was resisted",
-	
+
 
 	-- AceConsole strings
 	cmd = "Corehound",
-	
+
 	bars_cmd = "bars",
 	bars_name = "Toggle bars",
 	bars_desc = "Toggles showing bars for timers.",
-	
-     
+
+
 } end )
 
 local debuffTable = {
@@ -87,8 +87,8 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE", "Debuff")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_PARTY_DAMAGE", "Debuff")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE", "Debuff")
-  
-	
+
+
 	self:ThrottleSync(2, syncName.debuff)
 end
 
@@ -129,10 +129,10 @@ end
 --      Synchronization	    --
 ------------------------------
 
-function module:BigWigs_RecvSync( sync, rest, nick )  
-    if sync == syncName.debuff then
+function module:BigWigs_RecvSync( sync, rest, nick )
+	if sync == syncName.debuff then
 		if self.db.profile.bars then
 			self:Bar(L["Debuff"], timer.debuff, icon.debuff)
 		end
-    end
+	end
 end

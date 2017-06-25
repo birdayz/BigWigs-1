@@ -124,7 +124,7 @@ function module:Enrage()
 		self:Message(L["enragewarn"], "Important", nil, "Beware")
 
 		self:RemoveBar(L["enragebartext"])
-		
+
 		self:CancelDelayedMessage(L["warn5m"])
 		self:CancelDelayedMessage(L["warn3m"])
 		self:CancelDelayedMessage(L["warn90"])

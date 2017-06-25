@@ -14,23 +14,23 @@ local sounds = {
 	Alert = "Interface\\AddOns\\BigWigs\\Sounds\\Alert.mp3",
 	Alarm = "Interface\\AddOns\\BigWigs\\Sounds\\Alarm.mp3",
 	Victory = "Interface\\AddOns\\BigWigs\\Sounds\\Victory.mp3",
-	
+
 	Beware = "Interface\\AddOns\\BigWigs\\Sounds\\Beware.wav",
-    RunAway = "Interface\\AddOns\\BigWigs\\Sounds\\RunAway.wav",
-    
-    One = "Interface\\AddOns\\BigWigs\\Sounds\\1.ogg",
-    Two = "Interface\\AddOns\\BigWigs\\Sounds\\2.ogg",
-    Three = "Interface\\AddOns\\BigWigs\\Sounds\\3.ogg",
-    Four = "Interface\\AddOns\\BigWigs\\Sounds\\4.ogg",
-    Five = "Interface\\AddOns\\BigWigs\\Sounds\\5.ogg",
-    Six = "Interface\\AddOns\\BigWigs\\Sounds\\6.ogg",
-    Seven = "Interface\\AddOns\\BigWigs\\Sounds\\7.ogg",
-    Eight = "Interface\\AddOns\\BigWigs\\Sounds\\8.ogg",
-    Nine = "Interface\\AddOns\\BigWigs\\Sounds\\9.ogg",
-    Ten = "Interface\\AddOns\\BigWigs\\Sounds\\10.ogg",
-    
-    Murloc = "Sound\\Creature\\Murloc\\mMurlocAggroOld.wav",
-    Pain = "Sound\\Creature\\Thaddius\\THAD_NAXX_ELECT.wav",
+	RunAway = "Interface\\AddOns\\BigWigs\\Sounds\\RunAway.wav",
+
+	One = "Interface\\AddOns\\BigWigs\\Sounds\\1.ogg",
+	Two = "Interface\\AddOns\\BigWigs\\Sounds\\2.ogg",
+	Three = "Interface\\AddOns\\BigWigs\\Sounds\\3.ogg",
+	Four = "Interface\\AddOns\\BigWigs\\Sounds\\4.ogg",
+	Five = "Interface\\AddOns\\BigWigs\\Sounds\\5.ogg",
+	Six = "Interface\\AddOns\\BigWigs\\Sounds\\6.ogg",
+	Seven = "Interface\\AddOns\\BigWigs\\Sounds\\7.ogg",
+	Eight = "Interface\\AddOns\\BigWigs\\Sounds\\8.ogg",
+	Nine = "Interface\\AddOns\\BigWigs\\Sounds\\9.ogg",
+	Ten = "Interface\\AddOns\\BigWigs\\Sounds\\10.ogg",
+
+	Murloc = "Sound\\Creature\\Murloc\\mMurlocAggroOld.wav",
+	Pain = "Sound\\Creature\\Thaddius\\THAD_NAXX_ELECT.wav",
 }
 
 
@@ -114,7 +114,7 @@ function BigWigsSound:OnEnable()
 	self:RegisterEvent("BigWigs_Sound")
 end
 function BigWigsSound:OnDisable()
-    BigWigs:DebugMessage("OnDisable")
+	BigWigs:DebugMessage("OnDisable")
 end
 
 function BigWigsSound:BigWigs_Message(text, color, noraidsay, sound, broadcastonly)
@@ -128,10 +128,10 @@ end
 
 function BigWigsSound:BigWigs_Sound( sound )
 	if self.db.profile.sound then
-		if sounds[sound] and not self.db.profile.defaultonly then 
+		if sounds[sound] and not self.db.profile.defaultonly then
 			PlaySoundFile(sounds[sound])
-		else 
-			PlaySound("RaidWarning") 
+		else
+			PlaySound("RaidWarning")
 		end
 	end
 end

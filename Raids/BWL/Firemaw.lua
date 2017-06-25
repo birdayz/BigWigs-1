@@ -103,7 +103,7 @@ local timer = {
 }
 local icon = {
 	wingbuffet = "INV_Misc_MonsterScales_14",
-	shadowflame = "Spell_Fire_Incinerate",	
+	shadowflame = "Spell_Fire_Incinerate",
 	flameBuffet = "Spell_Fire_Fireball"
 }
 local syncName = {
@@ -117,14 +117,14 @@ local syncName = {
 ------------------------------
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_PARTY_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "Event")
-	
+
 	self:ThrottleSync(10, syncName.wingbuffet)
 	self:ThrottleSync(10, syncName.shadowflame)
 end
@@ -159,9 +159,9 @@ end
 function module:Event(msg)
 	if msg == L["wingbuffet_trigger"] then
 		self:Sync(syncName.wingbuffet)
-	elseif msg == L["shadowflame_trigger"] then 
+	elseif msg == L["shadowflame_trigger"] then
 		self:Sync(syncName.shadowflame)
-	-- flamebuffet triggers too often on nefarian and therefor this warning doesn't make any sense
+		-- flamebuffet triggers too often on nefarian and therefor this warning doesn't make any sense
 	elseif (string.find(msg, L["flamebuffetafflicted_trigger"]) or string.find(msg, L["flamebuffetresisted_trigger"]) or string.find(msg, L["flamebuffetimmune_trigger"]) or string.find(msg, L["flamebuffetabsorb1_trigger"]) or string.find(msg, L["flamebuffetabsorb2_trigger"])) and self.db.profile.flamebuffet then
 		self:Bar(L["flamebuffet_bar"], timer.flameBuffet, icon.flameBuffet, true, "White")
 	end
@@ -174,15 +174,15 @@ end
 
 function module:BigWigs_RecvSync(sync, rest, nick)
 	if sync == syncName.wingbuffet and self.db.profile.wingbuffet then
-        self:Message(L["wingbuffet_message"], "Important")
+		self:Message(L["wingbuffet_message"], "Important")
 		self:RemoveBar(L["wingbuffet_bar"]) -- remove timer bar
 		self:Bar(L["wingbuffetcast_bar"], timer.wingbuffetCast, icon.wingbuffet, true, "Black") -- show cast bar
 		self:DelayedBar(timer.wingbuffetCast, L["wingbuffet_bar"], timer.wingbuffet, icon.wingbuffet) -- delayed timer bar
-        self:DelayedMessage(timer.wingbuffet - 5, L["wingbuffet_warning"], "Attention", nil, nil, true)
+		self:DelayedMessage(timer.wingbuffet - 5, L["wingbuffet_warning"], "Attention", nil, nil, true)
 	elseif sync == syncName.shadowflame and self.db.profile.shadowflame then
-        self:Message(L["shadowflame_warning"], "Important", true, "Alarm")
+		self:Message(L["shadowflame_warning"], "Important", true, "Alarm")
 		self:RemoveBar(L["shadowflame_Nextbar"]) -- remove timer bar
 		self:Bar(L["shadowflame_bar"], timer.shadowflameCast, icon.shadowflame) -- show cast bar
-        self:DelayedBar(timer.shadowflameCast, L["shadowflame_Nextbar"], timer.shadowflame-timer.shadowflameCast, icon.shadowflame) -- delayed timer bar
+		self:DelayedBar(timer.shadowflameCast, L["shadowflame_Nextbar"], timer.shadowflame-timer.shadowflameCast, icon.shadowflame) -- delayed timer bar
 	end
 end

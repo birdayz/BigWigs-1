@@ -33,7 +33,7 @@ local syncName = {
 	supreme = "LordKazzakSupreme"..module.revision,
 	dead = "LordKazzakDead"..module.revision,
 	randomDeath = "LordKazzakRandomDeath"..module.revision,
-	
+
 }
 
 ----------------------------
@@ -97,7 +97,7 @@ L:RegisterTranslations("enUS", function() return {
 	markofkazzak_cmd = "markofkazzak",
 	markofkazzak_name = "Mark of Kazzak",
 	markofkazzak_desc = "Warn when people get the mana drain debuff from the boss.",
-	
+
 	twistedreflection_cmd = "twistedreflection",
 	twistedreflection_name = "Twisted Reflection",
 	twistedreflection_desc = "Warn when people get the debuff that heals the boss for 25000 HP each time it hits them.",
@@ -126,7 +126,7 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_COMBAT_CREATURE_VS_CREATURE_MISSES", "Melee")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS")
-	
+
 	self:ThrottleSync(2, syncName.markStart)
 	self:ThrottleSync(2, syncName.markStop)
 	self:ThrottleSync(2, syncName.reflectionStart)
@@ -180,7 +180,7 @@ function module:CHAT_MSG_COMBAT_FRIENDLY_DEATH(msg)
 end
 
 function module:CHAT_MSG_MONSTER_YELL(msg)
-	if self.db.profile.supreme and string.find(msg, L["starttrigger1"]) or  string.find(msg, L["starttrigger2"]) then 
+	if self.db.profile.supreme and string.find(msg, L["starttrigger1"]) or  string.find(msg, L["starttrigger2"]) then
 		self:Message(L["engagewarn"], "Important")
 		self:DelayedMessage(timer.supreme - 60, L["supreme1min"], "Attention")
 		self:DelayedMessage(timer.supreme - 30, L["supreme30sec"], "Urgent")
@@ -194,13 +194,13 @@ function module:CHAT_MSG_MONSTER_YELL(msg)
 end
 
 function module:CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE(msg)
-	if string.find(msg, L["voidbolt_trigger"]) then 
+	if string.find(msg, L["voidbolt_trigger"]) then
 		self:Sync(syncName.voidboltStart)
 	end
 end
 
 function module:CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS(msg)
-	if string.find(msg, L["enrage_trigger"]) then 
+	if string.find(msg, L["enrage_trigger"]) then
 		self:Sync(syncName.supreme)
 	end
 end
@@ -256,7 +256,7 @@ end
 function module:BigWigs_RecvSync(sync, rest, nick)
 	if sync == syncName.markStart and rest ~= UnitName("player") then
 		if self.db.profile.markofkazzak then
-		    self:Message(string.format(L["makrofkazzak_warn"], rest), "Important")
+			self:Message(string.format(L["makrofkazzak_warn"], rest), "Important")
 			self:TriggerEvent("BigWigs_SendTell", rest, L["mark_message_you"])
 			self:Bar(string.format(L["mark_bar"], rest), timer.mark, icon.mark, true, "white")
 		end
@@ -316,7 +316,7 @@ end
 
 function module:Melee(msg)
 	if string.find(msg, L["attack_trigger1"]) or string.find(msg, L["attack_trigger2"]) or string.find(msg, L["attack_trigger3"]) or string.find(msg, L["attack_trigger4"]) then
-		if castingvoidbolt then 
+		if castingvoidbolt then
 			if (GetTime() - voidbolttime) < 1.5 then
 				self:Sync(syncName.voidboltStop)
 			elseif (GetTime() - voidbolttime) >= 1.5 then

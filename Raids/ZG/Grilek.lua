@@ -25,7 +25,7 @@ L:RegisterTranslations("enUS", function() return {
 	avatar_cmd = "avatar",
 	avatar_name = "Avatar alert",
 	avatar_desc = "Announce when the boss has Avatar (enrage phase).",
-	
+
 	melee_cmd = "melee",
 	melee_name = "Warnings for melee",
 	melee_desc = "Warn before Avatar is cast, so melee classes can get away from the boss in time.",
@@ -54,7 +54,7 @@ L:RegisterTranslations("deDE", function() return {
 	avatar_cmd = "avatar",
 	avatar_name = "Alarm f\195\188r Avatar",
 	avatar_desc = "Ank\195\188ndingen wenn der Boss Avatar ist (Raserei Phase).",
-	
+
 	melee_cmd = "melee",
 	melee_name = "Warnunken f\195\188r die Nahk\195\164mpfer",
 	melee_desc = "Warnt bevor Avatar gewirkt wird, sodass die Nahk\195\164mpfe Zeit haben um sich vom Boss zu entfernen.",
@@ -101,10 +101,10 @@ local syncName = {
 --module:RegisterYellEngage(L["start_trigger"])
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_OTHER", "Event")
-	
+
 	self:ThrottleSync(8, syncName.meleeIni)
 	self:ThrottleSync(8, syncName.melee)
 	self:ThrottleSync(10, syncName.avatar)
@@ -123,7 +123,7 @@ end
 function module:OnEngage()
 	if firstwarn == 0 then
 		self:Sync(syncName.meleeIni)
-	end	
+	end
 end
 
 -- called after boss is disengaged (wipe(retreat) or victory)

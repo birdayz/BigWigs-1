@@ -22,7 +22,7 @@ L:RegisterTranslations("enUS", function() return {
 	chainlightning_cmd = "chainlightning",
 	chainlightning_name = "Chain Lightning alert",
 	chainlightning_desc = "Warn when the boss is casting Chain Lightning.",
-	
+
 	lightningcloud_cmd = "lightningcloud",
 	lightningcloud_name = "Lightning Cloud warning",
 	lightningcloud_desc = "Warns when you stand in the Lightning Cloud.",
@@ -39,8 +39,8 @@ L:RegisterTranslations("deDE", function() return {
 
 	chainlightning_cmd = "chainlightning",
 	chainlightning_name = "Alarm f\195\188r Kettenblitzschlag",
-	chainlightning_desc = "Warnen wenn Wushoolay beginnt Kettenblitzschlag zu wirken.", 
-	
+	chainlightning_desc = "Warnen wenn Wushoolay beginnt Kettenblitzschlag zu wirken.",
+
 	lightningcloud_cmd = "lightningcloud",
 	lightningcloud_name = "Alarm f\195\188r Blitzschlagwolke",
 	lightningcloud_desc = "Warnt dich wenn du in Blitzschlagwolke stehst.",
@@ -76,7 +76,7 @@ local syncName = {
 function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "Event")
-	
+
 	self:ThrottleSync(3, syncName.chainlightning)
 end
 
@@ -97,7 +97,7 @@ end
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.chainlightning and self.db.profile.chainlightning then
+	if sync == syncName.chainlightning and self.db.profile.chainlightning then
 		self:Message(L["chainlightning_message"], "Important")
 		self:Bar(L["chainlightning_bar"], timer.chainlightning, icon.chainlightning)
 	end

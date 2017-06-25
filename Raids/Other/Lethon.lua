@@ -27,7 +27,7 @@ local icon = {
 	breath = "Interface\\Icons\\Spell_Shadow_LifeDrain02",
 }
 local syncName = {
-}
+	}
 
 ----------------------------
 --      Localization      --
@@ -43,14 +43,14 @@ L:RegisterTranslations("enUS", function() return {
 	engage_trigger = "I can sense the SHADOW on your hearts. There can be no rest for the wicked!",
 	breath_trigger = "afflicted by Noxious Breath",
 	shadow_trigger = "Your wicked souls shall feed my power!",
-	
+
 	shadow_warn = "Shadows spawned!",
 	breathSoon_warn = "Noxious Breath soon!",
 	breath_warn = "Noxious Breath!",
 
-	
+
 	breath_bar = "Noxious Breath",
-	
+
 } end )
 
 ------------------------------
@@ -82,12 +82,12 @@ end
 
 function module:Event( msg )
 	if string.find(msg, L["breath_trigger"]) then
-		if self.db.profile.noxious then 
+		if self.db.profile.noxious then
 			self:CancelDelayedMessage(L["breathSoon_warn"])
 			self:DelayedMessage(timer.breath-3, L["breathSoon_warn"], "Important", true, "Alert")
 			self:RemoveBar(L["breath_bar"])
 			self:Bar(L["breath_bar"], timer.breath, icon.breath)
-		end			
+		end
 	end
 end
 
@@ -98,8 +98,8 @@ function module:CHAT_MSG_MONSTER_YELL(msg)
 			self:DelayedMessage(timer.firstBreath-3, L["breathSoon_warn"], "Important", true, "Alert")
 			self:RemoveBar(L["breath_bar"])
 			self:Bar(L["breath_bar"], timer.firstBreath, icon.breath)
-	end
+		end
 	elseif (string.find(msg, L["shadow_trigger"])) then
-		 self:Message(L["shadow_warn"], "Important")
+		self:Message(L["shadow_warn"], "Important")
 	end
 end

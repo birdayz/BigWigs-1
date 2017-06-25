@@ -111,7 +111,7 @@ module.enabletrigger = module.translatedName -- string or table {boss, add1, add
 module.toggleoptions = {"plagueyou", "plagueother", "icon", -1, "thunderclap", "explode", "enrage"--[[, "bosskill"]]}
 
 module.defaultDB = {
-    enrage = false,
+	enrage = false,
 	bosskill = nil,
 }
 
@@ -135,7 +135,7 @@ local syncName = {
 ------------------------------
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_BUFF")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "CheckPlague")
@@ -144,7 +144,7 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE", "Thunderclap")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_PARTY_DAMAGE", "Thunderclap")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE", "Thunderclap")
-	
+
 	self:ThrottleSync(10, syncName.enrage)
 	self:ThrottleSync(10, syncName.explode)
 	self:ThrottleSync(6, syncName.thunderclap)

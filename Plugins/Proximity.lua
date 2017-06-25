@@ -1,14 +1,14 @@
 --[[
-    Backport from later versions by Dorann
-    https://github.com/xorann/BigWigs
-    
-	This is a small plugin to show which raid members are in close range. This is useful for encounters like C'Thun.
-	Boss modules can override the following properties:
-	module.proximityCheck = function(unit) return CheckInteractDistance(unit, 3) end
-	module.proximitySilent = true
-	
-	module.proximityCheck defines the function to use for the range check. The CheckInteractDistance function has four possible input values for different ranges: 1=10(?) yards; 2=11.11 yards; 3=9.9 yards; 4=28 yards
-	module.proximitySilent allows you to configure whether a warning sound should be played, whenever a raid member is too close
+Backport from later versions by Dorann
+https://github.com/xorann/BigWigs
+
+This is a small plugin to show which raid members are in close range. This is useful for encounters like C'Thun.
+Boss modules can override the following properties:
+module.proximityCheck = function(unit) return CheckInteractDistance(unit, 3) end
+module.proximitySilent = true
+
+module.proximityCheck defines the function to use for the range check. The CheckInteractDistance function has four possible input values for different ranges: 1=10(?) yards; 2=11.11 yards; 3=9.9 yards; 4=28 yards
+module.proximitySilent allows you to configure whether a warning sound should be played, whenever a raid member is too close
 --]]
 
 
@@ -36,9 +36,9 @@ local hexColors = {}
 local function decToHex(IN)
 	local B,K,OUT,I,D=16,"0123456789ABCDEF","",0
 	while IN>0 do
-    	I=I+1
-    	IN,D=math.floor(IN/B),math.mod(IN,B)+1
-    	OUT=string.sub(K,D,D)..OUT
+		I=I+1
+		IN,D=math.floor(IN/B),math.mod(IN,B)+1
+		OUT=string.sub(K,D,D)..OUT
 	end
 	return OUT
 end
@@ -49,9 +49,9 @@ local function rgbToHex(r,g,b)
 end
 
 for k, v in pairs(RAID_CLASS_COLORS) do
-    --hexColors[k] = "|cff" .. rgbToHex(v.r * 256, v.g * 256, v.b * 256)
-    hexColors[k] = string.format("|cff%02x%02x%02x ", v.r * 255, v.g * 255, v.b * 255)
-    --BigWigs:Print(hexColors[k] .. k .. " " .. v.r .. " " .. v.g .. " " .. v.b)
+	--hexColors[k] = "|cff" .. rgbToHex(v.r * 256, v.g * 256, v.b * 256)
+	hexColors[k] = string.format("|cff%02x%02x%02x ", v.r * 255, v.g * 255, v.b * 255)
+	--BigWigs:Print(hexColors[k] .. k .. " " .. v.r .. " " .. v.g .. " " .. v.b)
 	--hexColors[k] = ("|cff%02x%02x%02x"):format(v.r * 255, v.g * 255, v.b * 255)
 end
 
@@ -60,7 +60,7 @@ local coloredNames = setmetatable({}, {__index =
 	function(self, unit)
 		if type(unit) == "nil" then return nil end
 		local _, class = UnitClass(unit)
-        local name, _ = UnitName(unit)
+		local name, _ = UnitName(unit)
 		if class then
 			self[name] = hexColors[class] .. name .. "|r"
 			return self[name]
@@ -84,7 +84,7 @@ L:RegisterTranslations("enUS", function() return {
 	["Disabled"] = true,
 	["Disable the proximity display for all modules that use it."] = true,
 	["The proximity display has been disabled for %s, please use the boss modules options to enable it again."] = true,
-	
+
 	["Has Debuff"] = true,
 
 	proximity = "Proximity display",
@@ -94,8 +94,8 @@ L:RegisterTranslations("enUS", function() return {
 
 	["Test"] = true,
 	["Perform a Proximity test."] = true,
-            
-    ["Reset position"] = true,
+
+	["Reset position"] = true,
 	["Reset the anchor position, moving it to the center of your screen."] = true,
 } end)
 
@@ -117,8 +117,8 @@ L:RegisterTranslations("deDE", function() return {
 
 	["Test"] = "Test",
 	["Perform a Proximity test."] = "Führe einen Nähe Test durch.",
-            
-    ["Reset position"] = "Position zurücksetzen",
+
+	["Reset position"] = "Position zurücksetzen",
 	["Reset the anchor position, moving it to the center of your screen."] = "Die Verankerungsposition zurücksetzen (bewegt das Fenster zur Ursprungsposition).",
 } end)
 
@@ -162,29 +162,29 @@ BigWigsProximity.consoleOptions = {
 			name = L["Sound"],
 			desc = L["Play sound on proximity."],
 			order = 100,
-            get = function() return BigWigsProximity.db.profile.sound end,
-            set = function(v) BigWigsProximity.db.profile.sound = v end,
+			get = function() return BigWigsProximity.db.profile.sound end,
+			set = function(v) BigWigsProximity.db.profile.sound = v end,
 		},
 		disabled = {
 			type = "toggle",
 			name = L["Disabled"],
 			desc = L["Disable the proximity display for all modules that use it."],
 			order = 101,
-            get = function() return BigWigsProximity.db.profile.disabled end,
-            set = function(v)
-                BigWigsProximity.db.profile.disabled = v 
-                if BigWigsProximity.db.profile.disabled then
-                    BigWigsProximity:CloseAndDisableProximity()
-                end
-            end,
+			get = function() return BigWigsProximity.db.profile.disabled end,
+			set = function(v)
+				BigWigsProximity.db.profile.disabled = v
+				if BigWigsProximity.db.profile.disabled then
+					BigWigsProximity:CloseAndDisableProximity()
+				end
+			end,
 		},
-        reset = {
-            type = "execute",
+		reset = {
+			type = "execute",
 			name = L["Reset position"],
 			desc = L["Reset the anchor position, moving it to the center of your screen."],
 			order = 102,
 			func = function() BigWigsProximity:ResetAnchor() end,
-        },
+		},
 		spacer = {
 			type = "header",
 			name = " ",
@@ -206,7 +206,7 @@ BigWigsProximity.consoleOptions = {
 -----------------------------------------------------------------------
 
 function BigWigsProximity:OnRegister()
-	--BigWigs:RegisterBossOption("proximity", L["proximity"], L["proximity_desc"], OnOptionToggled)
+--BigWigs:RegisterBossOption("proximity", L["proximity"], L["proximity_desc"], OnOptionToggled)
 end
 
 function BigWigsProximity:OnEnable()
@@ -227,14 +227,14 @@ end
 
 function BigWigsProximity:BigWigs_ShowProximity(moduleName)
 	--[[if active then
-        error("The proximity module is already running for another boss module.")
-    end]]
-    if moduleName and BigWigs:HasModule(moduleName) then
-        local module = BigWigs:GetModule(moduleName)
-        self:OpenProximity(module)
-    else
-        self:OpenProximity()
-    end
+	error("The proximity module is already running for another boss module.")
+	end]]
+	if moduleName and BigWigs:HasModule(moduleName) then
+		local module = BigWigs:GetModule(moduleName)
+		self:OpenProximity(module)
+	else
+		self:OpenProximity()
+	end
 end
 
 function BigWigsProximity:BigWigs_HideProximity()
@@ -242,18 +242,18 @@ function BigWigsProximity:BigWigs_HideProximity()
 end
 
 function BigWigsProximity:Ace2_AddonDisabled()
-    self:BigWigs_HideProximity()
+	self:BigWigs_HideProximity()
 end
 
 function BigWigsProximity:BigWigs_StartDebuffTrack(moduleName, debuff, title)
-    if moduleName and debuff and BigWigs:HasModule(moduleName) then
-        local module = BigWigs:GetModule(moduleName)
-        self:StartDebuffTrack(module, debuff, title)
-    end
+	if moduleName and debuff and BigWigs:HasModule(moduleName) then
+		local module = BigWigs:GetModule(moduleName)
+		self:StartDebuffTrack(module, debuff, title)
+	end
 end
 
 function BigWigsProximity:BigWigs_StopDebuffTrack()
-    self:StopDebuffTrack()
+	self:StopDebuffTrack()
 end
 
 -----------------------------------------------------------------------
@@ -270,22 +270,22 @@ function BigWigsProximity:CloseAndDisableProximity()
 end
 
 function BigWigsProximity:CloseProximity()
-    active = false
+	active = false
 	if anchor then anchor:Hide() end
 	self:CancelScheduledEvent("bwproximityupdate")
 end
 
-function BigWigsProximity:OpenProximity(module)    
+function BigWigsProximity:OpenProximity(module)
 	--if self.db.profile.disabled or not active or type(active.proximityCheck) ~= "function" or not active.db.profile.proximity then return end
-    if self.db.profile.disabled then return end
-    if module and not module.db.profile.proximity then return end
-    
-    active = true
-    
-    if module then
-        activeModule = module
-    end
-    
+	if self.db.profile.disabled then return end
+	if module and not module.db.profile.proximity then return end
+
+	active = true
+
+	if module then
+		activeModule = module
+	end
+
 	self:SetupFrames()
 
 	for k in pairs(tooClose) do tooClose[k] = nil end
@@ -304,38 +304,38 @@ function BigWigsProximity:TestProximity()
 	anchor.text:SetText(L["|cff777777Nobody|r"])
 	anchor.cheader:SetText(L["Close Players"])
 	anchor:Show()]]
-    self:BigWigs_ShowProximity()
+	self:BigWigs_ShowProximity()
 end
 
 local function tablelength(T)
-    local count = 0
-    for _ in pairs(T) do count = count + 1 end
-    return count
+	local count = 0
+	for _ in pairs(T) do count = count + 1 end
+	return count
 end
 local function proximityCheck(unit)
-    return CheckInteractDistance(unit, 3) 
+	return CheckInteractDistance(unit, 3)
 end
 function BigWigsProximity:UpdateProximity()
-    --mod.proximityCheck = function( unit ) return CheckInteractDistance( unit, 3 ) end
-    
+	--mod.proximityCheck = function( unit ) return CheckInteractDistance( unit, 3 ) end
+
 	if not active then return end
 
-    for k in pairs(tooClose) do tooClose[k] = nil end
-    tooClose = {}
-    
+	for k in pairs(tooClose) do tooClose[k] = nil end
+	tooClose = {}
+
 	local num = GetNumRaidMembers()
-    local func = function(unit) return CheckInteractDistance(unit, 2) end -- 1=10(?) yards; 2=11.11 yards; 3=9.9 yards; 4=28 yards
-    if activeModule and type(activeModule.proximityCheck) == "function" then
-        func = activeModule.proximityCheck
-    end
-    
+	local func = function(unit) return CheckInteractDistance(unit, 2) end -- 1=10(?) yards; 2=11.11 yards; 3=9.9 yards; 4=28 yards
+	if activeModule and type(activeModule.proximityCheck) == "function" then
+		func = activeModule.proximityCheck
+	end
+
 	for i = 1, num do
 		local name = GetRaidRosterInfo(i)
-        local unit = "raid"..i
+		local unit = "raid"..i
 		if UnitExists(unit) and not UnitIsDeadOrGhost(unit) and not UnitIsUnit(unit, "player") then
-            --if CheckInteractDistance(unit, 2) then -- 1=28 yards; 2=11.11 yards; 3=9.9 yards
-            if func(unit) then
-                table.insert(tooClose, tostring(coloredNames[unit]))
+			--if CheckInteractDistance(unit, 2) then -- 1=28 yards; 2=11.11 yards; 3=9.9 yards
+			if func(unit) then
+				table.insert(tooClose, tostring(coloredNames[unit]))
 			end
 		end
 		if tablelength(tooClose) > 4 then break end
@@ -346,20 +346,20 @@ function BigWigsProximity:UpdateProximity()
 		anchor.text:SetText(L["|cff777777Nobody|r"])
 	else
 		anchor:SetBackdropBorderColor(1.0,0.0,0.0) --- red
-        local test = table.concat(tooClose, "\n");
+		local test = table.concat(tooClose, "\n");
 		anchor.text:SetText(table.concat(tooClose, "\n"))
 		--for k in pairs(tooClose) do tooClose[k] = nil end
 		local t = time()
 		if t > lastplayed + 1 then
 			lastplayed = t
 			if self.db.profile.sound and UnitAffectingCombat("player") then
-                if activeModule then 
-                    if not activeModule.proximitySilent then
-				        self:TriggerEvent("BigWigs_Sound", "Alarm")
-                    end
-                else 
-                    self:TriggerEvent("BigWigs_Sound", "Alarm")
-                end
+				if activeModule then
+					if not activeModule.proximitySilent then
+						self:TriggerEvent("BigWigs_Sound", "Alarm")
+					end
+				else
+					self:TriggerEvent("BigWigs_Sound", "Alarm")
+				end
 			end
 		end
 	end
@@ -381,7 +381,7 @@ function BigWigsProximity:SetupFrames()
 	frame:SetBackdrop({
 		bgFile = "Interface\\Tooltips\\UI-Tooltip-Background", tile = true, tileSize = 16,
 		edgeFile = "Interface\\AddOns\\BigWigs\\Textures\\otravi-semi-full-border", edgeSize = 32,
-        --edgeFile = "", edgeSize = 32,
+		--edgeFile = "", edgeSize = 32,
 		insets = {left = 1, right = 1, top = 20, bottom = 1},
 	})
 	frame:SetBackdropBorderColor(1.0,1.0,1.0)
@@ -452,7 +452,7 @@ function BigWigsProximity:ResetAnchor()
 	if not anchor then self:SetupFrames() end
 	anchor:ClearAllPoints()
 	--anchor:SetPoint("CENTER", UIParent, "CENTER")
-    anchor:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", 300, 500)
+	anchor:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", 300, 500)
 	self.db.profile.posx = nil
 	self.db.profile.posy = nil
 end
@@ -466,27 +466,27 @@ function BigWigsProximity:SavePosition()
 end
 
 function BigWigsProximity:StopDebuffTrack()
-    debuffActive = false
+	debuffActive = false
 	debuffTexture = nil
 	if anchor then anchor:Hide() end
 	self:CancelScheduledEvent("bwdebuffupdate")
 end
 
 function BigWigsProximity:StartDebuffTrack(module, debuff, title)
-    if self.db.profile.disabled then return end
-    if module and not module.db.profile.proximity then return end
-    
-    if module then
-        activeModule = module
-    end
-	
+	if self.db.profile.disabled then return end
+	if module and not module.db.profile.proximity then return end
+
+	if module then
+		activeModule = module
+	end
+
 	if not title then title = L["Has Debuff"] end
-	
-    active = false
+
+	active = false
 	debuffActive = true
 	debuffTexture = debuff
 	self:CancelScheduledEvent("bwproximityupdate")
-	
+
 	self:SetupFrames()
 
 	for k in pairs(hasDebuff) do hasDebuff[k] = nil end
@@ -504,18 +504,18 @@ function BigWigsProximity:StartDebuffTrack(module, debuff, title)
 end
 
 function BigWigsProximity:UpdateDebuff()
-    --mod.proximityCheck = function( unit ) return CheckInteractDistance( unit, 3 ) end
-    
+	--mod.proximityCheck = function( unit ) return CheckInteractDistance( unit, 3 ) end
+
 	if not debuffActive then return end
 
-    for k in pairs(hasDebuff) do hasDebuff[k] = nil end
-    hasDebuff = {}
-    
+	for k in pairs(hasDebuff) do hasDebuff[k] = nil end
+	hasDebuff = {}
+
 	local num = GetNumRaidMembers()
-    
+
 	for i = 1, num do
 		local name = GetRaidRosterInfo(i)
-        local unit = "raid"..i
+		local unit = "raid"..i
 		if UnitExists(unit) and not UnitIsDeadOrGhost(unit) and not UnitIsUnit(unit, "player") then
 			for a=1,16 do
 				local t,c = UnitDebuff(unit,a);
@@ -533,7 +533,7 @@ function BigWigsProximity:UpdateDebuff()
 	if tablelength(hasDebuff) == 0 then
 		anchor.text:SetText(L["|cff777777Nobody|r"])
 	else
-        local test = table.concat(hasDebuff, "\n");
+		local test = table.concat(hasDebuff, "\n");
 		anchor.text:SetText(table.concat(hasDebuff, "\n"))
 		local t = time()
 	end

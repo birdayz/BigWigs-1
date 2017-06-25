@@ -20,10 +20,10 @@ local L = AceLibrary("AceLocale-2.2"):new("BigWigs"..name)
 L:RegisterTranslations("enUS", function() return {
 	onyHeadHorde_trigger = "People of the Horde, citizens of Orgrimmar, come, gather round and celebrate a hero of the Horde. On this day",
 	nefHeadHorde_trigger = "NEFARIAN IS SLAIN! People of Orgrimmar, bow down before the might of",
-	
+
 	onyHeadAlliance_trigger = "Citizens and allies of Stormwind, on this day, history has been made.",
 	nefHeadAlliance_trigger = "Citizens of the Alliance, the Lord of Blackrock is slain! Nefarian has been subdued by the combined might of",
-	
+
 	zgHeart_trigger = "Now, only one step remains to rid us of the Soulflayer's threat...",
 	rendHead_trigger = "Honor your heroes! On this day, they have dealt a great blow against one of our most hated enemies! The false Warchief, Rend Blackhand, has fallen!",
 
@@ -34,7 +34,7 @@ L:RegisterTranslations("enUS", function() return {
 	["worldbuffs"] = true,
 	["World Buff Timers"] = true,
 	["Gives timer bars to see when world buffs are going out."] = true,
-	
+
 	["Enable"] = true,
 	["Enable timers"] = true,
 } end )

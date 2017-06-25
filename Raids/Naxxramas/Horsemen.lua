@@ -114,7 +114,7 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "MarkEvent")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "MarkEvent")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "MarkEvent")
-	
+
 	self:ThrottleSync(3, syncName.shieldwall)
 	self:ThrottleSync(8, syncName.mark)
 	self:ThrottleSync(5, syncName.void)
@@ -125,7 +125,7 @@ end
 -- called after module is enabled and after each wipe
 function module:OnSetup()
 	self:RegisterEvent("CHAT_MSG_COMBAT_HOSTILE_DEATH")
-	
+
 	self.marks = 0
 	self.deaths = 0
 
@@ -182,23 +182,23 @@ end
 
 function module:CHAT_MSG_SPELL_PERIODIC_CREATURE_BUFFS( msg )
 	local _,_, mob = string.find(msg, L["shieldwalltrigger"])
-	if mob then 
-		self:Sync(syncName.shieldwall .. " " .. mob) 
+	if mob then
+		self:Sync(syncName.shieldwall .. " " .. mob)
 	end
 end
 
 function module:CHAT_MSG_SPELL_CREATURE_VS_CREATURE_BUFF(msg)
 	if msg == L["voidtrigger"] then
 		self:Sync(syncName.void )
-	end	
+	end
 end
 
 function module:CHAT_MSG_COMBAT_HOSTILE_DEATH(msg)
 	if msg == string.format(UNITDIESOTHER, thane) or
-		msg == string.format(UNITDIESOTHER, zeliek) or 
+		msg == string.format(UNITDIESOTHER, zeliek) or
 		msg == string.format(UNITDIESOTHER, mograine) or
 		msg == string.format(UNITDIESOTHER, blaumeux) then
-		
+
 		self.deaths = self.deaths + 1
 		if self.deaths == 4 then
 			self:SendBossDeathSync()

@@ -51,8 +51,8 @@ L:RegisterTranslations("enUS", function() return {
 	addmsg = "%d/2 Flamewakers dead!",
 	flamewaker_name = "Flamewaker",
 
-    barNextRain = "Next Rain",
-            
+	barNextRain = "Next Rain",
+
 	curse_warn_soon = "5 seconds until Gehennas' Curse!",
 	curse_warn_now = "Gehennas' Curse - Decurse NOW!",
 
@@ -60,35 +60,35 @@ L:RegisterTranslations("enUS", function() return {
 	firewarn = "Move from FIRE!",
 
 	cmd = "Gehennas",
-	
+
 	adds_cmd = "adds",
 	adds_name = "Dead adds counter",
 	adds_desc = "Announces dead Flamewakers",
-	
+
 	curse_cmd = "curse",
 	curse_name = "Gehennas' Curse alert",
 	curse_desc = "Warn for Gehennas' Curse",
-            
-    rain_cmd = "rain",
-    rain_name = "Rain of Fire alert",
-    rain_desc = "Shows a warning sign for Rain of Fire",
-            
-    ["Rain of Fire"] = true,
+
+	rain_cmd = "rain",
+	rain_name = "Rain of Fire alert",
+	rain_desc = "Shows a warning sign for Rain of Fire",
+
+	["Rain of Fire"] = true,
 } end)
 
 L:RegisterTranslations("deDE", function() return {
 	curse_trigger = "von Gehennas(.+)Fluch betroffen",
 	--bolt_trigger = "Gehennas beginnt Schattenblitz",
 	rain_trigger = "Ihr seid von Feuerregen betroffen",
-	rain_run_trigger = "Ihr erleidet (%d+) (.+) von " .. module.translatedName .. " Feuerregen.",	
-	
+	rain_run_trigger = "Ihr erleidet (%d+) (.+) von " .. module.translatedName .. " Feuerregen.",
+
 	curse_trigger2 = "Gehennas\' Fluch(.+) widerstanden",
 	dead1 = "Feuerschuppe stirbt",
 	addmsg = "%d/2 Feuerschuppe tot!",
 	flamewaker_name = "Feuerschuppe",
 
-    barNextRain = "N\195\164chster Regen",
-            
+	barNextRain = "N\195\164chster Regen",
+
 	curse_warn_soon = "5 Sekunden bis Gehennas' Fluch!",
 	curse_warn_now = "Gehennas' Fluch - JETZT Entfluchen!",
 
@@ -96,20 +96,20 @@ L:RegisterTranslations("deDE", function() return {
 	firewarn = "Raus aus dem Feuer!",
 
 	cmd = "Gehennas",
-	
+
 	adds_cmd = "adds",
 	adds_name = "Z\195\164hler f\195\188r tote Adds",
 	adds_desc = "Verk\195\188ndet Feuerschuppe Tod",
-	
+
 	curse_cmd = "curse",
 	curse_name = "Alarm f\195\188r Gehennas' Fluch",
 	curse_desc = "Warnen vor Gehennas' Fluch",
-            
-    rain_cmd = "rain",
-    rain_name = "Feuerregen",
-    rain_desc = "Zeigt ein Warnzeichen bei Feuerregen",
-        
-    ["Rain of Fire"] = "Feuerregen",
+
+	rain_cmd = "rain",
+	rain_name = "Feuerregen",
+	rain_desc = "Zeigt ein Warnzeichen bei Feuerregen",
+
+	["Rain of Fire"] = "Feuerregen",
 } end)
 
 
@@ -120,15 +120,15 @@ L:RegisterTranslations("deDE", function() return {
 module.wipemobs = { L["flamewaker_name"] }
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE",        "Event")
-    self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE",            "Event")
-    self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_FRIENDLYPLAYER_DAMAGE",  "Event")
-    self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE",              "Event")
-    self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE",     "Event")
-    self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE",               "Event")
-    self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF")
-	
+	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE",            "Event")
+	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_FRIENDLYPLAYER_DAMAGE",  "Event")
+	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE",              "Event")
+	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE",     "Event")
+	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE",               "Event")
+	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF")
+
 	self:ThrottleSync(10, syncName.curse)
 end
 
@@ -136,7 +136,7 @@ end
 function module:OnSetup()
 	self.started = false
 	flamewaker = 0
-	
+
 	self:RegisterEvent("CHAT_MSG_COMBAT_HOSTILE_DEATH")
 end
 
@@ -159,34 +159,34 @@ end
 ------------------------------
 
 function module:Event(msg)
-    if string.find(msg, L["rain_run_trigger"]) then
-        if self.db.profile.rain then
-            -- I found no better way to trigger this, it will autohide after 2s which is the time between Rain of Fire ticks
-            self:WarningSign(icon.rain, timer.rainTick)
-        end
-    elseif ((string.find(msg, L["curse_trigger"])) or (string.find(msg, L["curse_trigger2"]))) then
+	if string.find(msg, L["rain_run_trigger"]) then
+		if self.db.profile.rain then
+			-- I found no better way to trigger this, it will autohide after 2s which is the time between Rain of Fire ticks
+			self:WarningSign(icon.rain, timer.rainTick)
+		end
+	elseif ((string.find(msg, L["curse_trigger"])) or (string.find(msg, L["curse_trigger2"]))) then
 		self:Sync(syncName.curse)
 	elseif (string.find(msg, L["rain_trigger"])) then
-        -- this will not trigger, but I will leave it in case they fix this combatlog event/message
-        if self.db.profile.rain then
-            self:Message(L["firewarn"], "Attention", true, "Alarm")
-            self:WarningSign(icon.rain, timer.rainDuration)
-            --self:DelayedBar(timer.rainDuration, L["barNextRain"], timer.nextRain - timer.rainDuration, icon.rain) -- variance too high
-        end
+		-- this will not trigger, but I will leave it in case they fix this combatlog event/message
+		if self.db.profile.rain then
+			self:Message(L["firewarn"], "Attention", true, "Alarm")
+			self:WarningSign(icon.rain, timer.rainDuration)
+			--self:DelayedBar(timer.rainDuration, L["barNextRain"], timer.nextRain - timer.rainDuration, icon.rain) -- variance too high
+		end
 	end
 end
 
 function module:CHAT_MSG_SPELL_AURA_GONE_SELF(msg)
-    if string.find(msg, L["Rain of Fire"]) then
-        -- this will not trigger, but I will leave it in case they fix this combatlog event/message
-        self:RemoveWarningSign(icon.rain)
-    end
+	if string.find(msg, L["Rain of Fire"]) then
+		-- this will not trigger, but I will leave it in case they fix this combatlog event/message
+		self:RemoveWarningSign(icon.rain)
+	end
 end
 
 function module:CHAT_MSG_COMBAT_HOSTILE_DEATH(msg)
 	BigWigs:CheckForBossDeath(msg, self)
-	
-    --DEFAULT_CHAT_FRAME:AddMessage("CHAT_MSG_COMBAT_HOSTILE_DEATH: " .. msg)
+
+	--DEFAULT_CHAT_FRAME:AddMessage("CHAT_MSG_COMBAT_HOSTILE_DEATH: " .. msg)
 	if string.find(msg, L["dead1"]) then
 		self:Sync(syncName.add .. " " .. tostring(flamewaker + 1))
 	end
@@ -202,12 +202,12 @@ function module:BigWigs_RecvSync(sync, rest, nick)
 		self:DelayedMessage(timer.curse - 5, L["curse_warn_soon"], "Urgent", nil, nil, true)
 		self:Bar(L["curse_bar"], timer.curse, icon.curse)
 	elseif sync == syncName.add and rest and rest ~= "" then
-        rest = tonumber(rest)
-        if rest <= 2 and flamewaker < rest then
-            flamewaker = rest
+		rest = tonumber(rest)
+		if rest <= 2 and flamewaker < rest then
+			flamewaker = rest
 			if self.db.profile.adds then
 				self:Message(string.format(L["addmsg"], flamewaker), "Positive")
 			end
-        end
+		end
 	end
 end

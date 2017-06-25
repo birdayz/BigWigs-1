@@ -59,9 +59,9 @@ L:RegisterTranslations("enUS", function() return {
 	submerge_trigger2 = "^YOU CANNOT DEFEAT THE LIVING FLAME,",
 	engage_trigger = "^NOW FOR YOU",
 	engage_soon_trigger1 = "Imprudent whelps!",
-    engage_soon_trigger2 = "TOO SOON! YOU HAVE AWAKENED ME TOO SOON",
+	engage_soon_trigger2 = "TOO SOON! YOU HAVE AWAKENED ME TOO SOON",
 	engage_soon_trigger3 = "YOU ALLOWED THESE INSECTS",
-    hammer_trigger = "^BY FIRE BE PURGED!",
+	hammer_trigger = "^BY FIRE BE PURGED!",
 
 	knockback_message = "Knockback!",
 	knockback_soon_message = "Knockback soon!",
@@ -81,7 +81,7 @@ L:RegisterTranslations("enUS", function() return {
 	sonsdeadwarn = "%d/8 Sons of Flame dead!",
 
 	cmd = "Ragnaros",
-	
+
 	start_cmd = "start",
 	start_name = "Start",
 	start_desc = "Starts a bar for estimating the beginning of the fight.",
@@ -101,16 +101,16 @@ L:RegisterTranslations("enUS", function() return {
 	aoeknock_cmd = "aoeknock",
 	aoeknock_name = "Knockback alert",
 	aoeknock_desc = "Warn for Wrath of Ragnaros knockback",
-    
-    ["Combat"] = true,
+
+	["Combat"] = true,
 } end)
 
 L:RegisterTranslations("deDE", function() return {
 	knockback_trigger = "DIE FLAMMEN VON SULFURON",
 	submerge_trigger = "^Kommt herbei, meine Diener!",
 	engage_trigger = "^NUN ZU EUCH,",
-    engage_soon_trigger = "ZU FRÜH!",
-    hammer_trigger = "^DAS FEUER WIRD EUCH!",
+	engage_soon_trigger = "ZU FRÜH!",
+	hammer_trigger = "^DAS FEUER WIRD EUCH!",
 
 	knockback_message = "Rücksto\195\159!",
 	knockback_soon_message = "3 Sekunden bis Rücksto\195\159!",
@@ -130,7 +130,7 @@ L:RegisterTranslations("deDE", function() return {
 	sonsdeadwarn = "%d/8 Sohn der Flamme tot!",
 
 	--cmd = "Ragnaros",
-	
+
 	start_cmd = "start",
 	start_name = "Start",
 	start_desc = "Startet eine Balken f\195\188r die Sch\195\164tzung der Beginn des Kampfes.",
@@ -150,8 +150,8 @@ L:RegisterTranslations("deDE", function() return {
 	--aoeknock_cmd = "aoeknock",
 	aoeknock_name = "Alarm für Rücksto\195\159",
 	aoeknock_desc = "Warnen, wenn Zorn des Ragnaros zurückstö\195\159t",
-            
-    ["Combat"] = "Kampf beginnt",
+
+	["Combat"] = "Kampf beginnt",
 } end)
 
 local lastKnockback = nil
@@ -167,15 +167,15 @@ module.wipemobs = { L["sonofflame"] }
 -- called after module is enabled
 function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_MONSTER_YELL")
-	
+
 	self:ThrottleSync(5, syncName.knockback)
 end
 
 -- called after module is enabled and after each wipe
 function module:OnSetup()
 	self:RegisterEvent("CHAT_MSG_COMBAT_HOSTILE_DEATH")
-	
-	self.started = nil	
+
+	self.started = nil
 	self.barstarted = false
 	firstKnockback = true
 	sonsdead = 0
@@ -211,16 +211,16 @@ function module:CHAT_MSG_MONSTER_YELL(msg)
 		self:Sync(syncName.submerge)
 	elseif string.find(msg, L["engage_trigger"]) then
 		self:SendEngageSync()
-    elseif string.find(msg, L["engage_soon_trigger1"]) and self.db.profile.start then
-        self:Bar(L["Combat"], timer.emerge_soon1, icon.emerge_soon)
+	elseif string.find(msg, L["engage_soon_trigger1"]) and self.db.profile.start then
+		self:Bar(L["Combat"], timer.emerge_soon1, icon.emerge_soon)
 		self.barstarted = true
 	elseif string.find(msg, L["engage_soon_trigger2"]) and self.db.profile.start and not self.barstarted then
-        self:Bar(L["Combat"], timer.emerge_soon2, icon.emerge_soon)
+		self:Bar(L["Combat"], timer.emerge_soon2, icon.emerge_soon)
 		self.barstarted = true
 	elseif string.find(msg, L["engage_soon_trigger3"]) and self.db.profile.start and not self.barstarted then
-        self:Bar(L["Combat"], timer.emerge_soon3, icon.emerge_soon)
-    elseif string.find(msg ,L["hammer_trigger"]) then
-        --self:Bar("Hammer of Ragnaros", timer.hammer_of_ragnaros, icon.hammer_of_ragnaros) -- doesn't do anything on nefarian
+		self:Bar(L["Combat"], timer.emerge_soon3, icon.emerge_soon)
+	elseif string.find(msg ,L["hammer_trigger"]) then
+	--self:Bar("Hammer of Ragnaros", timer.hammer_of_ragnaros, icon.hammer_of_ragnaros) -- doesn't do anything on nefarian
 	end
 end
 
@@ -230,16 +230,16 @@ end
 
 function module:BigWigs_RecvSync(sync, rest, nick)
 	if sync == syncName.sons and rest and rest ~= "" then
-        rest = tonumber(rest)
-        if rest <= 8 and sonsdead < rest then
-            sonsdead = rest
-            if self.db.profile.adds then
-                self:Message(string.format(L["sonsdeadwarn"], sonsdead), "Positive")
-            end
-            if sonsdead == 8 then
-            end
-            --self:TriggerEvent("BigWigs_SetCounterBar", self, "Sons dead", (8 - sonsdead))
-        end
+		rest = tonumber(rest)
+		if rest <= 8 and sonsdead < rest then
+			sonsdead = rest
+			if self.db.profile.adds then
+				self:Message(string.format(L["sonsdeadwarn"], sonsdead), "Positive")
+			end
+			if sonsdead == 8 then
+			end
+			--self:TriggerEvent("BigWigs_SetCounterBar", self, "Sons dead", (8 - sonsdead))
+		end
 	elseif sync == syncName.knockback then
 		self:Knockback()
 	elseif sync == syncName.submerge then
@@ -254,14 +254,14 @@ end
 ------------------------------
 
 function module:Submerge()
-    phase = "submerged"
+	phase = "submerged"
 	lastSubmerge = GetTime()
 	self:CancelScheduledEvent("bwragnarosaekbwarn")
 	self:RemoveBar(L["knockback_bar"])
 	self:CancelDelayedMessage(L["knockback_soon_message"])
 	self:CancelDelayedWarningSign(icon.knockbackWarn)
 	self:RemoveWarningSign(icon.knockbackWarn, true)
-	
+
 	if self.db.profile.submerge then
 		self:Message(L["submerge_message"], "Important")
 	end
@@ -271,12 +271,12 @@ function module:Submerge()
 	end
 	self:ScheduleRepeatingEvent("bwragnarosemergecheck", self.EmergeCheck, 1, self)
 	self:DelayedSync(timer.emerge, syncName.emerge)
-    --self:TriggerEvent("BigWigs_StartCounterBar", self, "Sons dead", 8, "Interface\\Icons\\spell_fire_fire")
-    --self:TriggerEvent("BigWigs_SetCounterBar", self, "Sons dead", (8 - 0.1))
+	--self:TriggerEvent("BigWigs_StartCounterBar", self, "Sons dead", 8, "Interface\\Icons\\spell_fire_fire")
+	--self:TriggerEvent("BigWigs_SetCounterBar", self, "Sons dead", (8 - 0.1))
 end
 
 function module:Emerge()
-    phase = "emerged"
+	phase = "emerged"
 	firstKnockback = true
 	sonsdead = 0 -- reset counter
 
@@ -284,11 +284,11 @@ function module:Emerge()
 	self:CancelScheduledEvent("bwragnarosemergecheck")
 	self:CancelDelayedMessage(L["emerge_soon_message"])
 	self:RemoveBar(L["emerge_bar"])
-	
+
 	if self.db.profile.emerge then
 		self:Message(L["emerge_message"], "Attention")
 	end
-	
+
 	if lastSubmerge then
 		local knocktimer = timer.knockback-(lastSubmerge-lastKnockback)
 		if knocktimer > 0 then
@@ -305,24 +305,24 @@ function module:Emerge()
 	else
 		self:Knockback()
 	end
-	
+
 	if self.db.profile.submerge then
 		self:Bar(L["submerge_bar"], timer.submerge, icon.submerge)
-		
+
 		self:DelayedMessage(timer.submerge - 60, L["submerge_60sec_message"], "Attention", nil, nil, true)
 		self:DelayedMessage(timer.submerge - 30, L["submerge_30sec_message"], "Attention", nil, nil, true)
 		self:DelayedMessage(timer.submerge - 10, L["submerge_10sec_message"], "Attention", nil, nil, true)
 		self:DelayedMessage(timer.submerge - 5, L["submerge_5sec_message"], "Attention", nil, nil, true)
-		
+
 		--self:DelayedSync(timer.submerge, syncName.submerge)
 	end
-    --self:TriggerEvent("BigWigs_StopCounterBar", self, "Sons dead")
+	--self:TriggerEvent("BigWigs_StopCounterBar", self, "Sons dead")
 end
 
 function module:Knockback()
-    if phase == "submerged" then
-        self:Emerge()
-    end
+	if phase == "submerged" then
+		self:Emerge()
+	end
 	if self.db.profile.aoeknock then
 		if not firstKnockback then
 			self:Message(L["knockback_message"], "Important")
@@ -346,7 +346,7 @@ function module:EmergeCheck()
 		self:Sync(syncName.emerge)
 		return
 	end
-	
+
 	local num = GetNumRaidMembers()
 	for i = 1, num do
 		local raidUnit = string.format("raid%starget", i)

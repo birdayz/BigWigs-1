@@ -26,7 +26,7 @@ L:RegisterTranslations("enUS", function() return {
 	shadowflame_bar = "Shadow Flame",
 	shadowflame_Nextbar = "Next Shadow Flame",
 	shadowcurse_bar = "%s - Shadow of Ebonroc",
-    shadowcurse_Firstbar = "Initial Shadow of Ebonroc",
+	shadowcurse_Firstbar = "Initial Shadow of Ebonroc",
 
 	cmd = "Ebonroc",
 
@@ -60,7 +60,7 @@ L:RegisterTranslations("deDE", function() return {
 	shadowflame_bar = "Schattenflamme",
 	shadowflame_Nextbar = "Nächste Schattenflamme",
 	shadowcurse_bar = "%s - Schattenschwinges Schatten",
-    shadowcurse_Firstbar = "Erster Schattenschwinges Schatten",
+	shadowcurse_Firstbar = "Erster Schattenschwinges Schatten",
 
 	cmd = "Ebonroc",
 
@@ -100,7 +100,7 @@ local timer = {
 local icon = {
 	wingbuffet = "INV_Misc_MonsterScales_14",
 	curse = "Spell_Shadow_GatherShadows",
-	shadowflame = "Spell_Fire_Incinerate",	
+	shadowflame = "Spell_Fire_Incinerate",
 }
 local syncName = {
 	wingbuffet = "EbonrocWingBuffet"..module.revision,
@@ -116,12 +116,12 @@ local syncName = {
 --module:RegisterYellEngage(L["start_trigger"])
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "Event")
-	
+
 	self:ThrottleSync(10, syncName.wingbuffet)
 	self:ThrottleSync(5, syncName.shadowflame)
 	self:ThrottleSync(5, syncName.curse)
@@ -169,7 +169,7 @@ function module:Event(msg)
 		self:Sync(syncName.curse .. " " .. UnitName("player"))
 		if self.db.profile.curse then
 			self:Message(L["shadowfcurse_message_you"], "Attention")
-            self:WarningSign(icon.curse, timer.curse)
+			self:WarningSign(icon.curse, timer.curse)
 		end
 	elseif shadowcurseother then
 		self:Sync(syncName.curse .. " " .. shadowcurseother)

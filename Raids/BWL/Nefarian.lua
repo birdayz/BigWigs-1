@@ -13,7 +13,7 @@ local victor = AceLibrary("Babble-Boss-2.2")["Lord Victor Nefarius"]
 L:RegisterTranslations("enUS", function() return {
 	engage_trigger = "Let the games begin!",
 	landing_trigger = "Enough! Now you",
-    landingNOW_trigger = "courage begins to wane",
+	landingNOW_trigger = "courage begins to wane",
 	zerg_trigger = "Impossible! Rise my",
 	fear_trigger = "Nefarian begins to cast Bellowing Roar",
 	fear_over_trigger = "Bellowing Roar",
@@ -58,7 +58,7 @@ L:RegisterTranslations("enUS", function() return {
 
 	classcall_bar = "Class call",
 	fear_bar = "Possible fear",
-	
+
 	curse_bar = "Veil Of Shadow",
 
 	cmd = "Nefarian",
@@ -78,22 +78,22 @@ L:RegisterTranslations("enUS", function() return {
 	otherwarn_cmd = "otherwarn",
 	otherwarn_name = "Other alerts",
 	otherwarn_desc = "Landing and Zerg warnings",
-	
+
 	curse_cmd = "curse",
 	curse_name = "Veil Of Shadow",
 	curse_desc = "Shows a timer bar for Veil Of Shadow.",
-            
-    mc_cmd = "mc",
+
+	mc_cmd = "mc",
 	mc_name = "Mind Control Alert",
 	mc_desc = "Warn for Mind Control",
-    mcwarn = "Casting Mind Control!",
+	mcwarn = "Casting Mind Control!",
 	mcplayer = "^([^%s]+) ([^%s]+) afflicted by Shadow Command.$",
 	mcplayerwarn = " is mindcontrolled!",
 	mcyou = "You",
 	mcare = "are",
-            
-    -- nef counter
-    ["NefCounter_Trigger"] = "^([%w ]+) dies.",
+
+	-- nef counter
+	["NefCounter_Trigger"] = "^([%w ]+) dies.",
 
 	["NefCounter_RED"] = "Red Drakonid",
 	["NefCounter_GREEN"] = "Green Drakonid",
@@ -107,7 +107,7 @@ L:RegisterTranslations("enUS", function() return {
 L:RegisterTranslations("deDE", function() return {
 	engage_trigger = "Lasst die Spiele beginnen!",
 	landing_trigger = "GENUG! Nun sollt ihr Ungeziefer",
-    landingNOW_trigger = "Der Mut der Sterblichen scheint zu schwinden",
+	landingNOW_trigger = "Der Mut der Sterblichen scheint zu schwinden",
 	zerg_trigger = "Unmöglich! Erhebt Euch, meine Diener!",
 	fear_trigger = "Nefarian beginnt Dröhnendes Gebrüll zu wirken.",
 	fear_over_trigger = "Dröhnendes Gebrüll",
@@ -168,18 +168,18 @@ L:RegisterTranslations("deDE", function() return {
 	--otherwarn_cmd = "otherwarn",
 	otherwarn_name = "Other alerts",
 	otherwarn_desc = "Landing and Zerg warnings",
-            
-    --mc_cmd = "mc",
+
+	--mc_cmd = "mc",
 	mc_name = "Mind Control Alert",
 	mc_desc = "Warn for Mind Control",
-    mcwarn = "Gedankencontrolle!",
+	mcwarn = "Gedankencontrolle!",
 	mcplayer = "^([^%s]+) ([^%s]+) von Schattenbefehl betroffen.",
 	mcplayerwarn = " ist gedankenkontrolliert.",
 	mcyou = "Ihr",
 	mcare = "seid",
-            
-    -- nef counter
-    ["NefCounter_Trigger"] = "^([%w ]+) stirbt.",
+
+	-- nef counter
+	["NefCounter_Trigger"] = "^([%w ]+) stirbt.",
 
 	["NefCounter_RED"] = "Roter Drakonid",
 	["NefCounter_GREEN"] = "Grüner Drakonid",
@@ -246,17 +246,17 @@ local nefCounterMax = 42 -- how many adds have to be killed to trigger phase 2?
 module:RegisterYellEngage(L["engage_trigger"])
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_MONSTER_YELL")
-    self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF")
-    self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_DAMAGE")
+	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_SELF")
+	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_DAMAGE")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE")
-	
+
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_DAMAGE", "Event")
 	self:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_DAMAGE", "Event")
-    
-	if not warnpairs then 
+
+	if not warnpairs then
 		warnpairs = {
 			[L["triggershamans"]] = {L["warnshaman"], true},
 			[L["triggerdruid"]] = {L["warndruid"], true},
@@ -269,9 +269,9 @@ function module:OnEnable()
 			[L["triggermage"]] = {L["warnmage"], true},
 			[L["landing_trigger"]] = {L["landing_warning"]},
 			[L["zerg_trigger"]] = {L["zerg_warning"]},
-		} 
+		}
 	end
-	
+
 	self:ThrottleSync(10, syncName.shadowflame)
 	self:ThrottleSync(15, syncName.fear)
 	self:ThrottleSync(0, syncName.addDead)
@@ -282,20 +282,20 @@ end
 function module:OnSetup()
 	self.started = nil
 	self.phase2 = nil
-    nefCounter = 0
-    
-    self:RegisterEvent("CHAT_MSG_COMBAT_HOSTILE_DEATH")
+	nefCounter = 0
+
+	self:RegisterEvent("CHAT_MSG_COMBAT_HOSTILE_DEATH")
 end
 
 -- called after boss is engaged
 function module:OnEngage()
 	self:Message(L["landing_soon_warning"], "Important", true, "Long")
 	self:Bar(L["Mob_Spawn"], timer.mobspawn, icon.mobspawn)
-	
+
 	--self:Bar(L["land"], 159, "INV_Misc_Head_Dragon_Black")
 	--self:DelayedMessage(105, L["landing_soon_warning"], "Important", true, "Alarm")
 	--self:DelayedMessage(125, L["landing_very_soon"], "Important", true, "Long")
-	
+
 	self:TriggerEvent("BigWigs_StartCounterBar", self, L["Drakonids dead"], nefCounterMax, "Interface\\Icons\\inv_egg_01")
 	self:TriggerEvent("BigWigs_SetCounterBar", self, L["Drakonids dead"], (nefCounterMax - 0.1))
 end
@@ -318,34 +318,34 @@ function module:Event(msg)
 end
 
 function module:CHAT_MSG_COMBAT_HOSTILE_DEATH(msg)
-    BigWigs:CheckForBossDeath(msg, self)
-    
-    local _, _, drakonid = string.find(msg, L["NefCounter_Trigger"])
-    if drakonid and L:HasReverseTranslation(drakonid) then
-        --self:OnKill(L:GetReverseTranslation(drakonid))
-        --nefCounter = nefCounter + 1
-        self:DebugMessage("Drakonids dead: " .. tostring(nefCounter + 1) .. " Name: " .. drakonid)
+	BigWigs:CheckForBossDeath(msg, self)
+
+	local _, _, drakonid = string.find(msg, L["NefCounter_Trigger"])
+	if drakonid and L:HasReverseTranslation(drakonid) then
+		--self:OnKill(L:GetReverseTranslation(drakonid))
+		--nefCounter = nefCounter + 1
+		self:DebugMessage("Drakonids dead: " .. tostring(nefCounter + 1) .. " Name: " .. drakonid)
 		self:Sync(syncName.addDead .. " " .. tostring(nefCounter + 1))
-    end
+	end
 end
 
 function module:CHAT_MSG_MONSTER_YELL(msg)
-    if string.find(msg, L["landingNOW_trigger"]) then
-        self:Sync(syncName.landing)
-    end
-    
+	if string.find(msg, L["landingNOW_trigger"]) then
+		self:Sync(syncName.landing)
+	end
+
 	for i,v in pairs(warnpairs) do
 		if string.find(msg, i) then
 			if v[2] then
 				if self.db.profile.classcall then
-                    local localizedClass, englishClass = UnitClass("player");
-                    if string.find(msg, localizedClass) then
+					local localizedClass, englishClass = UnitClass("player");
+					if string.find(msg, localizedClass) then
 						self:Message(v[1], "Core", nil, "Beware")
 						self:WarningSign(icon.classcall, 3)
-					else 
+					else
 						self:Message(v[1], "Core", nil, "Long")
-                    end
-					
+					end
+
 					self:Bar(v[1], timer.classcall, icon.classcall)
 					self:DelayedMessage(timer.classcall - 3, L["classcall_warning"], "Important")
 					self:DelayedSound(timer.classcall - 3, "Three")
@@ -353,9 +353,9 @@ function module:CHAT_MSG_MONSTER_YELL(msg)
 					self:DelayedSound(timer.classcall - 1, "One")
 				end
 			else
-				if self.db.profile.otherwarn and string.find(msg, L["landing_trigger"]) then 
-					--self:Message(v[1], "Important", true, "Long")  --- threw this when boss was 5%
-				elseif self.db.profile.otherwarn and string.find(msg, L["zerg_trigger"]) then 
+				if self.db.profile.otherwarn and string.find(msg, L["landing_trigger"]) then
+				--self:Message(v[1], "Important", true, "Long")  --- threw this when boss was 5%
+				elseif self.db.profile.otherwarn and string.find(msg, L["zerg_trigger"]) then
 					self:Message(v[1], "Important", true, "Long")
 				end
 			end
@@ -371,10 +371,10 @@ function module:CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_DAMAGE(arg1)
 		if player == L["mcyou"] and type == L["mcare"] then
 			player = UnitName("player")
 		end
-		if self.db.profile.mc then 
-            self:Message(player .. L["mcplayerwarn"], "Important") 
-            self:Bar(player .. L["mcplayerwarn"], timer.mc, icon.mc, "Orange")
-        end
+		if self.db.profile.mc then
+			self:Message(player .. L["mcplayerwarn"], "Important")
+			self:Bar(player .. L["mcplayerwarn"], timer.mc, icon.mc, "Orange")
+		end
 	end
 end
 
@@ -387,9 +387,9 @@ function module:CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE(msg)
 end
 
 function module:CHAT_MSG_SPELL_AURA_GONE_SELF(msg)
-    if string.find(msg, L["fear_over_trigger"]) then
-        --self:RemoveWarningSign(icon.fear)
-    end
+	if string.find(msg, L["fear_over_trigger"]) then
+	--self:RemoveWarningSign(icon.fear)
+	end
 end
 
 ------------------------------
@@ -397,15 +397,15 @@ end
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.shadowflame then
+	if sync == syncName.shadowflame then
 		self:Shadowflame()
 	elseif sync == syncName.fear then
 		self:Fear()
-    elseif sync == syncName.landing then
+	elseif sync == syncName.landing then
 		self:Landing()
 	elseif sync == syncName.addDead and rest then
 		self:NefCounter(rest)
-    elseif sync == syncName.curse then
+	elseif sync == syncName.curse then
 		self:Curse()
 	end
 end
@@ -431,34 +431,34 @@ end
 
 function module:Fear()
 	if self.db.profile.fear then
-        self:RemoveBar(L["fear_bar"]) -- remove timer bar
+		self:RemoveBar(L["fear_bar"]) -- remove timer bar
 		self:Message(L["fear_warning"], "Important", true, "Alert")
 		self:Bar(L["fear_warn"], timer.fearCast, icon.fear) -- show cast bar
 		self:DelayedBar(timer.fearCast, L["fear_bar"], timer.fear, icon.fear) -- delayed timer bar
-        --self:WarningSign(icon.fear, 5)
+		--self:WarningSign(icon.fear, 5)
 	end
 end
 
 function module:Landing()
 	if not self.phase2 then
-        self.phase2 = true
-        self:RemoveBar(L["land"])
+		self.phase2 = true
+		self:RemoveBar(L["land"])
 		self:TriggerEvent("BigWigs_StopCounterBar", self, L["Drakonids dead"])
-		
-        self:Bar(L["landing_warning"], timer.landing, icon.landing)
-        self:Message(L["landing_warning"], "Important", nil, "Beware")
-		
+
+		self:Bar(L["landing_warning"], timer.landing, icon.landing)
+		self:Message(L["landing_warning"], "Important", nil, "Beware")
+
 		-- landing in 15s
 		self:DelayedBar(timer.landing, L["classcall_bar"], timer.firstClasscall, icon.classcall)
-        self:DelayedBar(timer.landing, L["fear_bar"], timer.firstFear, icon.fear)
+		self:DelayedBar(timer.landing, L["fear_bar"], timer.firstFear, icon.fear)
 		self:DelayedBar(timer.landing, L["curse_bar"], timer.firstCurse, icon.curse)
-        
-        -- set ktm
-        local function setKTM()
-            self:KTM_SetTarget(self:ToString())
-            self:KTM_Reset()
-        end
-        self:ScheduleEvent("bwnefarianktm", setKTM, timer.landing + 1, self)
+
+		-- set ktm
+		local function setKTM()
+			self:KTM_SetTarget(self:ToString())
+			self:KTM_Reset()
+		end
+		self:ScheduleEvent("bwnefarianktm", setKTM, timer.landing + 1, self)
 	end
 end
 
@@ -467,7 +467,7 @@ function module:NefCounter(n)
 	if not self.phase2 and n == (nefCounter + 1) and nefCounter <= nefCounterMax then
 		nefCounter = nefCounter + 1
 		--[[if self.db.profile.adds then
-			self:Message(string.format(L["add_message"], nefCounter), "Positive")
+		self:Message(string.format(L["add_message"], nefCounter), "Positive")
 		end]]
 		self:TriggerEvent("BigWigs_SetCounterBar", self, L["Drakonids dead"], (nefCounterMax - nefCounter))
 	end

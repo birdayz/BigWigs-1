@@ -95,7 +95,7 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_BREAK_AURA", "Curse")
 
 	-- 2: Doom and SporeSpawn versioned up because of the sync including the
-	-- doom/spore count now, so we don't hold back the counter.	
+	-- doom/spore count now, so we don't hold back the counter.
 	self:ThrottleSync(10, syncName.doom)
 	self:ThrottleSync(5, syncName.spore)
 	self:ThrottleSync(5, syncName.curse)
@@ -117,7 +117,7 @@ function module:OnEngage()
 		self:DelayedMessage(timer.softEnrage - 10, string.format(L["doomtimerwarn"], 10), "Urgent")
 		self:DelayedMessage(timer.softEnrage - 5, string.format(L["doomtimerwarn"], 5), "Important")
 		self:DelayedMessage(timer.softEnrage, L["doomtimerwarnnow"], "Important")
-		
+
 		-- soft enrage after 5min: Doom every 15s instead of every 30s
 		--self:ScheduleEvent("bwloathebdoomtimerreduce", function() module.doomTime = 15 end, 300)
 		self:ScheduleEvent("bwloathebdoomtimerreduce", self.SoftEnrage, timer.softEnrage)
@@ -191,7 +191,7 @@ function module:Spore(syncNumSpore)
 			numSpore = numSpore
 			if self.db.profile.spore then
 				self:Message(string.format(L["sporewarn"], numSpore), "Important")
-			end			
+			end
 			if self.db.profile.spore then
 				self:Bar(string.format(L["sporebar"], numSpore + 1), timer.spore, icon.spore)
 			end

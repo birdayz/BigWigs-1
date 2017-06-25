@@ -22,7 +22,7 @@ local icon = {
 	shield = "Interface\\Icons\\Spell_Frost_FrostShock",
 }
 local syncName = {
-}
+	}
 
 ----------------------------
 --      Localization      --

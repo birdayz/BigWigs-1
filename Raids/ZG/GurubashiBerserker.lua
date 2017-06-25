@@ -5,7 +5,7 @@
 
 local module, L = BigWigs:ModuleDeclaration("Gurubashi Berserker", "Zul'Gurub")
 
-module.revision = 20001 
+module.revision = 20001
 module.enabletrigger = module.translatedName
 module.toggleoptions = {"bars"--[[, "bosskill"]]}
 
@@ -38,36 +38,36 @@ L:RegisterTranslations("enUS", function() return {
 	ThunderClap = "ThunderClap",
 	KnockBack = "KnockBack",
 	Fear = "Fear",
-	
+
 	trigger1 = "afflicted by Intimidating Roar",
 	trigger2 = "Intimidating Roar fail(.+) immune.",
 	trigger3 = "Intimidating Roar was resisted",
 
 	-- AceConsole strings
 	cmd = "Berserker",
-	
+
 	bars_cmd = "bars",
 	bars_name = "Toggle bars",
 	bars_desc = "Toggles showing bars for timers.",
-	     
+
 } end )
 
 L:RegisterTranslations("deDE", function() return {
 	ThunderClap = "ThunderClap",
 	KnockBack = "KnockBack",
 	Fear = "Fear",
-	
+
 	trigger1 = "afflicted by Intimidating Roar",
 	trigger2 = "Intimidating Roar fail(.+) immune.",
 	trigger3 = "Intimidating Roar was resisted",
 
 	-- AceConsole strings
 	cmd = "Berserker",
-	
+
 	bars_cmd = "bars",
 	bars_name = "Toggle bars",
 	bars_desc = "Toggles showing bars for timers.",
-	    
+
 } end )
 
 ------------------------------
@@ -83,8 +83,8 @@ function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE", "Debuff")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_PARTY_DAMAGE", "Debuff")
 	self:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_DAMAGE", "Debuff")
-  
-	
+
+
 	self:ThrottleSync(2, syncName.debuff)
 end
 
@@ -122,12 +122,12 @@ end
 --      Synchronization	    --
 ------------------------------
 
-function module:BigWigs_RecvSync( sync, rest, nick )  
-    if sync == syncName.debuff then
+function module:BigWigs_RecvSync( sync, rest, nick )
+	if sync == syncName.debuff then
 		if self.db.profile.bars then
 			self:Bar(L["Fear"], timer.fear, icon.fear)
 		end
-    elseif sync == syncName.knockBack then
+	elseif sync == syncName.knockBack then
 		if self.db.profile.bars then
 			self:Bar(L["KnockBack"], timer.knockBack, icon.knockBack)
 		end

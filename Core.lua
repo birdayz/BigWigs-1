@@ -578,6 +578,10 @@ end
 function BigWigs.modulePrototype:CancelDelayedBar(text)
 	self:CancelScheduledEvent(delayPrefix .. "Bar" .. self:ToString() .. text)
 end
+function BigWigs.modulePrototype:BarStatus(text)
+	local registered, time, elapsed, running = BigWigsBars:GetBarStatus(self, text)
+	return registered, time, elapsed, running
+end
 
 function BigWigs.modulePrototype:Sound(sound)
 	self:TriggerEvent("BigWigs_Sound", sound)

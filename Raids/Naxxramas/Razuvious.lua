@@ -40,7 +40,7 @@ L:RegisterTranslations("enUS", function() return {
 	noshoutwarn = "No shout! Next in 20secs",
 	shoutbar = "Disrupting Shout",
 
-    unbalance_trigger = "afflicted by Unbalancing Strike",
+	unbalance_trigger = "afflicted by Unbalancing Strike",
 	unbalancesoonwarn = "Unbalancing Strike coming soon!",
 	unbalancewarn = "Unbalancing Strike! Next in ~30sec",
 	unbalancebar = "Unbalancing Strike",
@@ -132,7 +132,7 @@ end
 --      Initialization      --
 ------------------------------
 
-function module:CheckForShieldwall(msg) 
+function module:CheckForShieldwall(msg)
 	if string.find(msg, L["shieldwalltrigger"]) then
 		self:Sync(syncName.shieldwall)
 	end
@@ -145,18 +145,18 @@ function module:CheckForShout(msg)
 end
 
 -- 5s after expected shout
-function module:NoShout()	
+function module:NoShout()
 	self:CancelScheduledEvent("bwrazuviousnoshout")
 	self:ScheduleEvent("bwrazuviousnoshout", self.NoShout, timer.shout + timer.noShoutDelay, self)
 	if self.db.profile.shout then
-		self:Message(L["noshoutwarn"], "Attention") -- is this message useful?		
+		self:Message(L["noshoutwarn"], "Attention") -- is this message useful?
 		self:Bar(L["shoutbar"], timer.shout - timer.noShoutDelay, icon.shout)
 		self:DelayedMessage(timer.shout - timer.noShoutDelay - 7, L["shout7secwarn"], "Urgent")
 		self:DelayedMessage(timer.shout - timer.noShoutDelay - 3, L["shout3secwarn"], "Urgent")
 	end
 end
 
-function module:CheckForUnbalance(msg)	
+function module:CheckForUnbalance(msg)
 	if string.find(msg, L["unbalance_trigger"]) then
 		self:Message(L["unbalancewarn"], "Urgent")
 		self:DelayedMessage(timer.unbalance - 5, L["unbalancesoonwarn"], "Urgent")
@@ -170,7 +170,7 @@ end
 ------------------------------
 
 function module:BigWigs_RecvSync(sync, rest, nick)
-    if sync == syncName.shout then
+	if sync == syncName.shout then
 		self:Shout()
 	elseif sync == syncName.shieldwall then
 		self:Shieldwall()
@@ -183,8 +183,8 @@ end
 
 function module:Shout()
 	self:CancelScheduledEvent("bwrazuviousnoshout")
-	self:ScheduleEvent("bwrazuviousnoshout", self.NoShout, timer.shout + timer.noShoutDelay, self)		
-	
+	self:ScheduleEvent("bwrazuviousnoshout", self.NoShout, timer.shout + timer.noShoutDelay, self)
+
 	if self.db.profile.shout then
 		self:Message(L["shoutwarn"], "Attention", nil, "Alarm")
 		self:DelayedMessage(timer.shout - 7, L["shout7secwarn"], "Urgent")

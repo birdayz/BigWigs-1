@@ -30,8 +30,8 @@ L:RegisterTranslations("enUS", function() return {
 	paralyzebar = "Paralyze",
 	returnincoming = "Moam unparalyzed in %s seconds!",
 	returntrigger = "Energize fades from Moam.",
-    returntrigger2 = "bristles with energy",
-	returnwarn = "Moam unparalyzed! 90 seconds until Mana Fiends!",	
+	returntrigger2 = "bristles with energy",
+	returnwarn = "Moam unparalyzed! 90 seconds until Mana Fiends!",
 } end )
 
 L:RegisterTranslations("deDE", function() return {
@@ -89,9 +89,9 @@ local firstunparalyze = nil
 -- called after module is enabled
 function module:OnEnable()
 	self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE", "Emote")
-    self:RegisterEvent("CHAT_MSG_RAID_BOSS_EMOTE", "Emote")
+	self:RegisterEvent("CHAT_MSG_RAID_BOSS_EMOTE", "Emote")
 	self:RegisterEvent("CHAT_MSG_SPELL_AURA_GONE_OTHER")
-	
+
 	self:ThrottleSync(10, syncName.paralyze)
 	self:ThrottleSync(10, syncName.unparalyze)
 end
@@ -103,8 +103,8 @@ end
 
 -- called after boss is engaged
 function module:OnEngage()
-	if self.db.profile.adds then 
-		self:Message(L["startwarn"], "Important") 
+	if self.db.profile.adds then
+		self:Message(L["startwarn"], "Important")
 	end
 	self:Unparalyze()
 end
@@ -119,8 +119,8 @@ end
 ------------------------------
 
 function module:Emote(msg)
-    self:DebugMessage("moam raid boss emote: " .. msg)
-    if string.find(msg, L["addstrigger"]) then -- alternative trigger: Moam gains Energize.
+	self:DebugMessage("moam raid boss emote: " .. msg)
+	if string.find(msg, L["addstrigger"]) then -- alternative trigger: Moam gains Energize.
 		self:Sync(syncName.paralyze)
 	end
 end
@@ -168,15 +168,15 @@ function module:Unparalyze()
 	self:RemoveBar(L["addsbar"])
 	if firstunparalyze then
 		firstunparalyze = false
-	elseif self.db.profile.paralyze then 
-		self:Message(L["returnwarn"], "Important") 
+	elseif self.db.profile.paralyze then
+		self:Message(L["returnwarn"], "Important")
 	end
-	
+
 	if self.db.profile.adds then
 		self:DelayedMessage(timer.unparalyze - 60, format(L["addsincoming"], 60), "Attention", nil, nil, true)
 		self:DelayedMessage(timer.unparalyze - 30, format(L["addsincoming"], 30), "Attention", nil, nil, true)
 		self:DelayedMessage(timer.unparalyze - 15, format(L["addsincoming"], 15), "Urgent", nil, nil, true)
 		self:DelayedMessage(timer.unparalyze - 5, format(L["addsincoming"], 5), "Important", nil, nil, true)
-		self:Bar(L["addsbar"], timer.unparalyze, icon.unparalyze) 
+		self:Bar(L["addsbar"], timer.unparalyze, icon.unparalyze)
 	end
 end
