@@ -14,7 +14,7 @@ L:RegisterTranslations("enUS", function() return {
 	cmd = "Testboss",
 
 	start_trigger = "Let the games begin.",
-	
+
 	berserk_cmd = "berserk",
 	berserk_name = "Berserk",
 	berserk_desc = "Warn for when Testboss goes berserk",
@@ -22,7 +22,7 @@ L:RegisterTranslations("enUS", function() return {
 	berserktrigger = "%s goes into a berserker rage!",
 	berserkannounce = "Berserk - Berserk!",
 	berserksoonwarn = "Berserk Soon - Get Ready!",
-	
+
 	add_name = "Dragon",
 } end )
 
@@ -35,7 +35,7 @@ L:RegisterTranslations("deDE", function() return {
 	berserktrigger = "%s bekommt Berserkerwut!",
 	berserkannounce = "Berserk - Berserk!",
 	berserksoonwarn = "Berserkerwut in Kürze - Bereit machen!",
-	
+
 	add_name = "Drache",
 } end )
 
@@ -79,10 +79,10 @@ local berserkannounced = nil
 --module:RegisterYellEngage(L["start_trigger"])
 
 -- called after module is enabled
-function module:OnEnable()	
+function module:OnEnable()
 	self:RegisterEvent("UNIT_HEALTH")
 	self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE")
-	
+
 	self:ThrottleSync(10, syncName.berserk)
 end
 
@@ -154,31 +154,31 @@ end
 ----------------------------------
 
 function module:Test()
-    local function berserkSoon()
-        self:UNIT_HEALTH(boss)
-    end
-    
-    local function berserk()
-        self:CHAT_MSG_MONSTER_EMOTE(L["berserktrigger"])
-    end
-    local function deactivate()
-        self.core:DisableModule(self:ToString())
-    end
-    
-    BigWigs:Print("BigWigsTestboss Test started")
-    BigWigs:Print("  Berserk Soon Warning after 5s")
-    BigWigs:Print("  Berserk after 10s")
-    
-    -- immitate CheckForEngage
-    self:SendEngageSync()    
-    
-    -- berserk soon warning after 5s
-    self:ScheduleEvent(self:ToString().."Test_berserkSoon", berserkSoon, 5, self)
-    
-    -- berserk after 10s
-    self:ScheduleEvent(self:ToString().."Test_sandblast", berserk, 10, self)
-    
-    -- reset after 15s
-    self:ScheduleEvent(self:ToString().."Test_deactivate", deactivate, 15, self)
-    
+	local function berserkSoon()
+		self:UNIT_HEALTH(boss)
+	end
+
+	local function berserk()
+		self:CHAT_MSG_MONSTER_EMOTE(L["berserktrigger"])
+	end
+	local function deactivate()
+		self.core:DisableModule(self:ToString())
+	end
+
+	BigWigs:Print("BigWigsTestboss Test started")
+	BigWigs:Print("  Berserk Soon Warning after 5s")
+	BigWigs:Print("  Berserk after 10s")
+
+	-- immitate CheckForEngage
+	self:SendEngageSync()
+
+	-- berserk soon warning after 5s
+	self:ScheduleEvent(self:ToString().."Test_berserkSoon", berserkSoon, 5, self)
+
+	-- berserk after 10s
+	self:ScheduleEvent(self:ToString().."Test_sandblast", berserk, 10, self)
+
+	-- reset after 15s
+	self:ScheduleEvent(self:ToString().."Test_deactivate", deactivate, 15, self)
+
 end
