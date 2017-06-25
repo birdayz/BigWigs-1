@@ -27,7 +27,7 @@ L:RegisterTranslations("enUS", function() return {
 } end )
 
 L:RegisterTranslations("deDE", function() return {
-	start_trigger = "Lasst die Spiele beginnen."
+	start_trigger = "Lasst die Spiele beginnen.",
 
 	berserk_name = "Berserk",
 	berserk_desc = "Warn for when Testboss goes berserk",
